@@ -36,8 +36,8 @@ namespace INSTALLER
 {
     public static class VarHold
     {
-        public static string repositoryURL = "https://github.com/FaolanBig/DB-Matcher";
-        public static string repositoryName = "DB-Matcher\\DB-Matcher-main4";
+        public static string repositoryURL = "https://github.com/FaolanBig/DB-Matcher-v5";
+        public static string repositoryName = @"DB-Matcher-v5\DB-Matcher-v5";
         public static string currentFilePath;
         public static string currentDirPath;
         public static string toDirPath;
@@ -93,7 +93,7 @@ namespace INSTALLER
 
             Console.WriteLine("get directory");
             VarHold.currentDirPath = AppDomain.CurrentDomain.BaseDirectory;
-            VarHold.currentDirPath += "\\DB-Matcher_git-clone";
+            VarHold.currentDirPath += @"\DB-Matcher_git-clone";
 
             Console.WriteLine("find empty directory");
             string dirHold = VarHold.currentDirPath;
@@ -119,13 +119,17 @@ namespace INSTALLER
             VarHold.toDirPath += VarHold.repositoryName;
 
             Console.WriteLine("installing packages");
-            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet install package npoi");
+            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet add package NPOI");
 
             Console.WriteLine("installing dependencies");
             ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet restore");
 
             Console.WriteLine("building from source-code");
-            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet build");
+            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet build &&");
+
+            printInGreen("installation finished");
+            Console.WriteLine("press any key to exit the installer");
+            Console.ReadKey();
         }
         public static void colorReset() { Console.ResetColor(); }
         public static void green() { Console.ForegroundColor = ConsoleColor.Green; }
