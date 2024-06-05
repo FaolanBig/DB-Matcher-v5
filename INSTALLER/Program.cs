@@ -29,6 +29,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 
@@ -37,7 +38,8 @@ namespace INSTALLER
     public static class VarHold
     {
         public static string repositoryURL = "https://github.com/FaolanBig/DB-Matcher-v5";
-        public static string repositoryName = @"DB-Matcher-v5\DB-Matcher-v5";
+        //ypublic static string repositoryName = @"DB-Matcher-v5";
+        public static string repositoryName = @"";
         public static string currentFilePath;
         public static string currentDirPath;
         public static string toDirPath;
@@ -56,6 +58,40 @@ namespace INSTALLER
             if (!UserInteractions.switchYesNo()) { exitProgramm(); }
 
             if (UserInteractions.switchYesNo("Proceed as autonomous installation? (y/n): ")) { VarHold.autonomousInstall = true; }
+
+            GetTargetPath:
+            Console.Write("target directory (this if empty): ");
+            string userDefinedDirHold = Console.ReadLine();
+            /*if (!string.IsNullOrEmpty(userDefinedDirHold))
+            {
+                if (!Directory.Exists(userDefinedDirHold))
+                {
+                    printInRed($"invalid path: {userDefinedDirHold}");
+                    goto GetTargetPath;
+                }
+                userDefinedDirHold = userDefinedDirHold.Replace("\"", "");
+                VarHold.currentDirPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
+            else
+            {
+                VarHold.currentDirPath = userDefinedDirHold;
+            }*/
+
+            if (string.IsNullOrEmpty(userDefinedDirHold))
+            {
+                VarHold.currentDirPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
+            else
+            {
+                if (Directory.Exists(userDefinedDirHold))
+                {
+                    userDefinedDirHold = userDefinedDirHold.Replace("\"", "");
+                    VarHold.currentDirPath = userDefinedDirHold;
+                }
+            }
+
+            Console.Write("using path: ");
+            printInBlue(VarHold.currentDirPath);
 
             //check for commands availability
             printInBlue("starting installation");
@@ -92,8 +128,7 @@ namespace INSTALLER
             printInBlue("DB-Matcher");
 
             Console.WriteLine("get directory");
-            VarHold.currentDirPath = AppDomain.CurrentDomain.BaseDirectory;
-            VarHold.currentDirPath += @"\DB-Matcher_git-clone";
+            VarHold.currentDirPath += @"DB-Matcher_git-clone";
 
             Console.WriteLine("find empty directory");
             string dirHold = VarHold.currentDirPath;
@@ -108,7 +143,7 @@ namespace INSTALLER
             VarHold.toDirPath = dirHold;
 
             Console.Write("new directory: ");
-            printInBlue(VarHold.currentDirPath);
+            printInBlue(VarHold.toDirPath);
 
             Console.Write("cloning repository from: ");
             printInBlue(VarHold.repositoryURL);
@@ -125,7 +160,7 @@ namespace INSTALLER
             ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet restore");
 
             Console.WriteLine("building from source-code");
-            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet build &&");
+            ApiInteractions.ExecuteInCMD($"cd {VarHold.toDirPath} && dotnet build");
 
             printInGreen("installation finished");
             Console.WriteLine("press any key to exit the installer");
@@ -171,7 +206,17 @@ namespace INSTALLER
 
             exitProgramm();
         }
-
+        public static void restartComputer()
+        {
+            ApiInteractions.ExecuteInCMD("shutdown /r /t 5 /c \"restarting from INSTALLER.exe (DB-Matcher) in 5sek\"");
+        }
+        public static void askToRestartOrExit()
+        {
+            printInBlue("your computer has to be restarted");
+            printInRed("save any open files, then proceed");
+            if (UserInteractions.switchYesNo("restart computer? (y/n): ")) { restartComputer(); }
+            exitProgramm();
+        }
     }
 
     internal static class UserInteractions
