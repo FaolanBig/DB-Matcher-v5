@@ -287,6 +287,73 @@ namespace INSTALLER
             Program.printInGreen("process finished");
 
             int exitCode = process.ExitCode;
+
+            if (exitCode != 0)
+            {
+                Program.printInRed($"error while running command: {cmd}");
+                Program.printInRed($"exit code: {exitCode}");
+                GetErrorMessage(cmd);
+                if (!UserInteractions.switchYesNo("continue? (y/n): ")) { Program.exitProgramm(); }
+            }
+        }
+        public static string GetErrorMessage(string cmd) //1: available; 0: not available
+        {
+            Console.Write("using shell: ");
+            Program.printInBlue("cmd.exe");
+            Console.Write($"fetching error message: ");
+            Program.printInBlue(cmd);
+
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                Arguments = $"/C {cmd}",
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                //CreateNoWindow = true
+            };
+
+            Process process = new Process
+            {
+                StartInfo = startInfo
+            };
+
+            Console.WriteLine("attempting to run command");
+            process.Start();
+
+            string output = process.StandardOutput.ReadToEnd();
+            string error = process.StandardError.ReadToEnd();
+
+            Console.WriteLine("waiting for process to finish");
+
+            process.WaitForExit();
+
+            Console.WriteLine("process finished");
+
+            int exitCode = process.ExitCode;
+
+            /*if (exitCode != 0 || !string.IsNullOrEmpty(error)) //not available (error occured)
+            {
+                Program.printInRed("command not available");
+                return false;
+            }
+            else //available
+            {
+                Program.printInGreen("command available");
+                return true;
+            }*/
+            if (string.IsNullOrEmpty(error))
+            {
+                Program.printInRed("no error message has been fetched");
+                Program.printInBlue($"error code: {exitCode}");
+                return "null";
+            }
+            else
+            {
+                Program.printInRed($"error message: {error}");
+                Program.printInBlue($"{exitCode}");
+                return error;
+            }
         }
         public static bool CheckIfCMDCommandIsAvailableForExecute(string cmd) //1: available; 0: not available
         {
@@ -335,5 +402,6 @@ namespace INSTALLER
                 return true;
             }
         }
+
     }
 }
