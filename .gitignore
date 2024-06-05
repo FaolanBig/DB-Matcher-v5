@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/DB-Matching-main1/DB-Matcher-main1.csproj
+/DB-Matcher-main2/DB-Matcher-main2.csproj
+/DB-Matcher-main3/DB-Matcher-main3.csproj
+/DB-Matcher-main4/DB-Matcher-main4.csproj
+/RandomExcelFiller/RandomExcelFiller.csproj
