@@ -70,7 +70,7 @@ namespace DB_Matching_main1
 
         private static void run(bool jsonCheck = true)
         {
-            Console.Title = "DB-MATCHER";
+            Console.Title = "DB-MATCHER-v5";
             VarHold varHold = new VarHold();
             Stopwatch stopwatch = new Stopwatch();
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
