@@ -8,7 +8,7 @@ Database (Excel) matching program written in C# with .NET-Framework using nPoi
 3. Run the INSTALLER.exe
 4. You will be guided through the process of installation by INSTALLER.exe
 
-**Describtion**
+**Description**
 
 *** English ***
 
