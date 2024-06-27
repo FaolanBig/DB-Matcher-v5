@@ -147,7 +147,6 @@ namespace INSTALLER
 
             Console.Write("cloning repository from: ");
             printInBlue(VarHold.repositoryURL);
-
             ApiInteractions.ExecuteInCMD($"git clone {VarHold.repositoryURL} {VarHold.toDirPath}");
 
             Console.WriteLine("updating directory");
@@ -288,13 +287,13 @@ namespace INSTALLER
 
             int exitCode = process.ExitCode;
 
-            if (exitCode != 0)
+            /*if (exitCode != 0)
             {
                 Program.printInRed($"error while running command: {cmd}");
                 Program.printInRed($"exit code: {exitCode}");
                 GetErrorMessage(cmd);
                 if (!UserInteractions.switchYesNo("continue? (y/n): ")) { Program.exitProgramm(); }
-            }
+            }*/
         }
         public static string GetErrorMessage(string cmd) //1: available; 0: not available
         {

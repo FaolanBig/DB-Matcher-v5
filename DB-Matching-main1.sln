@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "INSTALLER", "INSTALLER\INST
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DB-Matcher-v5", "DB-Matcher-v5\DB-Matcher-v5.csproj", "{7CEB9121-EA3F-400A-882B-D1F9094F2823}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "run-DB-Matcher-v5-FLEXIBLE", "run-DB-Matcher-v5-FLEXIBLE\run-DB-Matcher-v5-FLEXIBLE.csproj", "{67B6681F-8509-46B9-9DD0-077BB71C5857}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +81,14 @@ Global
 		{7CEB9121-EA3F-400A-882B-D1F9094F2823}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7CEB9121-EA3F-400A-882B-D1F9094F2823}.Release|x64.ActiveCfg = Release|Any CPU
 		{7CEB9121-EA3F-400A-882B-D1F9094F2823}.Release|x64.Build.0 = Release|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Debug|x64.Build.0 = Debug|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Release|x64.ActiveCfg = Release|Any CPU
+		{67B6681F-8509-46B9-9DD0-077BB71C5857}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
