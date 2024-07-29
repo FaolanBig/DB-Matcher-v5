@@ -38,7 +38,7 @@ namespace DB_Matcher_v5
                 Console.WriteLine();
                 Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURL}");
                 Console.WriteLine($"   2. move \"recoveryMenu.txt\" to {VarHold.currentRecoveryMenuFile}");
-                Console.WriteLine("    3. restart DB-Matcher-v5");
+                Console.WriteLine("   3. restart DB-Matcher-v5");
                 Console.WriteLine();
                 PrintIn.blue("this should fix the problem");
                 PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
