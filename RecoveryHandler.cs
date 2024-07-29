@@ -149,6 +149,10 @@ namespace DB_Matcher_v5
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode();
                         break;
+                    case "2":
+                        PrintIn.blue("launching SettingsAgent");
+                        SettingsAgent.EditMode(true);
+                        break;
                     default:
                         PrintIn.red("bad input");
                         goto EnterNumber;

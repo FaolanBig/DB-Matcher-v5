@@ -2,6 +2,7 @@
 using MathNet.Numerics.RootFinding;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,9 +12,31 @@ namespace DB_Matcher_v5
 {
     internal class SettingsAgent
     {
-        public static void EditMode()
+        public static void EditMode(bool editManually = false)
         {
+            Console.Clear();
+            Program.printFittedSizeAsterixSurroundedText("Settings Agent");
+            if (editManually)
+            {
+                if (File.Exists(VarHold.currentSettingsFilePathHold))
+                {
+                    if (VarHold.osIsWindows) { Process.Start(new ProcessStartInfo(VarHold.currentSettingsFilePathHold) { UseShellExecute = true }); }
+                    if (!VarHold.osIsWindows) { Process.Start("nano", VarHold.currentSettingsFilePathHold); }
 
+                    PrintIn.blue("DB-Matcher-v5 needs to be restarted");
+                    Program.shutdownOrRestart();
+                }
+                else
+                {
+                    PrintIn.red("settings file not found");
+                    PrintIn.red("proceding with launcher");
+                }
+            }
+
+
+
+            PrintIn.blue("DB-Matcher-v5 needs to be restarted");
+            Program.shutdownOrRestart();
         }
         internal static void FileLookUp()
         {
@@ -27,7 +50,10 @@ namespace DB_Matcher_v5
                 
                 RecoveryHandler.RunRecovery();
             }
-
+            loadSettings();
+        }
+        internal static void loadSettings()
+        {
             foreach (var line in File.ReadLines(VarHold.currentSettingsFilePathHold))
             {
                 var parts = line.Split(new[] { "//" }, StringSplitOptions.None);
