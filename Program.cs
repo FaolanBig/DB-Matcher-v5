@@ -65,6 +65,8 @@ namespace DB_Matching_main1
         public static bool toggleConsoleColor = true;
         public static string currentSettingsFilePathHold = "";
         public static string currentRecoveryMenuFile = "";
+
+        public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
     internal class Program
     {
@@ -80,8 +82,6 @@ namespace DB_Matching_main1
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
         Start:
-            printFittedSizeAsterixSurroundedText("DB-MATCHER");
-
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
             string currentHoldFilePathBAK = currentHoldFilePath;
             string currentHoldFilePath2 = currentHoldFilePath;
@@ -96,6 +96,8 @@ namespace DB_Matching_main1
             //StartUp Interrupt
             RecoveryHandler.StartUp();
             SettingsAgent.FileLookUp();
+
+            printFittedSizeAsterixSurroundedText("DB-MATCHER");
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))

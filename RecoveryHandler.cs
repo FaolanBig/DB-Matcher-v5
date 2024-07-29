@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,13 +13,24 @@ namespace DB_Matcher_v5
     {
         public static void StartUp()
         {
-            if (Console.KeyAvailable)
+            PrintIn.blue("press ESC to enter recovery mode");
+
+            var stopwatch = Stopwatch.StartNew();
+            while (stopwatch.ElapsedMilliseconds < 1000)
             {
-                if (Console.ReadKey(true).Key == ConsoleKey.Escape)
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {
+                    PrintIn.blue("starting recovery mode...");
+                    Console.WriteLine();
+                    PrintIn.wigglyStarInBorders();
+
                     RunRecovery();
+                    return;
                 }
+
+                Thread.Sleep(50);
             }
+
         }
         public static void RunRecovery()
         {
