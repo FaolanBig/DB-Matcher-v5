@@ -83,6 +83,7 @@ namespace DB_Matching_main1
             printFittedSizeAsterixSurroundedText("DB-MATCHER");
 
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
+            string currentHoldFilePathBAK = currentHoldFilePath;
             string currentHoldFilePath2 = currentHoldFilePath;
             string currentSettingsFilePathHold = currentHoldFilePath;
             VarHold.currentMainFilePath = Assembly.GetExecutingAssembly().Location;
@@ -90,10 +91,13 @@ namespace DB_Matching_main1
             currentHoldFilePath2 += "pw.txt";
             currentSettingsFilePathHold += "settings.txt";
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
-            VarHold.currentRecoveryMenuFile = currentHoldFilePath += "recoveryMenu.txt";
+            VarHold.currentRecoveryMenuFile = currentHoldFilePathBAK += "recoveryMenu.txt";
 
+            Console.WriteLine(VarHold.currentRecoveryMenuFile);
             //StartUp Interrupt
             RecoveryHandler.StartUp();
+
+            SettingsAgent.FileLookUp();
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))
@@ -1108,8 +1112,17 @@ namespace DB_Matching_main1
                 workbook.Write(ffstream);
             }*/
             //fileStream.Dispose();
+
+            workbook.Close();
+            workbook = null;
+
             Console.WriteLine();
             Console.WriteLine();
+
+            shutdownOrRestart();
+        }
+        public static void shutdownOrRestart()
+        {
             Console.WriteLine("Press key: ENTER to restart in new instance / ESC to exit");
         GetExitValue:
             bool toggleRestartInNewInstance = false;
@@ -1118,8 +1131,6 @@ namespace DB_Matching_main1
                 case ConsoleKey.Enter:
                     Console.WriteLine();
                     printFittedSizeAsterixSurroundedText("RESTARTING IN NEW INSTANCE");
-                    workbook.Close();
-                    workbook = null;
                     toggleRestartInNewInstance = true;
                     goto exit;
                     break;
@@ -1150,6 +1161,7 @@ namespace DB_Matching_main1
                 Process.Start(currentFileName);
             }
             Environment.Exit(0);
+
         }
 
         private static int getIntOrDefault(int defaultValue)

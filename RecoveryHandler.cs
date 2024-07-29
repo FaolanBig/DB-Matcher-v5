@@ -27,7 +27,18 @@ namespace DB_Matcher_v5
                 }
             }
         }
-        private static bool Menu()
+        public static void RunRecovery()
+        {
+                    Console.Clear();
+                    Program.printFittedSizeAsterixSurroundedText("Recovery");
+
+                    Menu();
+
+                    WaitForKeystrokeENTER();
+
+                    Console.Clear();
+        }
+        internal static bool Menu()
         {
             string content;
             Console.WriteLine("launching menu");
@@ -38,7 +49,7 @@ namespace DB_Matcher_v5
                 Console.WriteLine();
                 Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURL}");
                 Console.WriteLine($"   2. move \"recoveryMenu.txt\" to {VarHold.currentRecoveryMenuFile}");
-                Console.WriteLine("    3. restart DB-Matcher-v5");
+                Console.WriteLine("   3. restart DB-Matcher-v5");
                 Console.WriteLine();
                 PrintIn.blue("this should fix the problem");
                 PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
