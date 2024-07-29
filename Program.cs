@@ -24,6 +24,7 @@
 */
 
 
+using DB_Matcher_v5;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -60,6 +61,7 @@ namespace DB_Matching_main1
         public string createDictionaryExitInput = "DIREXIT";
         public bool useDataFile = true;
         public bool toggleConsoleColor = true;
+        public string currentSettingsFilePathHold = "";
     }
     internal class Program
     {
@@ -85,20 +87,10 @@ namespace DB_Matching_main1
             currentHoldFilePath += "data.txt";
             currentHoldFilePath2 += "pw.txt";
             currentSettingsFilePathHold += "settings.txt";
+            varHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
 
             //StartUp Interrupt
-            if (Console.KeyAvailable)
-            {
-                if (Console.ReadKey(true).Key == ConsoleKey.Escape)
-                {
-                    Console.WriteLine("Interrupt during StartUp");
-                    Console.WriteLine("Press ENTER to continue");
-
-                    while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
-
-                    Console.WriteLine();
-                }
-            }
+            
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))
