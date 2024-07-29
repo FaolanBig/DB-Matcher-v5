@@ -43,6 +43,8 @@ namespace DB_Matching_main1
 {
     internal static class VarHold
     {
+        public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
+
         public static string currentMainFilePath;
         public static string getSimilarityMethodValue;
         /*public string GetSimilarityMethodValue
@@ -62,6 +64,7 @@ namespace DB_Matching_main1
         public static bool useDataFile = true;
         public static bool toggleConsoleColor = true;
         public static string currentSettingsFilePathHold = "";
+        public static string currentRecoveryMenuFile = "";
     }
     internal class Program
     {
@@ -87,6 +90,7 @@ namespace DB_Matching_main1
             currentHoldFilePath2 += "pw.txt";
             currentSettingsFilePathHold += "settings.txt";
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
+            VarHold.currentRecoveryMenuFile = currentHoldFilePath += "recoveryMenu.txt";
 
             //StartUp Interrupt
             RecoveryHandler.StartUp();
