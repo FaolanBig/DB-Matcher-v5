@@ -89,7 +89,7 @@ namespace DB_Matching_main1
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
 
             //StartUp Interrupt
-            
+            RecoveryHandler.StartUp();
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))

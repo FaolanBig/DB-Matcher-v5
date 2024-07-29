@@ -10,6 +10,9 @@ namespace DB_Matcher_v5
     {
         public static void EditMode(string pathToSettingsFile)
         {
+        }
+        private static void FileLookUp(string pathToSettingsFile)
+        {
             if (!File.Exists(pathToSettingsFile))
             {
 
