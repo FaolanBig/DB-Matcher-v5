@@ -2,7 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,31 +15,55 @@ namespace DB_Matcher_v5
     {
         public static void StartUp()
         {
-            if (Console.KeyAvailable)
+            PrintIn.blue("detecting operating system");
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                if (Console.ReadKey(true).Key == ConsoleKey.Escape)
-                {
-                    Console.Clear();
-                    Program.printFittedSizeAsterixSurroundedText("Recovery");
-
-                    Menu();
-
-                    WaitForKeystrokeENTER();
-
-                    Console.Clear();
-                }
+                PrintIn.green("detected: Microsoft Windows");
+                VarHold.osIsWindows = true;
             }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                PrintIn.green("detected: Linux");
+                VarHold.osIsWindows = false;
+            }
+            else
+            {
+                PrintIn.red("error when detecting the operating system");
+                PrintIn.red("continuing as Linux");
+                PrintIn.red("this may be ignored");
+                PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                VarHold.osIsWindows = false;
+            }
+
+            PrintIn.blue("press ESC to enter recovery mode");
+
+            var stopwatch = Stopwatch.StartNew();
+            while (stopwatch.ElapsedMilliseconds < 1500)
+            {
+                if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape)
+                {
+                    PrintIn.blue("starting recovery mode...");
+                    Console.WriteLine();
+                    PrintIn.wigglyStarInBorders();
+
+                    RunRecovery();
+                    return;
+                }
+
+                Thread.Sleep(50);
+            }
+
         }
         public static void RunRecovery()
         {
-                    Console.Clear();
-                    Program.printFittedSizeAsterixSurroundedText("Recovery");
+            Console.Clear();
+            Program.printFittedSizeAsterixSurroundedText("Recovery");
 
-                    Menu();
+            Menu();
 
-                    WaitForKeystrokeENTER();
-
-                    Console.Clear();
+            PrintIn.blue("DB-Matcher-v5 needs to be restarted");
+            Program.shutdownOrRestart();
         }
         internal static bool Menu()
         {
@@ -121,6 +148,10 @@ namespace DB_Matcher_v5
                     case "1":
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode();
+                        break;
+                    case "2":
+                        PrintIn.blue("launching SettingsAgent");
+                        SettingsAgent.EditMode(true);
                         break;
                     default:
                         PrintIn.red("bad input");

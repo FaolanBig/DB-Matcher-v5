@@ -1,1 +1,2 @@
 ﻿(1) - run launcher for editing settings
+(2) - edit setting file manually
