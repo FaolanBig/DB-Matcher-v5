@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,10 +15,31 @@ namespace DB_Matcher_v5
     {
         public static void StartUp()
         {
+            PrintIn.blue("detecting operating system");
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                PrintIn.green("detected: Microsoft Windows");
+                VarHold.osIsWindows = true;
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                PrintIn.green("detected: Linux");
+                VarHold.osIsWindows = false;
+            }
+            else
+            {
+                PrintIn.red("error when detecting the operating system");
+                PrintIn.red("continuing as Linux");
+                PrintIn.red("this may be ignored");
+                PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                VarHold.osIsWindows = false;
+            }
+
             PrintIn.blue("press ESC to enter recovery mode");
 
             var stopwatch = Stopwatch.StartNew();
-            while (stopwatch.ElapsedMilliseconds < 1000)
+            while (stopwatch.ElapsedMilliseconds < 1500)
             {
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {

@@ -65,6 +65,7 @@ namespace DB_Matching_main1
         public static bool toggleConsoleColor = true;
         public static string currentSettingsFilePathHold = "";
         public static string currentRecoveryMenuFile = "";
+        public static bool osIsWindows; //true: Windows; false: Linux
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -97,6 +98,7 @@ namespace DB_Matching_main1
             RecoveryHandler.StartUp();
             SettingsAgent.FileLookUp();
 
+            Console.Clear();
             printFittedSizeAsterixSurroundedText("DB-MATCHER");
 
         ContinueFromInterruptDuringStartUp:
