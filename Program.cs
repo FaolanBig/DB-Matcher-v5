@@ -95,6 +95,8 @@ namespace DB_Matching_main1
             //StartUp Interrupt
             RecoveryHandler.StartUp();
 
+            Dictionary<string, string> setitngs = new Dictionary<string, string>();
+
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))
             {
@@ -1108,8 +1110,17 @@ namespace DB_Matching_main1
                 workbook.Write(ffstream);
             }*/
             //fileStream.Dispose();
+
+            workbook.Close();
+            workbook = null;
+
             Console.WriteLine();
             Console.WriteLine();
+
+            shutdownOrRestart();
+        }
+        public static void shutdownOrRestart()
+        {
             Console.WriteLine("Press key: ENTER to restart in new instance / ESC to exit");
         GetExitValue:
             bool toggleRestartInNewInstance = false;
@@ -1118,8 +1129,6 @@ namespace DB_Matching_main1
                 case ConsoleKey.Enter:
                     Console.WriteLine();
                     printFittedSizeAsterixSurroundedText("RESTARTING IN NEW INSTANCE");
-                    workbook.Close();
-                    workbook = null;
                     toggleRestartInNewInstance = true;
                     goto exit;
                     break;
@@ -1150,6 +1159,7 @@ namespace DB_Matching_main1
                 Process.Start(currentFileName);
             }
             Environment.Exit(0);
+
         }
 
         private static int getIntOrDefault(int defaultValue)
