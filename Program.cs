@@ -1198,7 +1198,7 @@ namespace DB_Matching_main1
             Console.WriteLine();
         }
 
-        private static void printFittedSizeAsterixSurroundedText(string text)
+        internal static void printFittedSizeAsterixSurroundedText(string text)
         {
             int strLenght = text.Length;
             string outputHold = "";

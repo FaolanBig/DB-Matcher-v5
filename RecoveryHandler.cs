@@ -15,7 +15,8 @@ namespace DB_Matcher_v5
             {
                 if (Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {
-                    Console.WriteLine("Interrupt during StartUp");
+                    Console.Clear();
+                    Program.printFittedSizeAsterixSurroundedText("Recovery");
 
                     SettingsAgent.EditMode(VarHold.currentSettingsFilePathHold);
 
