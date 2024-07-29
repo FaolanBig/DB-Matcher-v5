@@ -93,10 +93,8 @@ namespace DB_Matching_main1
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
             VarHold.currentRecoveryMenuFile = currentHoldFilePathBAK += "recoveryMenu.txt";
 
-            Console.WriteLine(VarHold.currentRecoveryMenuFile);
             //StartUp Interrupt
             RecoveryHandler.StartUp();
-
             SettingsAgent.FileLookUp();
 
         ContinueFromInterruptDuringStartUp:

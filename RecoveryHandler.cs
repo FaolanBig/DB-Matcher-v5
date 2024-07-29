@@ -16,27 +16,19 @@ namespace DB_Matcher_v5
             {
                 if (Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {
-                    Console.Clear();
-                    Program.printFittedSizeAsterixSurroundedText("Recovery");
-
-                    Menu();
-
-                    WaitForKeystrokeENTER();
-
-                    Console.Clear();
+                    RunRecovery();
                 }
             }
         }
         public static void RunRecovery()
         {
-                    Console.Clear();
-                    Program.printFittedSizeAsterixSurroundedText("Recovery");
+            Console.Clear();
+            Program.printFittedSizeAsterixSurroundedText("Recovery");
 
-                    Menu();
+            Menu();
 
-                    WaitForKeystrokeENTER();
-
-                    Console.Clear();
+            PrintIn.blue("DB-Matcher-v5 needs to be restarted");
+            Program.shutdownOrRestart();
         }
         internal static bool Menu()
         {
