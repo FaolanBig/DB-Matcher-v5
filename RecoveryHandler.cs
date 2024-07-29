@@ -19,7 +19,7 @@ namespace DB_Matcher_v5
                     Console.Clear();
                     Program.printFittedSizeAsterixSurroundedText("Recovery");
 
-                    SettingsAgent.EditMode(VarHold.currentSettingsFilePathHold);
+                    Menu();
 
                     WaitForKeystrokeENTER();
 
@@ -115,6 +115,8 @@ namespace DB_Matcher_v5
                         PrintIn.red("bad input");
                         goto EnterNumber;
                 }
+                
+                return false;
             }
         }
         public static void WaitForKeystrokeENTER(string outputHold = "Press ENTER to continue")
