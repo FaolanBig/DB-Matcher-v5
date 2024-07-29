@@ -101,7 +101,7 @@ Funktionen:
 **Hold**
 
 
-
+    /*
    The DB-Matcher (including DB-Matcher-v5) is an easy-to-use console application written in C# and based on the .NET framework. 
    The DB-Matcher can merge two databases in Excel format (*.xlsx, *.xls). 
    It follows the following algorithms in order of importance: Levenshtein distance, Hamming distance, Jaccard index. 
@@ -124,3 +124,4 @@ Funktionen:
 
    You can contact me in the following ways:
        EMail: oettinger.carl@web.de or big-programming@web.de
+*/
