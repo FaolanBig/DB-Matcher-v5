@@ -1,5 +1,6 @@
 ﻿using DB_Matching_main1;
 using MathNet.Numerics.RootFinding;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +21,7 @@ namespace DB_Matcher_v5
             {
                 if (File.Exists(VarHold.currentSettingsFilePathHold))
                 {
+                    PrintIn.blue("launching in external editor");
                     if (VarHold.osIsWindows) { Process.Start(new ProcessStartInfo(VarHold.currentSettingsFilePathHold) { UseShellExecute = true }); }
                     if (!VarHold.osIsWindows) { Process.Start("nano", VarHold.currentSettingsFilePathHold); }
 
@@ -33,10 +35,36 @@ namespace DB_Matcher_v5
                 }
             }
 
+            PrintIn.blue("starting settings launcher");
+            Console.WriteLine();
+            addYesNo("automatically use settings file instead of user dialog","automaticMode");
 
-
+            SaveSettings();
             PrintIn.blue("DB-Matcher-v5 needs to be restarted");
             Program.shutdownOrRestart();
+        }
+        internal static bool addYesNo(string toAsk, string key, string valueYes = "true", string valueNo = "false")
+        {
+            Start:
+            Console.Write(toAsk + " (y/n): ");
+            string userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "y":
+                    Console.WriteLine("y");
+                    VarHold.settings.Add(key, valueYes);
+                    PrintIn.green($"added: {key}//{valueYes}");
+                    return true;
+                case "n":
+                    VarHold.settings.Add(key, valueNo);
+                    PrintIn.green($"added: {key}//{valueNo}");
+                    Console.WriteLine("n");
+                    return false;
+                default:
+                    PrintIn.red("bad input");
+                    goto Start;
+            }
         }
         internal static void FileLookUp()
         {
@@ -69,7 +97,7 @@ namespace DB_Matcher_v5
             {
                 foreach (var entry in VarHold.settings)
                 {
-                    file.WriteLine($"{entry.Key} // {entry.Value}");
+                    file.WriteLine($"{entry.Key}//{entry.Value}");
                 }
             }
         }
