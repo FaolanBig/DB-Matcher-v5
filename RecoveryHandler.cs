@@ -27,7 +27,18 @@ namespace DB_Matcher_v5
                 }
             }
         }
-        private static bool Menu()
+        public static void RunRecovery()
+        {
+                    Console.Clear();
+                    Program.printFittedSizeAsterixSurroundedText("Recovery");
+
+                    Menu();
+
+                    WaitForKeystrokeENTER();
+
+                    Console.Clear();
+        }
+        internal static bool Menu()
         {
             string content;
             Console.WriteLine("launching menu");

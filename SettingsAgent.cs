@@ -1,4 +1,5 @@
 ﻿using DB_Matching_main1;
+using MathNet.Numerics.RootFinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,37 +19,11 @@ namespace DB_Matcher_v5
             {
                 PrintIn.red("no settings file found");
                 PrintIn.red("launching recovery mode");
+                Console.WriteLine();
 
-                for (int i = 0; i < 10; i++)
-                {
-                    int position = 0;
-                    int direction = 1;
-                    int length = 5;
-                    int threadSleepingDuration = 350;
-
-                    Console.SetCursorPosition(0, Console.CursorTop);
-
-                    for (int ii = 0; ii < length; ii++)
-                    {
-                        if (ii == position)
-                        {
-                            Console.Write("*");
-                        }
-                        else
-                        {
-                            Console.Write(" ");
-                        }
-                    }
-
-                    position += direction;
-
-                    if (position == length - 1 || position == 0)
-                    {
-                        direction *= -1;
-                    }
-
-                    Thread.Sleep(threadSleepingDuration);
-                }
+                PrintIn.wigglyStarInBorders();
+                
+                RecoveryHandler.RunRecovery();
             }
         }
     }
