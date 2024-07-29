@@ -41,27 +41,27 @@ using System.Threading;
 
 namespace DB_Matching_main1
 {
-    internal class VarHold
+    internal static class VarHold
     {
-        public string currentMainFilePath;
-        public string getSimilarityMethodValue;
+        public static string currentMainFilePath;
+        public static string getSimilarityMethodValue;
         /*public string GetSimilarityMethodValue
         {
             get { return getSimilarityMethodValue; }
             set { GetSimilarityMethodValue = value; }
         }*/
         //public BigInteger arrayAccess = BigInteger.Parse("0");
-        public long arrayAccess = 0;
-        public long cyclesLog = 0;
-        public string checksumConvertedOriginal = "NULL";
-        public string checksumConvertedNew = "NULL";
-        public int runHold1 = 0;
-        public int runHold2 = 0;
-        public string createJsonExitInput = "JSONEXIT";
-        public string createDictionaryExitInput = "DIREXIT";
-        public bool useDataFile = true;
-        public bool toggleConsoleColor = true;
-        public string currentSettingsFilePathHold = "";
+        public static long arrayAccess = 0;
+        public static long cyclesLog = 0;
+        public static string checksumConvertedOriginal = "NULL";
+        public static string checksumConvertedNew = "NULL";
+        public static int runHold1 = 0;
+        public static int runHold2 = 0;
+        public static string createJsonExitInput = "JSONEXIT";
+        public static string createDictionaryExitInput = "DIREXIT";
+        public static bool useDataFile = true;
+        public static bool toggleConsoleColor = true;
+        public static string currentSettingsFilePathHold = "";
     }
     internal class Program
     {
@@ -73,7 +73,6 @@ namespace DB_Matching_main1
         private static void run(bool jsonCheck = true)
         {
             Console.Title = "DB-MATCHER-v5";
-            VarHold varHold = new VarHold();
             Stopwatch stopwatch = new Stopwatch();
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
@@ -83,11 +82,11 @@ namespace DB_Matching_main1
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
             string currentHoldFilePath2 = currentHoldFilePath;
             string currentSettingsFilePathHold = currentHoldFilePath;
-            varHold.currentMainFilePath = Assembly.GetExecutingAssembly().Location;
+            VarHold.currentMainFilePath = Assembly.GetExecutingAssembly().Location;
             currentHoldFilePath += "data.txt";
             currentHoldFilePath2 += "pw.txt";
             currentSettingsFilePathHold += "settings.txt";
-            varHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
+            VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
 
             //StartUp Interrupt
             
@@ -188,7 +187,7 @@ namespace DB_Matching_main1
                     //neu starten
                     Process process = new Process();
                     process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = $"/C {varHold.currentMainFilePath}";
+                    process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
 
                     printFittedSizeAsterixSurroundedText("RESTARTING");
 
@@ -256,7 +255,7 @@ namespace DB_Matching_main1
 
                                 Process process = new Process();
                                 process.StartInfo.FileName = "cmd.exe";
-                                process.StartInfo.Arguments = $"/C {varHold.currentMainFilePath}";
+                                process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
 
                                 for (int i = 0; i <= 100; i++)
                                 {
@@ -301,11 +300,11 @@ namespace DB_Matching_main1
                 {
                     case ConsoleKey.Y:
                         Console.WriteLine("y");
-                        varHold.useDataFile = true;
+                        VarHold.useDataFile = true;
                         break;
                     case ConsoleKey.N:
                         Console.WriteLine("n");
-                        varHold.useDataFile = false;
+                        VarHold.useDataFile = false;
                         break;
                     default:
                         goto UseDataFile;
@@ -377,12 +376,12 @@ namespace DB_Matching_main1
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.Y:
-                    varHold.toggleConsoleColor = true;
+                    VarHold.toggleConsoleColor = true;
                     Console.WriteLine("y");
                     Console.Beep();
                     break;
                 case ConsoleKey.N:
-                    varHold.toggleConsoleColor = false;
+                    VarHold.toggleConsoleColor = false;
                     Console.WriteLine("n");
                     break;
                 default:
@@ -417,7 +416,7 @@ namespace DB_Matching_main1
             Console.WriteLine();
 
         getSimilarityMethod:
-            varHold.getSimilarityMethodValue = "Levenshtein-Distance";
+            VarHold.getSimilarityMethodValue = "Levenshtein-Distance";
         /*Console.WriteLine();
         Console.WriteLine("Similarity-Algorithm:\r\n...Levenshtein-Distance - 1\r\n...Hamming-Distance - 2\r\n...String-Contain - 3");
         Console.WriteLine();
@@ -426,15 +425,15 @@ namespace DB_Matching_main1
         switch (Console.ReadKey(true).Key)
         {
             case ConsoleKey.D1:
-                varHold.getSimilarityMethodValue = "Levenshtein-Distance";
+                VarHold.getSimilarityMethodValue = "Levenshtein-Distance";
                 Console.WriteLine("1");
                 break;
             case ConsoleKey.D2:
-                varHold.getSimilarityMethodValue = "Hamming-Distance";
+                VarHold.getSimilarityMethodValue = "Hamming-Distance";
                 Console.WriteLine("2");
                 break;
             case ConsoleKey.D3:
-                varHold.getSimilarityMethodValue = "String-Contain";
+                VarHold.getSimilarityMethodValue = "String-Contain";
                 Console.WriteLine("3");
                 break;
             default:
@@ -478,10 +477,10 @@ namespace DB_Matching_main1
             string toPath = path.Substring(0, pathIndexOfDot) + "_db-matched.xlsx";
 
         CheckIfToPathIsEmpty:
-            varHold.runHold1 = 0;
+            VarHold.runHold1 = 0;
             if (File.Exists(toPath))
             {
-                varHold.runHold1++;
+                VarHold.runHold1++;
                 //printFittedSizeAsterixSurroundedText("ERROR PATH NOT EMPTY");
 
                 Random random = new Random();
@@ -489,7 +488,7 @@ namespace DB_Matching_main1
                 int randomLowerLimit = 10000;
                 int randomUpperLimit = 100000;
                 toPath = path.Substring(0, pathIndexOfDot) + $"_db-matched-{random.Next(randomLowerLimit, randomUpperLimit)}.xlsx";
-                if (!(varHold.runHold1 > (randomUpperLimit - randomLowerLimit))) { goto CheckIfToPathIsEmpty; }
+                if (!(VarHold.runHold1 > (randomUpperLimit - randomLowerLimit))) { goto CheckIfToPathIsEmpty; }
                 else
                 {
                     printFittedSizeAsterixSurroundedText("ERROR COPY TIMEOUT");
@@ -682,7 +681,7 @@ namespace DB_Matching_main1
             //Fortlaufendes Lesen der Zellen Zellbereich 1
             GetSimilarityValue getSimilarityValueOBJ = new GetSimilarityValue();
             Console.WriteLine();
-            //printFittedSizeAsterixSurroundedText($"STARTING COMPUTATION WITH {varHold.getSimilarityMethodValue} ALGORITHM");
+            //printFittedSizeAsterixSurroundedText($"STARTING COMPUTATION WITH {VarHold.getSimilarityMethodValue} ALGORITHM");
             //printFittedSizeAsterixSurroundedText($"STARTING COMPUTING WITH LEVENSHTEIN-DISTANCE ALGORITHM");
             //printFittedSizeAsterixSurroundedText($"COMPUTING SUPPORT VIA JACCARD-DISTANCE ALGORITHM");
             printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
@@ -697,7 +696,7 @@ namespace DB_Matching_main1
             {
                 SHA256Managed sha = new SHA256Managed();
                 byte[] checksum = sha.ComputeHash(fileStream);
-                varHold.checksumConvertedOriginal = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                VarHold.checksumConvertedOriginal = BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
 
             Stopwatch stopwatchIntern = new Stopwatch();
@@ -732,7 +731,7 @@ namespace DB_Matching_main1
 
                 string activePrimaryCellValue = activePrimaryCell.ToString();
 
-                if (varHold.useDataFile)
+                if (VarHold.useDataFile)
                 {
                     foreach (var entry in dictionary)
                     {
@@ -766,7 +765,7 @@ namespace DB_Matching_main1
 
                     activeSecondaryCellValue = activeSecondaryCell.ToString();
 
-                    if (varHold.useDataFile)
+                    if (VarHold.useDataFile)
                     {
                         foreach (var entry in dictionary)
                         {
@@ -868,9 +867,9 @@ namespace DB_Matching_main1
                         outputHold += ("Active Primary Row: " + (cnt + 1) + " | ");
                         outputHold += ("Active Secondary Row: " + (sCnt + 1) + " | ");
                         outputHold += ("ActivePrimaryCellValue: " + activePrimaryCellValue + " | ");
-                        if (varHold.useDataFile) { outputHold += ("ActivePrimaryCellValueOld: " + activePrimaryCellValueOld + " | "); }
+                        if (VarHold.useDataFile) { outputHold += ("ActivePrimaryCellValueOld: " + activePrimaryCellValueOld + " | "); }
                         outputHold += ("ActiveSecondaryCellValue: " + activeSecondaryCellValue + " | ");
-                        if (varHold.useDataFile) { outputHold += ("ActiveSecondaryCellValueOld: " + activeSecondaryCellValueOld + " | "); }
+                        if (VarHold.useDataFile) { outputHold += ("ActiveSecondaryCellValueOld: " + activeSecondaryCellValueOld + " | "); }
                         outputHold += ("CompareIdentical: " + compareIdentical + " | ");
                         outputHold += ("CompareMatch: " + compareMatch + " | ");
                         outputHold += ("CompareMatchPercentage: " + compareMatchPercentage + " | ");
@@ -909,7 +908,7 @@ namespace DB_Matching_main1
                     }
                     Console.Write(progressOutputHold);
                     Thread.Sleep(100);*/
-                    varHold.cyclesLog++;
+                    VarHold.cyclesLog++;
                 }
                 //if (verbose) Console.WriteLine();
                 if (!verbose)
@@ -1031,7 +1030,7 @@ namespace DB_Matching_main1
                     cellValueTransferHold = $"JD-Value: {activeMatchJaccardIndex}";
                     cccell.SetCellValue(cellValueTransferHold);
 
-                    if (varHold.useDataFile && (activePrimaryCellValueOld != null || activeSecondaryCellValueOld != null))
+                    if (VarHold.useDataFile && (activePrimaryCellValueOld != null || activeSecondaryCellValueOld != null))
                     {
                         sheet = workbook.GetSheetAt(resultSheet);
                         IRow rrow = sheet.GetRow(cnt);
@@ -1067,7 +1066,7 @@ namespace DB_Matching_main1
             {
                 SHA256Managed sha = new SHA256Managed();
                 byte[] checksum = sha.ComputeHash(fffstream);
-                varHold.checksumConvertedNew = BitConverter.ToString(checksum).Replace("-", String.Empty);
+                VarHold.checksumConvertedNew = BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
 
             if (toggleConsoleBeep) { Console.Beep(); }
@@ -1087,14 +1086,14 @@ namespace DB_Matching_main1
             Console.WriteLine();
             Console.Write("Old Checksum (SHA256): ");
             setConsoleColorToBlue();
-            Console.WriteLine(varHold.checksumConvertedOriginal);
+            Console.WriteLine(VarHold.checksumConvertedOriginal);
             resetConsoleColor();
             Console.Write("New Checksum (SHA256): ");
             setConsoleColorToBlue();
-            Console.WriteLine(varHold.checksumConvertedNew);
+            Console.WriteLine(VarHold.checksumConvertedNew);
             resetConsoleColor();
             Console.WriteLine();
-            Console.WriteLine("Cycles: " + varHold.cyclesLog);
+            Console.WriteLine("Cycles: " + VarHold.cyclesLog);
             Console.WriteLine("ArrayAccessLog: " + getSimilarityValueOBJ.getArrayAccess());
             Console.WriteLine();
             Console.WriteLine("Computing Duration: " + timeSpanString);
@@ -1201,8 +1200,6 @@ namespace DB_Matching_main1
 
         private static void printFittedSizeAsterixSurroundedText(string text)
         {
-            VarHold varHold = new VarHold();
-
             int strLenght = text.Length;
             string outputHold = "";
 
@@ -1280,7 +1277,6 @@ namespace DB_Matching_main1
 
         private static void writeToSettingsFile(string path, string settingName, string settingValue)
         {
-            VarHold varHold = new VarHold();
             Dictionary<string, string> settingsDict = new Dictionary<string, string>();
 
             if (File.Exists(path))
@@ -1338,7 +1334,6 @@ namespace DB_Matching_main1
 
         private static void createDictionary(string jsonPath)
         {
-            VarHold varHold = new VarHold();
             printFittedSizeAsterixSurroundedText("DATA FILE MODE");
             Console.WriteLine("No DATA file found");
         createDictionaryStart:
@@ -1364,7 +1359,7 @@ namespace DB_Matching_main1
             }
             Console.WriteLine();
             Console.WriteLine("### Eingabe der bekannten Übereinstimmungen ###");
-            Console.WriteLine($"### quit: '{varHold.createDictionaryExitInput}' ###");
+            Console.WriteLine($"### quit: '{VarHold.createDictionaryExitInput}' ###");
 
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             int loopCnt = 0;
@@ -1377,7 +1372,7 @@ namespace DB_Matching_main1
                 Console.Write("Eingabe primär: ");
                 string primaryValue = Console.ReadLine();
 
-                if (primaryValue.Contains(varHold.createDictionaryExitInput)) { goto CreateDictionarySave; }
+                if (primaryValue.Contains(VarHold.createDictionaryExitInput)) { goto CreateDictionarySave; }
                 if (primaryValue.Contains(','))
                 {
                     printFittedSizeAsterixSurroundedText("ERROR DATA");
@@ -1395,7 +1390,7 @@ namespace DB_Matching_main1
                 Console.Write("Eingabe sekundär: ");
                 string secondaryValue = Console.ReadLine();
 
-                if (secondaryValue.Contains(varHold.createDictionaryExitInput)) { goto CreateDictionarySave; }
+                if (secondaryValue.Contains(VarHold.createDictionaryExitInput)) { goto CreateDictionarySave; }
                 if (secondaryValue.Contains(','))
                 {
                     printFittedSizeAsterixSurroundedText("ERROR DATA");
@@ -1427,7 +1422,6 @@ namespace DB_Matching_main1
 
         private static void createJson(string jsonPath)
         {
-            VarHold varHold = new VarHold();
             printFittedSizeAsterixSurroundedText("JSON FILE MODE");
             Console.WriteLine("No JSON data file found");
         createJsonStart:
@@ -1453,7 +1447,7 @@ namespace DB_Matching_main1
             }
             Console.WriteLine();
             Console.WriteLine("### Eingabe der bekannten Übereinstimmungen ###");
-            Console.WriteLine($"### quit: '{varHold.createJsonExitInput}' ###");
+            Console.WriteLine($"### quit: '{VarHold.createJsonExitInput}' ###");
             Console.WriteLine();
             int loopCnt = 0;
             Console.WriteLine($"Datensatz-Index: {++loopCnt}");
@@ -1482,7 +1476,7 @@ namespace DB_Matching_main1
                 Console.Write("Eingabe sekundär: ");
                 valueHold.Value2 = Console.ReadLine();
 
-                if (primaryValue.Contains(varHold.createJsonExitInput) || secondaryValue.Contains(varHold.createJsonExitInput)) { break; }
+                if (primaryValue.Contains(VarHold.createJsonExitInput) || secondaryValue.Contains(VarHold.createJsonExitInput)) { break; }
 
                 toJsonString = JsonSerializer.Serialize(valueHold);
                 File.WriteAllText(jsonPath, toJsonString);
@@ -1508,7 +1502,6 @@ namespace DB_Matching_main1
     public class GetSimilarityValue
     {
         private int[,] matrixHold = new int[2, 2];
-        private VarHold varhold = new VarHold();
         public bool toggleArrayAccessLog = true;
 
         public double getLevenshteinDistance(string stringHold1, string stringHold2) //Levenshtein-Distance Algorithmus
@@ -1517,19 +1510,19 @@ namespace DB_Matching_main1
             int lenthHold2 = stringHold2.Length;
 
             matrixHold = new int[lenthHold1 + 1, lenthHold2 + 1];
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
 
             for (int i = 0; i <= lenthHold1; i++)
             {
                 matrixHold[i, 0] = i;
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
             }
             for (int j = 0; j <= lenthHold2; j++)
             {
                 //Console.WriteLine("LenthHold: " + lenthHold2);
                 //Console.WriteLine("  j: " + j);
                 matrixHold[0, j] = j;
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
             }
             for (int i = 1; i <= lenthHold1; i++)
             {
@@ -1539,14 +1532,14 @@ namespace DB_Matching_main1
                     matrixHold[i, j] = Math.Min(Math.Min(matrixHold[i - 1, j] + 1, matrixHold[i, j - 1] + 1), matrixHold[i - 1, j - 1] + val);*/
                     int cost = (j - 1 < stringHold2.Length && i - 1 < stringHold1.Length && stringHold2[j - 1] == stringHold1[i - 1]) ? 0 : 1;
                     matrixHold[i, j] = Math.Min(Math.Min(matrixHold[i - 1, j] + 1, matrixHold[i, j - 1] + 1), matrixHold[i - 1, j - 1] + cost);
-                    if (toggleArrayAccessLog) { varhold.arrayAccess += 3; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess += 3; }
                 }
             }
 
             //double returnHold = matrixHold[lenthHold1, lenthHold2];
             //matrixHold = null;
             //double returnHold = 1.0 - (double)matrixHold[lenthHold1, lenthHold2] / Math.Max(lenthHold1, lenthHold2);
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
             return matrixHold[lenthHold1, lenthHold2];
             //return returnHold;
         }
@@ -1555,15 +1548,15 @@ namespace DB_Matching_main1
             HashSet<char> hashSet1 = new HashSet<char>(input1);
             HashSet<char> hashSet2 = new HashSet<char>(input2);
 
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
 
             int intersectionValueCount = hashSet1.Intersect(hashSet2).Count();
             int unionValueCount = hashSet1.Union(hashSet2).Count();
 
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
 
             return ((double)intersectionValueCount / unionValueCount);
         }
@@ -1573,7 +1566,7 @@ namespace DB_Matching_main1
             int hammingDistance = 0;
             for (int i = 0; i < stringHold1.Length; i++)
             {
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                 if (stringHold1[i] != stringHold2[i]) { hammingDistance++; }
             }
 
@@ -1583,16 +1576,16 @@ namespace DB_Matching_main1
         {
             if (stringHold1.Length != stringHold2.Length)
             {
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                 if (stringHold1.Length < stringHold2.Length)
                 {
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                     while (stringHold1.Length < stringHold2.Length)
                     {
-                        if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                        if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                        if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                        if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                         stringHold1 += " ";
                     }
                 }
@@ -1600,8 +1593,8 @@ namespace DB_Matching_main1
                 {
                     while (stringHold1.Length > stringHold2.Length)
                     {
-                        if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                        if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                        if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                        if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                         stringHold2 += " ";
                     }
                 }
@@ -1610,17 +1603,17 @@ namespace DB_Matching_main1
         }
         private bool adaptStringLength(string stringHold1, string stringHold2)
         {
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
             if (stringHold1.Length == stringHold2.Length) { return (false); }
             else if (stringHold1.Length < stringHold2.Length)
             {
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                 while (stringHold1.Length < stringHold2.Length)
                 {
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                     stringHold1 += ""; //Prüfen
                 }
             }
@@ -1628,8 +1621,8 @@ namespace DB_Matching_main1
             {
                 while (stringHold1.Length > stringHold2.Length)
                 {
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-                    if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+                    if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
                     stringHold2 += "";
                 }
             }
@@ -1638,8 +1631,8 @@ namespace DB_Matching_main1
         }
         public short getStringContainingValue(string stringHold1, string stringHold2) //0: Equal; 1: 2 in 1; 2: 2 in 1; 3: no
         {
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
-            if (toggleArrayAccessLog) { varhold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
+            if (toggleArrayAccessLog) { VarHold.arrayAccess++; }
             if (stringHold1.Equals(stringHold2)) { return 0; }
             else if (stringHold1.Contains(stringHold2)) { return 1; }
             else if (stringHold2.Contains(stringHold1)) { return 2; }
@@ -1647,7 +1640,7 @@ namespace DB_Matching_main1
         }
         public long getArrayAccess()
         {
-            return (varhold.arrayAccess);
+            return (VarHold.arrayAccess);
         }
     }
     public class createJsonValueHold
