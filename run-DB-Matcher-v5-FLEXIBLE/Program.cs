@@ -29,15 +29,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace run_DB_Matcher_v5_FLEXIBLE
 {
+    public static class VarHold
+    {
+        public static string currentMainPath = AppContext.BaseDirectory;
+        public static string contentPath = currentMainPath += "";
+    }
     internal class Program
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(VarHold.currentMainPath);
+            Console.Read();
         }
     }
 }
