@@ -1,8 +1,35 @@
-﻿using DB_Matching_main1;
+/*
+   The DB-Matcher (including DB-Matcher-v5) is an easy-to-use console application written in C# and based on the .NET framework. 
+   The DB-Matcher can merge two databases in Excel format (*.xlsx, *.xls). 
+   It follows the following algorithms in order of importance: Levenshtein distance, Hamming distance, Jaccard index. 
+   The DB-Matcher takes you by the hand at all times and guides you through the process of data matching. 
+
+   Copyright (C) 2024  Carl Öttinger (Carl Oettinger)
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU Affero General Public License as published
+   by the Free Software Foundation, either version 3 of the License, or
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+   You can contact me in the following ways:
+       EMail: oettinger.carl@web.de or big-programming@web.de
+*/
+
+
+using DB_Matching_main1;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
@@ -30,7 +57,7 @@ namespace DB_Matcher_v5
             else
             {
                 PrintIn.red("error when detecting the operating system");
-                PrintIn.red("continuing as Linux");
+                PrintIn.red("proceeding as Linux");
                 PrintIn.red("this may be ignored");
                 PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
                 VarHold.osIsWindows = false;
@@ -68,7 +95,7 @@ namespace DB_Matcher_v5
         internal static bool Menu()
         {
             string content;
-            Console.WriteLine("launching menu");
+            Console.WriteLine("launching recovery menu");
             if (!File.Exists(VarHold.currentRecoveryMenuFile))
             {
                 PrintIn.red("no menu file found");
@@ -87,7 +114,7 @@ namespace DB_Matcher_v5
             {
                 try
                 {
-                    Console.WriteLine($"loading menu from {VarHold.currentRecoveryMenuFile}");
+                    Console.WriteLine($"loading recovery menu from {VarHold.currentRecoveryMenuFile}");
                     content = File.ReadAllText(VarHold.currentRecoveryMenuFile);
 
                     if (string.IsNullOrEmpty(content))
@@ -145,11 +172,18 @@ namespace DB_Matcher_v5
 
                 switch (userInput)
                 {
+                    case "0":
+                        Program.shutdownOrRestart();
+                        break;
                     case "1":
+                        PrintIn.blue("launching SettingsAgent");
+                        SettingsAgent.ViewSettings();
+                        break;
+                    case "2":
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode();
                         break;
-                    case "2":
+                    case "3":
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode(true);
                         break;
@@ -161,9 +195,9 @@ namespace DB_Matcher_v5
                 return false;
             }
         }
-        public static void WaitForKeystrokeENTER(string outputHold = "Press ENTER to continue")
+        public static void WaitForKeystrokeENTER(string outputHold = "hit ENTER to continue")
         {
-            PrintIn.blue("Press ENTER to continue");
+            PrintIn.blue(outputHold);
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
     }

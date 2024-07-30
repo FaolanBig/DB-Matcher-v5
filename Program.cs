@@ -95,8 +95,11 @@ namespace DB_Matching_main1
             VarHold.currentRecoveryMenuFile = currentHoldFilePathBAK += "recoveryMenu.txt";
 
             //StartUp Interrupt
-            RecoveryHandler.StartUp();
-            SettingsAgent.FileLookUp();
+            if (jsonCheck)
+            {
+                RecoveryHandler.StartUp();
+                SettingsAgent.FileLookUp();
+            }
 
             Console.Clear();
             printFittedSizeAsterixSurroundedText("DB-MATCHER");
@@ -260,7 +263,7 @@ namespace DB_Matching_main1
                                 setConsoleColorToGreen();
                                 Console.WriteLine("*** deleted ***");
                                 resetConsoleColor();
-                                Console.WriteLine();
+                                /*Console.WriteLine();
                                 printFittedSizeAsterixSurroundedText("RESTARTING");
 
                                 Process process = new Process();
@@ -279,8 +282,8 @@ namespace DB_Matching_main1
                                 }
 
                                 process.Start();
-                                Environment.Exit(1);
-
+                                Environment.Exit(1);*/
+                                shutdownOrRestart();
                                 break;
                             case ConsoleKey.N:
                                 Console.WriteLine("n");
@@ -1125,7 +1128,8 @@ namespace DB_Matching_main1
         }
         public static void shutdownOrRestart()
         {
-            Console.WriteLine("Press key: ENTER to restart in new instance / ESC to exit");
+            Console.WriteLine();
+            PrintIn.yellow("Press key: ENTER to restart in new instance / ESC to exit");
         GetExitValue:
             bool toggleRestartInNewInstance = false;
             switch (Console.ReadKey(true).Key)
@@ -1165,7 +1169,10 @@ namespace DB_Matching_main1
             Environment.Exit(0);
 
         }
-
+        public static void awaitEnterKey()
+        {
+            while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+        }
         private static int getIntOrDefault(int defaultValue)
         {
             string inputHold1 = Console.ReadLine();
