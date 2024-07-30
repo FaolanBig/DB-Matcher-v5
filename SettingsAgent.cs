@@ -26,6 +26,7 @@
 
 using DB_Matching_main1;
 using MathNet.Numerics.RootFinding;
+using NPOI.POIFS.Crypt;
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
@@ -78,10 +79,12 @@ namespace DB_Matcher_v5
 
             Console.WriteLine();
             addYesNo("automatically use settings file instead of user dialog","automaticMode");
+            addYesNo("use big logo at startUp", "useBigLogoAtStartUp");
 
             try
             {
                 PrintIn.blue("saving settings");
+                PrintIn.WigglyStarInBorders(runs: 1);
                 SaveSettings();
                 PrintIn.green("saving successful");
             }
@@ -197,6 +200,24 @@ namespace DB_Matcher_v5
                 RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to return to recovery menu");
                 RecoveryHandler.RunRecovery();
             }
+        }
+        internal static string GetSettingValue(string keyToCheck)
+        {
+            VarHold.settings.TryGetValue(keyToCheck, out string value);
+            if (string.IsNullOrEmpty(value))
+            {
+                ToLog.Err($"value is null or empty - key: {keyToCheck} @GetSettingValue()");
+                PrintIn.red($"error when reading key-value (value is null or empty) of key: {keyToCheck}");
+                PrintIn.red("this could be caused by a currupt settings file");
+                PrintIn.red("to solve this, reconfigure the settings in recovery mode");
+                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURL}");
+                RecoveryHandler.WaitForKeystrokeENTER();
+                PrintIn.blue("launching recovery mode");
+                PrintIn.WigglyStarInBorders();
+                RecoveryHandler.RunRecovery();
+                return null;
+            }
+            else { return value; }
         }
     }
 }

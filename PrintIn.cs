@@ -24,9 +24,11 @@
 */
 
 
+using DB_Matching_main1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -99,6 +101,37 @@ namespace DB_Matcher_v5
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
                 PrintIn.yellow("[   ]");
                 Thread.Sleep(sleepingDuration);
+            }
+        }
+        public static void PrintLogo()
+        {
+            string logo = @" /$$$$$$$  /$$$$$$$  /$$      /$$             /$$               /$$                                            /$$$$$$$ 
+| $$__  $$| $$__  $$| $$$    /$$$            | $$              | $$                                           | $$____/ 
+| $$  \ $$| $$  \ $$| $$$$  /$$$$  /$$$$$$  /$$$$$$    /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$        /$$    /$$| $$      
+| $$  | $$| $$$$$$$ | $$ $$/$$ $$ |____  $$|_  $$_/   /$$_____/| $$__  $$ /$$__  $$ /$$__  $$ /$$$$|  $$  /$$/| $$$$$$$ 
+| $$  | $$| $$__  $$| $$  $$$| $$  /$$$$$$$  | $$    | $$      | $$  \ $$| $$$$$$$$| $$  \__/|____/ \  $$/$$/ |_____  $$
+| $$  | $$| $$  \ $$| $$\  $ | $$ /$$__  $$  | $$ /$$| $$      | $$  | $$| $$_____/| $$              \  $$$/   /$$  \ $$
+| $$$$$$$/| $$$$$$$/| $$ \/  | $$|  $$$$$$$  |  $$$$/|  $$$$$$$| $$  | $$|  $$$$$$$| $$               \  $/   |  $$$$$$/
+|_______/ |_______/ |__/     |__/ \_______/   \___/   \_______/|__/  |__/ \_______/|__/                \_/     \______/ ";
+
+            if (File.Exists(VarHold.logoFilePath))
+            {
+                try
+                {
+                    ToLog.Inf("logo file detected");
+                    logo = File.ReadAllText(VarHold.currentRecoveryMenuFile);
+                    PrintIn.blue(logo);
+                }
+                catch (Exception ex)
+                {
+                    ToLog.Err($"can't load logo file - error: {ex.Message}");
+                    PrintIn.blue(logo);
+                }
+            }
+            else
+            {
+                //Console.WindowWidth = 140;
+                PrintIn.blue(logo);
             }
         }
     }

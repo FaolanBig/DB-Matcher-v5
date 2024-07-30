@@ -2,5 +2,3 @@
 SeriLog
 SeriLog.Sinks.Console
 SeriLog.Sinks.File
-
-dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File
