@@ -75,6 +75,7 @@ namespace DB_Matching_main1
     {
         private static void Main(string[] args)
         {
+            Console.Clear();
             run();
         }
 
