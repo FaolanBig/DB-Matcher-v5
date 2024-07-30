@@ -58,7 +58,7 @@ namespace DB_Matcher_v5
             Console.WriteLine(toPrint);
             Console.ResetColor();
         }
-        public static void wigglyStarInBorders(int sleepingDuration = 100, int runs = 3)
+        public static void WigglyStarInBorders(int sleepingDuration = 100, int runs = 3)
         {
             for (int ii = 0; ii < runs; ii++)
             {

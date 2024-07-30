@@ -72,7 +72,7 @@ namespace DB_Matcher_v5
                 {
                     PrintIn.blue("starting recovery mode...");
                     Console.WriteLine();
-                    PrintIn.wigglyStarInBorders();
+                    PrintIn.WigglyStarInBorders();
 
                     RunRecovery();
                     return;

@@ -125,7 +125,7 @@ namespace DB_Matcher_v5
                 PrintIn.blue("launching recovery mode");
                 Console.WriteLine();
 
-                PrintIn.wigglyStarInBorders();
+                PrintIn.WigglyStarInBorders();
                 
                 RecoveryHandler.RunRecovery();
             }
@@ -180,7 +180,7 @@ namespace DB_Matcher_v5
                 PrintIn.red("no settings file found");
                 PrintIn.blue("try adding a settings configuration in recovery mode");
                 PrintIn.blue("returning to recovery menu");
-                PrintIn.wigglyStarInBorders();
+                PrintIn.WigglyStarInBorders();
                 RecoveryHandler.RunRecovery();
             }
             else
