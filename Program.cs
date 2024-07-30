@@ -68,7 +68,8 @@ namespace DB_Matching_main1
         public static bool osIsWindows; //true: Windows; false: Linux
         public static string logFileNameInfo = "logfile.txt";
         public static string logFileNameError = logFileNameInfo;
-        public static string logoFilePath;
+        public static string logoFilePath = "";
+        public static string currentHoldFilePath = "";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -96,6 +97,7 @@ namespace DB_Matching_main1
             VarHold.currentMainFilePath = Assembly.GetExecutingAssembly().Location;
             currentHoldFilePath += "data.txt";
             currentHoldFilePath2 += "pw.txt";
+            VarHold.currentHoldFilePath = currentHoldFilePath;
             currentSettingsFilePathHold += "settings.txt";
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
             VarHold.currentRecoveryMenuFile = currentHoldFilePathBAK += "recoveryMenu.txt";
@@ -1368,11 +1370,11 @@ namespace DB_Matching_main1
             else { return null; }
         }
 
-        private static void createDictionary(string jsonPath)
+        internal static void createDictionary(string jsonPath, bool runFromRun = true)
         {
             Console.Clear();
             printFittedSizeAsterixSurroundedText("DATA FILE MODE");
-            Console.WriteLine("No DATA file found");
+            if (runFromRun) { Console.WriteLine("No DATA file found"); }
         createDictionaryStart:
             Console.Write("Create DATA file (y/n): ");
 
@@ -1385,7 +1387,8 @@ namespace DB_Matching_main1
                     Console.Write("n");
                     Console.WriteLine();
                     Console.WriteLine();
-                    run(false);
+                    if (runFromRun) { run(false); }
+                    else { RecoveryHandler.RunRecovery(); }
                     break;
                 default:
                     Console.WriteLine();

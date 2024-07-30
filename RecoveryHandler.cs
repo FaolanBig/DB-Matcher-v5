@@ -186,6 +186,9 @@ namespace DB_Matcher_v5
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode(true);
                         break;
+                    case "4":
+                        Program.createDictionary(VarHold.currentHoldFilePath, false);
+                        break;
                     default:
                         PrintIn.red("bad input");
                         goto EnterNumber;
