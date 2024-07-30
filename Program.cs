@@ -1061,11 +1061,11 @@ namespace DB_Matching_main1
                 ToLog.Err("could not load data file: file does not exist @loadDataFile()");
             }
         }
-        internal static void jsonChecker(Dictionary<string, string> dictionaryy)
+        internal static void jsonChecker(Dictionary<string, string> dictionaryy, bool passRunFromRun = true)
         {
             if (!File.Exists(VarHold.currentHoldFilePath))
             {
-                createDictionary(VarHold.currentHoldFilePath);
+                createDictionary(VarHold.currentHoldFilePath, passRunFromRun);
 
                 //neu starten
                 /*Process process = new Process();
