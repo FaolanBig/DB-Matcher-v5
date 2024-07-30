@@ -10,6 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="recoveryMenu.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="recoveryMenu.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="npoi" Version="2.7.1" />
   </ItemGroup>
 
