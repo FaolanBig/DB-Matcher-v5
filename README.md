@@ -8,6 +8,30 @@ Database (Excel) matching program written in C# with .NET-Framework using nPoi
 3. Run the INSTALLER.exe
 4. You will be guided through the process of installation by INSTALLER.exe
 
+**Manual installation**
+
+first of all make shure you have dotnet SDK installed
+then follow these steps:
+
+1. download the repo as a .zip file
+2. extract it to the preferred directory
+3. open a terminal in this directory (either cmd.exe or powershell)
+4. execute the following command (only when executing the first time)
+
+*cmd*
+
+    dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
+
+*powershell*
+
+    dotnet add package npoi; dotnet add package SeriLog; dotnet add package SeriLog.Sinks.Console; dotnet add package SeriLog.Sinks.File; dotnet restore; copy .\recoveryMenu.txt .\bin\Debug\net8.0\; dotnet run
+
+5. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command
+
+*cmd or powershell*
+
+    dotnet run
+
 **Description**
 
 *** English ***
