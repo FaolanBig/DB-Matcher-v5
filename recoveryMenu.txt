@@ -2,4 +2,4 @@
 (1) - view settings
 (2) - run launcher for editing settings
 (3) - edit setting file manually
-(4) - create new data file (old one will be lost)
+(4) - launch data file setup

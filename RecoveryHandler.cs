@@ -187,7 +187,7 @@ namespace DB_Matcher_v5
                         SettingsAgent.EditMode(true);
                         break;
                     case "4":
-                        Program.createDictionary(VarHold.currentHoldFilePath, false);
+                        Program.jsonChecker(Program.dictionary);
                         break;
                     default:
                         PrintIn.red("bad input");

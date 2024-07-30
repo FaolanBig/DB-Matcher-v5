@@ -80,6 +80,8 @@ namespace DB_Matcher_v5
             Console.WriteLine();
             addYesNo("automatically use settings file instead of user dialog","automaticMode");
             addYesNo("use big logo at startUp", "useBigLogoAtStartUp");
+            addYesNo("skip data file setup at startUp", "skipDataFileSetup");
+            addYesNo("skip ask to use data file", "skipAskToUseDataFile");
 
             try
             {
