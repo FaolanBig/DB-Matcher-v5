@@ -1,2 +1,4 @@
-﻿(1) - run launcher for editing settings
-(2) - edit setting file manually
+﻿(0) - exit
+(1) - view settings
+(2) - run launcher for editing settings
+(3) - edit setting file manually

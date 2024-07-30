@@ -29,6 +29,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
@@ -56,7 +57,7 @@ namespace DB_Matcher_v5
             else
             {
                 PrintIn.red("error when detecting the operating system");
-                PrintIn.red("continuing as Linux");
+                PrintIn.red("proceeding as Linux");
                 PrintIn.red("this may be ignored");
                 PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
                 VarHold.osIsWindows = false;
@@ -94,7 +95,7 @@ namespace DB_Matcher_v5
         internal static bool Menu()
         {
             string content;
-            Console.WriteLine("launching menu");
+            Console.WriteLine("launching recovery menu");
             if (!File.Exists(VarHold.currentRecoveryMenuFile))
             {
                 PrintIn.red("no menu file found");
@@ -113,7 +114,7 @@ namespace DB_Matcher_v5
             {
                 try
                 {
-                    Console.WriteLine($"loading menu from {VarHold.currentRecoveryMenuFile}");
+                    Console.WriteLine($"loading recovery menu from {VarHold.currentRecoveryMenuFile}");
                     content = File.ReadAllText(VarHold.currentRecoveryMenuFile);
 
                     if (string.IsNullOrEmpty(content))
@@ -171,11 +172,18 @@ namespace DB_Matcher_v5
 
                 switch (userInput)
                 {
+                    case "0":
+                        Program.shutdownOrRestart();
+                        break;
                     case "1":
+                        PrintIn.blue("launching SettingsAgent");
+                        SettingsAgent.ViewSettings();
+                        break;
+                    case "2":
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode();
                         break;
-                    case "2":
+                    case "3":
                         PrintIn.blue("launching SettingsAgent");
                         SettingsAgent.EditMode(true);
                         break;
@@ -187,9 +195,9 @@ namespace DB_Matcher_v5
                 return false;
             }
         }
-        public static void WaitForKeystrokeENTER(string outputHold = "Press ENTER to continue")
+        public static void WaitForKeystrokeENTER(string outputHold = "hit ENTER to continue")
         {
-            PrintIn.blue("Press ENTER to continue");
+            PrintIn.blue(outputHold);
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
         }
     }

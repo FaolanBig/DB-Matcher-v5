@@ -28,6 +28,7 @@ using DB_Matching_main1;
 using MathNet.Numerics.RootFinding;
 using NPOI.SS.Formula.Functions;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -62,10 +63,34 @@ namespace DB_Matcher_v5
             }
 
             PrintIn.blue("starting settings launcher");
+            PrintIn.blue("erasing current configuration");
+
+            try
+            {
+                VarHold.settings.Clear();
+                PrintIn.green("erasing successful");
+            }
+            catch (Exception ex)
+            {
+                PrintIn.red($"an unexpected error occurred: {ex.Message}");
+                PrintIn.blue("proceeding");
+            }
+
             Console.WriteLine();
             addYesNo("automatically use settings file instead of user dialog","automaticMode");
 
-            SaveSettings();
+            try
+            {
+                PrintIn.blue("saving settings");
+                SaveSettings();
+                PrintIn.green("saving successful");
+            }
+            catch (Exception ex)
+            {
+                PrintIn.red($"an unexpected error occurred: {ex.Message}");
+                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURL}");
+            }
+            
             PrintIn.blue("DB-Matcher-v5 needs to be restarted");
             Program.shutdownOrRestart();
         }
@@ -78,14 +103,14 @@ namespace DB_Matcher_v5
             switch (userInput)
             {
                 case "y":
-                    Console.WriteLine("y");
+                    //Console.WriteLine("y");
                     VarHold.settings.Add(key, valueYes);
                     PrintIn.green($"added: {key}//{valueYes}");
                     return true;
                 case "n":
                     VarHold.settings.Add(key, valueNo);
                     PrintIn.green($"added: {key}//{valueNo}");
-                    Console.WriteLine("n");
+                    //Console.WriteLine("n");
                     return false;
                 default:
                     PrintIn.red("bad input");
@@ -104,27 +129,76 @@ namespace DB_Matcher_v5
                 
                 RecoveryHandler.RunRecovery();
             }
-            loadSettings();
+            LoadSettings();
         }
-        internal static void loadSettings()
+        internal static void LoadSettings()
         {
-            foreach (var line in File.ReadLines(VarHold.currentSettingsFilePathHold))
+            try
             {
-                var parts = line.Split(new[] { "//" }, StringSplitOptions.None);
-                if (parts.Length == 2)
+                foreach (var line in File.ReadLines(VarHold.currentSettingsFilePathHold))
                 {
-                    VarHold.settings[parts[0].Trim()] = parts[1].Trim();
+                    var parts = line.Split(new[] { "//" }, StringSplitOptions.None);
+                    if (parts.Length == 2)
+                    {
+                        VarHold.settings[parts[0].Trim()] = parts[1].Trim();
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                PrintIn.red($"an unexpected error occured: {ex.Message}");
+                PrintIn.red($"please report it to {VarHold.repoURL}");
             }
         }
         internal static void SaveSettings()
         {
-            using (StreamWriter file = new StreamWriter(VarHold.currentSettingsFilePathHold))
+            try
             {
-                foreach (var entry in VarHold.settings)
+                using (StreamWriter file = new StreamWriter(VarHold.currentSettingsFilePathHold))
                 {
-                    file.WriteLine($"{entry.Key}//{entry.Value}");
+                    foreach (var entry in VarHold.settings)
+                    {
+                        file.WriteLine($"{entry.Key}//{entry.Value}");
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                PrintIn.red($"an unexpected error occured: {ex.Message}");
+                PrintIn.red($"please report it to {VarHold.repoURL}");
+            }
+        }
+        internal static void ViewSettings()
+        {
+            Console.Clear();
+            Program.printFittedSizeAsterixSurroundedText("Settings Agent");
+
+            PrintIn.blue("file lookup");
+
+            if (!File.Exists(VarHold.currentSettingsFilePathHold))
+            {
+                PrintIn.red("no settings file found");
+                PrintIn.blue("try adding a settings configuration in recovery mode");
+                PrintIn.blue("returning to recovery menu");
+                PrintIn.wigglyStarInBorders();
+                RecoveryHandler.RunRecovery();
+            }
+            else
+            {
+                PrintIn.green("settings file found");
+                PrintIn.blue("loading settings");
+                LoadSettings();
+
+                Console.WriteLine();
+                //Console.WriteLine("⤓⤓⤓");
+                foreach (var i in VarHold.settings)
+                {
+                    Console.WriteLine($">>> {i.Key}//{i.Value}");
+                }
+                //Console.WriteLine("⤒⤒⤒");
+                Console.WriteLine();
+                RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to return to recovery menu");
+                RecoveryHandler.RunRecovery();
             }
         }
     }
