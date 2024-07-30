@@ -204,118 +204,136 @@ namespace DB_Matching_main1
 
             if (jsonCheck)
             {
-                if (SettingsAgent.GetSettingValue("skipDataFileSetup") != "true")
+                if (SettingsAgent.GetSettingIsTrue("automaticMode"))
                 {
-                    jsonChecker(dictionary);
-                }
-                else if (SettingsAgent.GetSettingValue("skipAskToUseDataFile") != "true")
-                {
-                    loadDataFile(dictionary);
+                    if (SettingsAgent.GetSettingValue("skipDataFileSetup") != "true")
+                    {
+                        jsonChecker(dictionary);
+                    }
+                    else if (SettingsAgent.GetSettingValue("skipAskToUseDataFile") != "true")
+                    {
+                        loadDataFile(dictionary);
+                    }
                 }
             }
 
-            Console.WriteLine();
-        SetVerbose:
-            Console.Write("Set Output to verbose (may be slower) y/n: ");
             bool verbose;
-            /*if (Console.ReadKey(true).Key == ConsoleKey.Y)
-            {
-                verbose = true;
-                Console.WriteLine("y");
-            }
-            else if (Console.ReadKey(true).Key == ConsoleKey.N)
-            {
-                verbose = false;
-                Console.WriteLine("n");
-            }
+
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("verbose")) { verbose = true; }
+            else if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("verbose")) { verbose = false; }
             else
             {
                 Console.WriteLine();
-                goto SetVerbose;
-            }*/
-
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.Y:
+            SetVerbose:
+                Console.Write("Set Output to verbose (may be slower) y/n: ");
+                /*if (Console.ReadKey(true).Key == ConsoleKey.Y)
+                {
                     verbose = true;
-                    Console.WriteLine("y"); break;
-                case ConsoleKey.N:
+                    Console.WriteLine("y");
+                }
+                else if (Console.ReadKey(true).Key == ConsoleKey.N)
+                {
                     verbose = false;
-                    Console.WriteLine("n"); break;
-                default:
+                    Console.WriteLine("n");
+                }
+                else
+                {
                     Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("DATA ERROR");
                     goto SetVerbose;
-                    break;
+                }*/
+
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        verbose = true;
+                        Console.WriteLine("y"); break;
+                    case ConsoleKey.N:
+                        verbose = false;
+                        Console.WriteLine("n"); break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("DATA ERROR");
+                        goto SetVerbose;
+                        break;
+                }
             }
 
-        SetWriteResults:
             bool writeResults;
-            Console.WriteLine();
-            Console.Write("Write Output (may be slower) y/n: ");
-            switch (Console.ReadKey(true).Key)
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("writeResults")) {  writeResults = true; }
+            else if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("writeResults")) { writeResults = false; }
+            else
             {
-                case ConsoleKey.Y:
-                    writeResults = true;
-                    Console.WriteLine("y");
-                    break;
-                case ConsoleKey.N:
-                    writeResults = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto SetWriteResults;
-                    break;
+            SetWriteResults:
+                Console.WriteLine();
+                Console.Write("Write Output (may be slower) y/n: ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        writeResults = true;
+                        Console.WriteLine("y");
+                        break;
+                    case ConsoleKey.N:
+                        writeResults = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto SetWriteResults;
+                        break;
+                }
             }
 
-        /*ToggleConsoleColor:
-            Console.WriteLine();
-            Console.Write("Console Color (y/n): ");
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.Y:
-                    VarHold.toggleConsoleColor = true;
-                    Console.WriteLine("y");
-                    Console.Beep();
-                    break;
-                case ConsoleKey.N:
-                    VarHold.toggleConsoleColor = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto ToggleConsoleBeep;
-            }*/
+            /*ToggleConsoleColor:
+                Console.WriteLine();
+                Console.Write("Console Color (y/n): ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        VarHold.toggleConsoleColor = true;
+                        Console.WriteLine("y");
+                        Console.Beep();
+                        break;
+                    case ConsoleKey.N:
+                        VarHold.toggleConsoleColor = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto ToggleConsoleBeep;
+                }*/
 
-
-        ToggleConsoleBeep:
             bool toggleConsoleBeep;
-            Console.WriteLine();
-            Console.Write("Console Beep (may be annoying) y/n: ");
-            switch (Console.ReadKey(true).Key)
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("consoleBeep")) { toggleConsoleBeep = true; }
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("consoleBeep")) { toggleConsoleBeep = false; }
+            else
             {
-                case ConsoleKey.Y:
-                    toggleConsoleBeep = true;
-                    Console.WriteLine("y");
-                    Console.Beep();
-                    break;
-                case ConsoleKey.N:
-                    toggleConsoleBeep = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto ToggleConsoleBeep;
+            ToggleConsoleBeep:
+                Console.WriteLine();
+                Console.Write("Console Beep (may be annoying) y/n: ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        toggleConsoleBeep = true;
+                        Console.WriteLine("y");
+                        Console.Beep();
+                        break;
+                    case ConsoleKey.N:
+                        toggleConsoleBeep = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto ToggleConsoleBeep;
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
 
         getSimilarityMethod:
             VarHold.getSimilarityMethodValue = "Levenshtein-Distance";
@@ -347,6 +365,7 @@ namespace DB_Matching_main1
         }
         Console.WriteLine();*/
         SetPath:
+            Console.WriteLine();
             Console.Write("Eingabe des Dateipfades: ");
             string path = Console.ReadLine(); //Pfad der Excel-Datei durch Konsoleneinabe
             path = path.Replace("\"", "");
@@ -1581,21 +1600,22 @@ namespace DB_Matching_main1
             }
         }
 
-        private static void setConsoleColorToRed() { Console.ForegroundColor = ConsoleColor.Red; }
+        internal static void setConsoleColorToRed() { Console.ForegroundColor = ConsoleColor.Red; }
 
-        private static void setConsoleColorToGreen() { Console.ForegroundColor = ConsoleColor.Green; }
+        internal static void setConsoleColorToGreen() { Console.ForegroundColor = ConsoleColor.Green; }
 
-        private static void setConsoleColorToBlue() { Console.ForegroundColor = ConsoleColor.Blue; }
+        internal static void setConsoleColorToBlue() { Console.ForegroundColor = ConsoleColor.Blue; }
 
-        private static void setConsoleColorToBlack() { Console.ForegroundColor = ConsoleColor.Black; }
+        internal static void setConsoleColorToBlack() { Console.ForegroundColor = ConsoleColor.Black; }
+        internal static void setConsoleColorToYellow() { Console.ForegroundColor = ConsoleColor.Yellow; }
 
-        private static void setConsoleBackgroundColorToRed() { Console.BackgroundColor = ConsoleColor.Red; }
+        internal static void setConsoleBackgroundColorToRed() { Console.BackgroundColor = ConsoleColor.Red; }
 
-        private static void setConsoleBackgroundColorToGreen() { Console.BackgroundColor = ConsoleColor.Green; }
+        internal static void setConsoleBackgroundColorToGreen() { Console.BackgroundColor = ConsoleColor.Green; }
 
-        private static void setConsoleBackgroundColorToBlue() { Console.BackgroundColor = ConsoleColor.Blue; }
+        internal static void setConsoleBackgroundColorToBlue() { Console.BackgroundColor = ConsoleColor.Blue; }
 
-        private static void resetConsoleColor() { Console.ResetColor(); }
+        internal static void resetConsoleColor() { Console.ResetColor(); }
     }
     public class GetSimilarityValue
     {
