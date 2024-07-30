@@ -66,6 +66,8 @@ namespace DB_Matching_main1
         public static string currentSettingsFilePathHold = "";
         public static string currentRecoveryMenuFile = "";
         public static bool osIsWindows; //true: Windows; false: Linux
+        public static string logFileNameInfo = "logfile.txt";
+        public static string logFileNameError = logFileNameInfo;
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -1166,6 +1168,7 @@ namespace DB_Matching_main1
                 var currentFileName = Assembly.GetExecutingAssembly().Location;
                 Process.Start(currentFileName);
             }
+            Console.Clear();
             Environment.Exit(0);
 
         }
