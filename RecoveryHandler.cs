@@ -71,7 +71,6 @@ namespace DB_Matcher_v5
                 if (Console.KeyAvailable && Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {
                     PrintIn.blue("starting recovery mode...");
-                    Console.WriteLine();
                     PrintIn.WigglyStarInBorders();
 
                     RunRecovery();

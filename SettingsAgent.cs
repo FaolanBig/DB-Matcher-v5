@@ -123,10 +123,7 @@ namespace DB_Matcher_v5
             {
                 PrintIn.red("no settings file found");
                 PrintIn.blue("launching recovery mode");
-                Console.WriteLine();
-
                 PrintIn.WigglyStarInBorders();
-                
                 RecoveryHandler.RunRecovery();
             }
             LoadSettings();

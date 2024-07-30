@@ -60,6 +60,7 @@ namespace DB_Matcher_v5
         }
         public static void WigglyStarInBorders(int sleepingDuration = 100, int runs = 3)
         {
+            Console.WriteLine();
             for (int ii = 0; ii < runs; ii++)
             {
                 Console.SetCursorPosition(0, Console.CursorTop - 1);
