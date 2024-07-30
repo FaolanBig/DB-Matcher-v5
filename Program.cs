@@ -68,6 +68,7 @@ namespace DB_Matching_main1
         public static bool osIsWindows; //true: Windows; false: Linux
         public static string logFileNameInfo = "logfile.txt";
         public static string logFileNameError = logFileNameInfo;
+        public static string logoFilePath;
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -75,6 +76,7 @@ namespace DB_Matching_main1
     {
         private static void Main(string[] args)
         {
+            ToLog.Inf("program started");
             Console.Clear();
             run();
         }
@@ -87,6 +89,7 @@ namespace DB_Matching_main1
 
         Start:
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
+            VarHold.logoFilePath = currentHoldFilePath + "logo.txt";
             string currentHoldFilePathBAK = currentHoldFilePath;
             string currentHoldFilePath2 = currentHoldFilePath;
             string currentSettingsFilePathHold = currentHoldFilePath;
@@ -105,7 +108,11 @@ namespace DB_Matching_main1
             }
 
             Console.Clear();
-            printFittedSizeAsterixSurroundedText("DB-MATCHER");
+            if (!jsonCheck)
+            {
+                if (SettingsAgent.GetSettingValue("useBigLogoAtStartUp") == "true") { PrintIn.PrintLogo(); }
+                else { printFittedSizeAsterixSurroundedText("DB-MATCHER"); }
+            }
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))
@@ -1363,6 +1370,7 @@ namespace DB_Matching_main1
 
         private static void createDictionary(string jsonPath)
         {
+            Console.Clear();
             printFittedSizeAsterixSurroundedText("DATA FILE MODE");
             Console.WriteLine("No DATA file found");
         createDictionaryStart:
