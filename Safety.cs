@@ -28,7 +28,7 @@ namespace DB_Matcher_v5
         {
             Serilog.Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File(VarHold.LogFileNameError)
+                .WriteTo.File(VarHold.logFileNameError)
                 .CreateLogger();
 
             Serilog.Log.Error(toLog);
