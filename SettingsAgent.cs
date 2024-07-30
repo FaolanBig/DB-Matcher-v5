@@ -80,6 +80,34 @@ namespace DB_Matcher_v5
             Console.WriteLine();
             addYesNo("automatically use settings file instead of user dialog","automaticMode");
             addYesNo("use big logo at startUp", "useBigLogoAtStartUp");
+            addYesNo("skip data file setup at startUp", "skipDataFileSetup");
+            addYesNo("skip ask to use data file", "skipAskToUseDataFile");
+            addYesNo("verbose output", "verbose");
+            addYesNo("always write results", "writeResults");
+            addYesNo("get an auditive feedback when finishing processes (beep)", "consoleBeep");
+
+            Console.WriteLine();
+            PrintIn.yellow("changing the settings will overwrite any existing setting file");
+            Program.setConsoleColorToYellow();
+
+            AskToSave:
+            Console.Write("continue and save new settings? (y/n) ");
+            string userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "y":
+                    break;
+                case "n":
+                    PrintIn.red("abort");
+                    PrintIn.red("returning to recovery menu");
+                    PrintIn.WigglyStarInBorders(runs: 1);
+                    RecoveryHandler.RunRecovery();
+                    break;
+                default:
+                    goto AskToSave;
+            }
+
 
             try
             {
@@ -218,6 +246,10 @@ namespace DB_Matcher_v5
                 return null;
             }
             else { return value; }
+        }
+        internal static bool GetSettingIsTrue(string keyToCheck)
+        {
+            if (GetSettingValue(keyToCheck) == "true") { return true; } else { return false; }
         }
     }
 }

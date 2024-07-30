@@ -28,6 +28,7 @@ using DB_Matcher_v5;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -68,12 +69,14 @@ namespace DB_Matching_main1
         public static bool osIsWindows; //true: Windows; false: Linux
         public static string logFileNameInfo = "logfile.txt";
         public static string logFileNameError = logFileNameInfo;
-        public static string logoFilePath;
+        public static string logoFilePath = "";
+        public static string currentHoldFilePath = "";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
     internal class Program
     {
+        internal static Dictionary<string, string> dictionary = new Dictionary<string, string>();
         private static void Main(string[] args)
         {
             ToLog.Inf("program started");
@@ -81,11 +84,11 @@ namespace DB_Matching_main1
             run();
         }
 
-        private static void run(bool jsonCheck = true)
+        internal static void run(bool jsonCheck = true)
         {
             Console.Title = "DB-MATCHER-v5";
             Stopwatch stopwatch = new Stopwatch();
-            Dictionary<string, string> dictionary = new Dictionary<string, string>();
+            //Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
         Start:
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
@@ -96,6 +99,7 @@ namespace DB_Matching_main1
             VarHold.currentMainFilePath = Assembly.GetExecutingAssembly().Location;
             currentHoldFilePath += "data.txt";
             currentHoldFilePath2 += "pw.txt";
+            VarHold.currentHoldFilePath = currentHoldFilePath;
             currentSettingsFilePathHold += "settings.txt";
             VarHold.currentSettingsFilePathHold = currentSettingsFilePathHold;
             VarHold.currentRecoveryMenuFile = currentHoldFilePathBAK += "recoveryMenu.txt";
@@ -108,11 +112,8 @@ namespace DB_Matching_main1
             }
 
             Console.Clear();
-            if (!jsonCheck)
-            {
-                if (SettingsAgent.GetSettingValue("useBigLogoAtStartUp") == "true") { PrintIn.PrintLogo(); }
-                else { printFittedSizeAsterixSurroundedText("DB-MATCHER"); }
-            }
+            if (SettingsAgent.GetSettingValue("useBigLogoAtStartUp") == "true") { PrintIn.PrintLogo(); }
+            else { printFittedSizeAsterixSurroundedText("DB-MATCHER"); }
 
         ContinueFromInterruptDuringStartUp:
             if (File.Exists(currentHoldFilePath2))
@@ -203,240 +204,136 @@ namespace DB_Matching_main1
 
             if (jsonCheck)
             {
-                if (!File.Exists(currentHoldFilePath))
+                if (SettingsAgent.GetSettingIsTrue("automaticMode"))
                 {
-                    createDictionary(currentHoldFilePath);
-
-                    //neu starten
-                    Process process = new Process();
-                    process.StartInfo.FileName = "cmd.exe";
-                    process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
-
-                    printFittedSizeAsterixSurroundedText("RESTARTING");
-
-                    for (int i = 0; i <= 100; i++)
+                    if (SettingsAgent.GetSettingValue("skipDataFileSetup") != "true")
                     {
-                        Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                        Console.Write(new string(' ', Console.WindowWidth));
-                        Console.SetCursorPosition(0, Console.WindowHeight - 1);
-
-                        double tprogress = (i * (Console.WindowWidth - 6) / 100);
-                        Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
-                        Thread.Sleep(1);
+                        jsonChecker(dictionary);
                     }
-
-                    process.Start();
-                    Environment.Exit(1);
-                }
-
-                Console.WriteLine("### quit: ^C ###");
-                Console.WriteLine();
-
-                using (StreamReader file = new StreamReader(currentHoldFilePath))
-                {
-                    string line;
-                    while ((line = file.ReadLine()) != null)
+                    else if (SettingsAgent.GetSettingValue("skipAskToUseDataFile") != "true")
                     {
-                        string[] streamParts = line.Split(' ');
-                        if (streamParts.Length == 2)
-                        {
-                            dictionary.Add(streamParts[0], streamParts[1]);
-                        }
+                        loadDataFile(dictionary);
                     }
-                }
-                Console.WriteLine("Current Dictionary Content: ");
-
-                foreach (var entry in dictionary)
-                {
-                    Console.WriteLine("- {0} ---> {1}", entry.Key, entry.Value);
-                }
-
-                Console.WriteLine();
-            KeepDataFile:
-                Console.Write("Keep DATA file (y/n): ");
-
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.Y:
-                        Console.WriteLine("y");
-                        break;
-                    case ConsoleKey.N:
-                        Console.WriteLine("n");
-                    ConfirmDelete:
-                        Console.Write("Confirm delete DATA file (y/n): ");
-                        switch (Console.ReadKey(true).Key)
-                        {
-                            case ConsoleKey.Y:
-                                Console.WriteLine("y");
-                                File.Delete(currentHoldFilePath);
-                                Console.WriteLine();
-                                setConsoleColorToGreen();
-                                Console.WriteLine("*** deleted ***");
-                                resetConsoleColor();
-                                /*Console.WriteLine();
-                                printFittedSizeAsterixSurroundedText("RESTARTING");
-
-                                Process process = new Process();
-                                process.StartInfo.FileName = "cmd.exe";
-                                process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
-
-                                for (int i = 0; i <= 100; i++)
-                                {
-                                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                                    Console.Write(new string(' ', Console.WindowWidth));
-                                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-
-                                    double tprogress = (i * (Console.WindowWidth - 6) / 100);
-                                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
-                                    Thread.Sleep(1);
-                                }
-
-                                process.Start();
-                                Environment.Exit(1);*/
-                                shutdownOrRestart();
-                                break;
-                            case ConsoleKey.N:
-                                Console.WriteLine("n");
-                                Console.WriteLine();
-                                setConsoleColorToRed();
-                                Console.WriteLine("*** canceled ***");
-                                resetConsoleColor();
-                                break;
-                            default:
-                                printFittedSizeAsterixSurroundedText("ERROR DATA");
-                                goto ConfirmDelete;
-                                break;
-                        }
-                        break;
-                    default:
-                        Console.WriteLine();
-                        printFittedSizeAsterixSurroundedText("ERROR DATA");
-                        goto KeepDataFile;
-                        break;
-                }
-
-                Console.WriteLine();
-
-            UseDataFile:
-                Console.Write("Use DATA file(y/n): ");
-                switch (Console.ReadKey(true).Key)
-                {
-                    case ConsoleKey.Y:
-                        Console.WriteLine("y");
-                        VarHold.useDataFile = true;
-                        break;
-                    case ConsoleKey.N:
-                        Console.WriteLine("n");
-                        VarHold.useDataFile = false;
-                        break;
-                    default:
-                        goto UseDataFile;
-                        break;
                 }
             }
 
-            Console.WriteLine();
-        SetVerbose:
-            Console.Write("Set Output to verbose (may be slower) y/n: ");
             bool verbose;
-            /*if (Console.ReadKey(true).Key == ConsoleKey.Y)
-            {
-                verbose = true;
-                Console.WriteLine("y");
-            }
-            else if (Console.ReadKey(true).Key == ConsoleKey.N)
-            {
-                verbose = false;
-                Console.WriteLine("n");
-            }
+
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("verbose")) { verbose = true; }
+            else if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("verbose")) { verbose = false; }
             else
             {
                 Console.WriteLine();
-                goto SetVerbose;
-            }*/
-
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.Y:
+            SetVerbose:
+                Console.Write("Set Output to verbose (may be slower) y/n: ");
+                /*if (Console.ReadKey(true).Key == ConsoleKey.Y)
+                {
                     verbose = true;
-                    Console.WriteLine("y"); break;
-                case ConsoleKey.N:
+                    Console.WriteLine("y");
+                }
+                else if (Console.ReadKey(true).Key == ConsoleKey.N)
+                {
                     verbose = false;
-                    Console.WriteLine("n"); break;
-                default:
+                    Console.WriteLine("n");
+                }
+                else
+                {
                     Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("DATA ERROR");
                     goto SetVerbose;
-                    break;
+                }*/
+
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        verbose = true;
+                        Console.WriteLine("y"); break;
+                    case ConsoleKey.N:
+                        verbose = false;
+                        Console.WriteLine("n"); break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("DATA ERROR");
+                        goto SetVerbose;
+                        break;
+                }
             }
 
-        SetWriteResults:
             bool writeResults;
-            Console.WriteLine();
-            Console.Write("Write Output (may be slower) y/n: ");
-            switch (Console.ReadKey(true).Key)
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("writeResults")) {  writeResults = true; }
+            else if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("writeResults")) { writeResults = false; }
+            else
             {
-                case ConsoleKey.Y:
-                    writeResults = true;
-                    Console.WriteLine("y");
-                    break;
-                case ConsoleKey.N:
-                    writeResults = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto SetWriteResults;
-                    break;
+            SetWriteResults:
+                Console.WriteLine();
+                Console.Write("Write Output (may be slower) y/n: ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        writeResults = true;
+                        Console.WriteLine("y");
+                        break;
+                    case ConsoleKey.N:
+                        writeResults = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto SetWriteResults;
+                        break;
+                }
             }
 
-        /*ToggleConsoleColor:
-            Console.WriteLine();
-            Console.Write("Console Color (y/n): ");
-            switch (Console.ReadKey(true).Key)
-            {
-                case ConsoleKey.Y:
-                    VarHold.toggleConsoleColor = true;
-                    Console.WriteLine("y");
-                    Console.Beep();
-                    break;
-                case ConsoleKey.N:
-                    VarHold.toggleConsoleColor = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto ToggleConsoleBeep;
-            }*/
+            /*ToggleConsoleColor:
+                Console.WriteLine();
+                Console.Write("Console Color (y/n): ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        VarHold.toggleConsoleColor = true;
+                        Console.WriteLine("y");
+                        Console.Beep();
+                        break;
+                    case ConsoleKey.N:
+                        VarHold.toggleConsoleColor = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto ToggleConsoleBeep;
+                }*/
 
-
-        ToggleConsoleBeep:
             bool toggleConsoleBeep;
-            Console.WriteLine();
-            Console.Write("Console Beep (may be annoying) y/n: ");
-            switch (Console.ReadKey(true).Key)
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && SettingsAgent.GetSettingIsTrue("consoleBeep")) { toggleConsoleBeep = true; }
+            if (SettingsAgent.GetSettingIsTrue("automaticMode") && !SettingsAgent.GetSettingIsTrue("consoleBeep")) { toggleConsoleBeep = false; }
+            else
             {
-                case ConsoleKey.Y:
-                    toggleConsoleBeep = true;
-                    Console.WriteLine("y");
-                    Console.Beep();
-                    break;
-                case ConsoleKey.N:
-                    toggleConsoleBeep = false;
-                    Console.WriteLine("n");
-                    break;
-                default:
-                    Console.WriteLine();
-                    Console.WriteLine();
-                    printFittedSizeAsterixSurroundedText("ERROR DATA");
-                    goto ToggleConsoleBeep;
+            ToggleConsoleBeep:
+                Console.WriteLine();
+                Console.Write("Console Beep (may be annoying) y/n: ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        toggleConsoleBeep = true;
+                        Console.WriteLine("y");
+                        Console.Beep();
+                        break;
+                    case ConsoleKey.N:
+                        toggleConsoleBeep = false;
+                        Console.WriteLine("n");
+                        break;
+                    default:
+                        Console.WriteLine();
+                        Console.WriteLine();
+                        printFittedSizeAsterixSurroundedText("ERROR DATA");
+                        goto ToggleConsoleBeep;
+                }
+                Console.WriteLine();
             }
-            Console.WriteLine();
 
         getSimilarityMethod:
             VarHold.getSimilarityMethodValue = "Levenshtein-Distance";
@@ -468,6 +365,7 @@ namespace DB_Matching_main1
         }
         Console.WriteLine();*/
         SetPath:
+            Console.WriteLine();
             Console.Write("Eingabe des Dateipfades: ");
             string path = Console.ReadLine(); //Pfad der Excel-Datei durch Konsoleneinabe
             path = path.Replace("\"", "");
@@ -1136,6 +1034,187 @@ namespace DB_Matching_main1
 
             shutdownOrRestart();
         }
+        internal static void loadDataFile(Dictionary<string, string> dictionaryy)
+        {
+            if (File.Exists(VarHold.currentHoldFilePath))
+            {
+                using (StreamReader file = new StreamReader(VarHold.currentHoldFilePath))
+                {
+                    string line;
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        string[] streamParts = line.Split(' ');
+                        if (streamParts.Length == 2)
+                        {
+                            dictionaryy.Add(streamParts[0], streamParts[1]);
+                        }
+                    }
+                }
+                Console.WriteLine("Current Dictionary Content: ");
+
+                foreach (var entry in dictionaryy)
+                {
+                    Console.WriteLine("- {0} ---> {1}", entry.Key, entry.Value);
+                }
+
+            UseDataFile:
+                Console.Write("Use DATA file(y/n): ");
+                switch (Console.ReadKey(true).Key)
+                {
+                    case ConsoleKey.Y:
+                        Console.WriteLine("y");
+                        VarHold.useDataFile = true;
+                        break;
+                    case ConsoleKey.N:
+                        Console.WriteLine("n");
+                        VarHold.useDataFile = false;
+                        break;
+                    default:
+                        goto UseDataFile;
+                        break;
+                }
+            }
+            else
+            {
+                PrintIn.red("could not load data file: file does not exist");
+                ToLog.Err("could not load data file: file does not exist @loadDataFile()");
+            }
+        }
+        internal static void jsonChecker(Dictionary<string, string> dictionaryy, bool passRunFromRun = true)
+        {
+            if (!File.Exists(VarHold.currentHoldFilePath))
+            {
+                createDictionary(VarHold.currentHoldFilePath, passRunFromRun);
+
+                //neu starten
+                /*Process process = new Process();
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
+
+                printFittedSizeAsterixSurroundedText("RESTARTING");
+
+                for (int i = 0; i <= 100; i++)
+                {
+                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                    Console.Write(new string(' ', Console.WindowWidth));
+                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
+
+                    double tprogress = (i * (Console.WindowWidth - 6) / 100);
+                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
+                    Thread.Sleep(1);
+                }
+
+                process.Start();
+                Environment.Exit(1);*/
+                shutdownOrRestart();
+            }
+
+            //Console.WriteLine("### quit: ^C ###");
+            Console.WriteLine();
+
+            using (StreamReader file = new StreamReader(VarHold.currentHoldFilePath))
+            {
+                string line;
+                while ((line = file.ReadLine()) != null)
+                {
+                    string[] streamParts = line.Split(' ');
+                    if (streamParts.Length == 2)
+                    {
+                        dictionaryy.Add(streamParts[0], streamParts[1]);
+                    }
+                }
+            }
+            Console.WriteLine("Current Dictionary Content: ");
+
+            foreach (var entry in dictionaryy)
+            {
+                Console.WriteLine("- {0} ---> {1}", entry.Key, entry.Value);
+            }
+
+            Console.WriteLine();
+        KeepDataFile:
+            Console.Write("Keep DATA file (y/n): ");
+
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.Y:
+                    Console.WriteLine("y");
+                    break;
+                case ConsoleKey.N:
+                    Console.WriteLine("n");
+                ConfirmDelete:
+                    Console.Write("Confirm delete DATA file (y/n): ");
+                    switch (Console.ReadKey(true).Key)
+                    {
+                        case ConsoleKey.Y:
+                            Console.WriteLine("y");
+                            File.Delete(VarHold.currentHoldFilePath);
+                            Console.WriteLine();
+                            setConsoleColorToGreen();
+                            Console.WriteLine("*** deleted ***");
+                            resetConsoleColor();
+                            /*Console.WriteLine();
+                            printFittedSizeAsterixSurroundedText("RESTARTING");
+
+                            Process process = new Process();
+                            process.StartInfo.FileName = "cmd.exe";
+                            process.StartInfo.Arguments = $"/C {VarHold.currentMainFilePath}";
+
+                            for (int i = 0; i <= 100; i++)
+                            {
+                                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                                Console.Write(new string(' ', Console.WindowWidth));
+                                Console.SetCursorPosition(0, Console.WindowHeight - 1);
+
+                                double tprogress = (i * (Console.WindowWidth - 6) / 100);
+                                Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
+                                Thread.Sleep(1);
+                            }
+
+                            process.Start();
+                            Environment.Exit(1);*/
+                            shutdownOrRestart();
+                            break;
+                        case ConsoleKey.N:
+                            Console.WriteLine("n");
+                            Console.WriteLine();
+                            setConsoleColorToRed();
+                            Console.WriteLine("*** canceled ***");
+                            resetConsoleColor();
+                            break;
+                        default:
+                            printFittedSizeAsterixSurroundedText("ERROR DATA");
+                            goto ConfirmDelete;
+                            break;
+                    }
+                    break;
+                default:
+                    Console.WriteLine();
+                    printFittedSizeAsterixSurroundedText("ERROR DATA");
+                    goto KeepDataFile;
+                    break;
+            }
+
+            Console.WriteLine();
+
+        UseDataFile:
+            Console.Write("Use DATA file(y/n): ");
+            switch (Console.ReadKey(true).Key)
+            {
+                case ConsoleKey.Y:
+                    Console.WriteLine("y");
+                    VarHold.useDataFile = true;
+                    break;
+                case ConsoleKey.N:
+                    Console.WriteLine("n");
+                    VarHold.useDataFile = false;
+                    break;
+                default:
+                    goto UseDataFile;
+                    break;
+            }
+
+        }
         public static void shutdownOrRestart()
         {
             Console.WriteLine();
@@ -1368,11 +1447,11 @@ namespace DB_Matching_main1
             else { return null; }
         }
 
-        private static void createDictionary(string jsonPath)
+        internal static void createDictionary(string jsonPath, bool runFromRun = true)
         {
             Console.Clear();
             printFittedSizeAsterixSurroundedText("DATA FILE MODE");
-            Console.WriteLine("No DATA file found");
+            if (runFromRun) { Console.WriteLine("No DATA file found"); }
         createDictionaryStart:
             Console.Write("Create DATA file (y/n): ");
 
@@ -1385,7 +1464,8 @@ namespace DB_Matching_main1
                     Console.Write("n");
                     Console.WriteLine();
                     Console.WriteLine();
-                    run(false);
+                    if (runFromRun) { run(false); }
+                    else { RecoveryHandler.RunRecovery(); }
                     break;
                 default:
                     Console.WriteLine();
@@ -1520,21 +1600,22 @@ namespace DB_Matching_main1
             }
         }
 
-        private static void setConsoleColorToRed() { Console.ForegroundColor = ConsoleColor.Red; }
+        internal static void setConsoleColorToRed() { Console.ForegroundColor = ConsoleColor.Red; }
 
-        private static void setConsoleColorToGreen() { Console.ForegroundColor = ConsoleColor.Green; }
+        internal static void setConsoleColorToGreen() { Console.ForegroundColor = ConsoleColor.Green; }
 
-        private static void setConsoleColorToBlue() { Console.ForegroundColor = ConsoleColor.Blue; }
+        internal static void setConsoleColorToBlue() { Console.ForegroundColor = ConsoleColor.Blue; }
 
-        private static void setConsoleColorToBlack() { Console.ForegroundColor = ConsoleColor.Black; }
+        internal static void setConsoleColorToBlack() { Console.ForegroundColor = ConsoleColor.Black; }
+        internal static void setConsoleColorToYellow() { Console.ForegroundColor = ConsoleColor.Yellow; }
 
-        private static void setConsoleBackgroundColorToRed() { Console.BackgroundColor = ConsoleColor.Red; }
+        internal static void setConsoleBackgroundColorToRed() { Console.BackgroundColor = ConsoleColor.Red; }
 
-        private static void setConsoleBackgroundColorToGreen() { Console.BackgroundColor = ConsoleColor.Green; }
+        internal static void setConsoleBackgroundColorToGreen() { Console.BackgroundColor = ConsoleColor.Green; }
 
-        private static void setConsoleBackgroundColorToBlue() { Console.BackgroundColor = ConsoleColor.Blue; }
+        internal static void setConsoleBackgroundColorToBlue() { Console.BackgroundColor = ConsoleColor.Blue; }
 
-        private static void resetConsoleColor() { Console.ResetColor(); }
+        internal static void resetConsoleColor() { Console.ResetColor(); }
     }
     public class GetSimilarityValue
     {
