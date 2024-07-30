@@ -1,14 +1,14 @@
 # DB-Matcher-v5
 Database (Excel) matching program written in C# with .NET-Framework using nPoi
 
-**Installation**
+**Installation (Windows 10/11)**
 
 1. Download INSTALLER.zip
 2. Extract the files to the target directory
 3. Run the INSTALLER.exe
 4. You will be guided through the process of installation by INSTALLER.exe
 
-**Manual installation**
+**Manual installation (Windows 10/11) without git**
 
 first of all make shure you have dotnet SDK installed
 then follow these steps:
@@ -26,9 +26,55 @@ then follow these steps:
 
     dotnet add package npoi; dotnet add package SeriLog; dotnet add package SeriLog.Sinks.Console; dotnet add package SeriLog.Sinks.File; dotnet restore; copy .\recoveryMenu.txt .\bin\Debug\net8.0\; dotnet run
 
-5. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command
+5. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command in the directory containing *DB-Matcher-v5.sln*
 
 *cmd or powershell*
+
+    dotnet run
+
+**Manual installation (Windows 10/11) with git**
+
+first of all make shure you have dotnet SDK and git installed
+then follow these steps:
+
+1. open a terminal (either cmd.exe or powershell) in the directory in which you want to install DB-Matcher-v5
+2. simply copy-and-paste the command below in the terminal and hit ENTER
+
+*cmd*
+
+    git clone https://github.com/FaolanBig/DB-Matcher-v5 && cd \DB-Matcher-v5\ && dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
+
+*powershell*
+
+    git clone https://github.com/FaolanBig/DB-Matcher-v5; cd \DB-Matcher-v5\; dotnet add package npoi; dotnet add package SeriLog; dotnet add package SeriLog.Sinks.Console; dotnet add package SeriLog.Sinks.File; dotnet restore; copy .\recoveryMenu.txt .\bin\Debug\net8.0\; dotnet run
+
+3. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command in the directory containing *DB-Matcher-v5.sln*
+
+*cmd or powershell*
+
+    dotnet run
+
+**Manual installation (Linux) without git**
+
+this was tested on Debian@Kernel_6.6.0@Xfce_4.18.4 (Kali Linux@Kali_2024.2) and Ubuntu 24.04 LTS
+
+1. download the repo as a .zip file
+2. extract it to the preferred directory
+3. open the terminal of your choice in this directory
+4. execute the following command (only when executing the first time)
+
+    dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
+
+**Manual installation (Linux) with git**
+
+this was tested on Debian@Kernel_6.6.0@Xfce_4.18.4 (Kali Linux@Kali_2024.2) and Ubuntu 24.04 LTS
+
+1. open the terminal of your coice in the directory in which you want to install DB-Matcher-v5
+2. simply copy-and-paste the command below in the terminal and hit 
+
+    git clone https://github.com/FaolanBig/DB-Matcher-v5 && cd \DB-Matcher-v5\ && dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
+
+3. after the first execution DB-Matcher-v5 can be launched by running the following command in the directory containing *DB-Matcher-v5.sln*
 
     dotnet run
 
