@@ -21,15 +21,25 @@ Database (Excel) matching program written in C# with .NET-Framework using nPoi
 **Daten**
 
 Programmiersprache:	Visual C#
+
 Ide:				Visual Studio
+
 Oberfläche:			CMD / Terminal
+
 Plattform:			Windows 10/11 und Linux
+
 Architektur:			x64 (64bit)
+
 Primärer Algorithmus:	Levenshtein-Distance
+
 Sekundärer Algorithmus:	Hamming-Distance
+
 Tertiärer Algorithmus:	Jaccard-Index
-Zusammenfassung ---
-Einsatzbereich:	Zusammenführung zweier Datenbanken im Excelformat (*.xlsx, *.xls)
+
+**Zusammenfassung**
+
+Einsatzbereich:     Zusammenführung zweier Datenbanken im Excelformat (*.xlsx, *.xls)
+
 Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primären Datenbank einem Wert aus der sekundären Datenbank ist. Er folgt dabei dem folgenden Algorithmus-Schema: 
 
     start    --> LD
@@ -63,16 +73,26 @@ Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primäre
 **Data**
 
 Programming language: Visual C#
+
 Ide: Visual Studio
+
 Interface: CMD / Terminal
+
 Platform: Windows 10/11 and Linux
+
 Architecture: x64 (64bit)
+
 Primary algorithm:      Levenshtein-Distance
+
 Secondary algorithm:    Hamming-Distance
+
 Tertiary algorithm:     Jaccard index
-Summary ---
+
+**Summary**
+
 Area of application: Merging two databases in Excel format (*.xlsx, *.xls)
-Basic function: The DB matcher calculates how similar a value from the primary database is to a value from the secondary database. It follows the following algorithm scheme: 
+
+Basic function:     The DB matcher calculates how similar a value from the primary database is to a value from the secondary database. It follows the following algorithm scheme: 
 
     start --> LD
     fails --> HD
