@@ -248,7 +248,7 @@ namespace DB_Matcher_v5
                     //Console.WriteLine($">>> {i.Key}//{i.Value}");
                     if (i.Value == "true") { Console.Write($">>> {i.Key}{VarHold.dictionaryExcapeCharacterString}"); PrintIn.green(i.Value); }
                     else if (i.Value == "false") { Console.Write($">>> {i.Key}{VarHold.dictionaryExcapeCharacterString}"); PrintIn.red(i.Value); }
-                    else { Console.WriteLine($">>> {i.Key}{VarHold.dictionaryExcapeCharacterString}"); PrintIn.yellow(i.Value); }
+                    else { Console.Write($">>> {i.Key}{VarHold.dictionaryExcapeCharacterString}"); PrintIn.yellow(i.Value); }
                     Thread.Sleep(10);
                 }
                 //Console.WriteLine("⤒⤒⤒");
