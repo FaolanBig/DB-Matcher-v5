@@ -1,4 +1,4 @@
-```
+﻿```
  /$$$$$$$  /$$$$$$$  /$$      /$$             /$$               /$$                                            /$$$$$$$ 
 | $$__  $$| $$__  $$| $$$    /$$$            | $$              | $$                                           | $$____/ 
 | $$  \ $$| $$  \ $$| $$$$  /$$$$  /$$$$$$  /$$$$$$    /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$        /$$    /$$| $$      
@@ -12,98 +12,63 @@
 # DB-Matcher-v5
 Database (Excel) matching program written in C# with .NET-Framework using nPoi
 
-**Installation (Windows 10/11)**
+## [WIKI](https://github.com/FaolanBig/DB-Matcher-v5/wiki)
 
-1. Download INSTALLER.zip
-2. Extract the files to the target directory
-3. Run the INSTALLER.exe
-4. You will be guided through the process of installation by INSTALLER.exe
+## Deutsch (German)
 
-**Manual installation (Windows 10/11) without git**
+### Beschreibung
 
-first of all make shure you have dotnet SDK installed
-then follow these steps:
+DB-Matcher
+Daten ---
+Programmiersprache:	Visual C#
+Ide:				Visual Studio
+Oberfläche:			CMD / Terminal
+Plattform:			Windows 10/11 und Linux
+Architektur:			x64 (64bit)
+Primärer Algorithmus:	Levenshtein-Distance
+Sekundärer Algorithmus:	Hamming-Distance
+Tertiärer Algorithmus:	Jaccard-Index
+Zusammenfassung ---
+Einsatzbereich:	Zusammenführung zweier Datenbanken im Excelformat (*.xlsx, *.xls)
+Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primären Datenbank einem Wert aus der sekundären Datenbank ist. Er folgt dabei dem folgenden Algorithmus-Schema: 
 
-1. download the repo as a .zip file
-2. extract it to the preferred directory
-3. open a terminal in this directory (either cmd.exe or powershell)
-4. execute the following command (only when executing the first time)
+    start    --> LD
+    fails    --> HD
+    fails    --> JD
 
-*cmd*
 
-    dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && dotnet build && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
+Funktionen:
+-	Definierung einer eigenen Datenbank (mittels Wizard in DB-Matcher), in welcher bekannte Unterschiede (z.B. Firmenkürzel) gespeichert werden können. Diese Unterschiede werden beim Matching berücksichtigt. Die erzeugte Datenbank kann auch extern bearbeitet werden. 
+-   Speicherung der Einstellungen für eine schnellere Bedienung und eine verbesserte Nutzungserfahrung
+-	Erstellen einer Sicherheitskopie der Excel-Datei um Datenverluste zu verhindern und den Komfort zu erhöhen, da die Ur-Datei weiter in Excel geöffnet bleiben kann, ohne dass es zu Datenstreamkonflikten kommt.
+-	Automatische dynamische Ermittlung der Datenbanken: Die wahrscheinlich gewünschten Tabellenbereiche werden als default-Wert bei der Eingabe bereitgestellt. Sie können entweder mit ENTER akzeptiert oder per Texteingabe geändert werden. Die ermittelten default-Werte verhalten sich dynamisch zu der geleisteten Eingabe und werden in Echtzeit aktualisiert
+-	Fehlerhafte Eingaben werden erkannt und an den Nutzer rückgemeldet.
+-	Der eingegebene Pfad wird auf Echtheit überprüft
+-	Der DB-Matcher verfügt über mehrere Einstellungsmöglichkeiten, welche in einer Konfigurationsdatei  gespeichert werden, sodass sie nicht bei jedem Start neu definiert werden müssen
+-	Mögliche Interrupt-Sequenz beim Starten von DB-Matcher
+-	Die Datenbanken müssen sich nicht auf dem gleichen Arbeitsblatt befinden. 
+-	Die Resultate können ab einer beliebigen Spalte in ein beliebiges Arbeitsblatt geschrieben werden.
+-	Bei den Resultaten besteht die Möglichkeit, nicht nur die geprüften Werte zu schreiben, sondern zusätzlich die dazugehörenden Zellen mitzuübertragen
+-	Für Sicherheitsrelevante Datenbanken oder zur Registrierung in andere Prozesse, Programme oder Sicherheitssoftware wird automatisch die Prüfsumme (SHA256) vor und nach dem Matching berechnet und bereitgestellt. 
+-	Ein Fortschrittsbalken wird in der untersten Zeile des Konsolenfensters in Kombination mit einer Zeitanzeige angezeigt. Der Fortschrittsbalken wird dynamisch an die Breite des Konsolenfensters angepasst. Die Zeitanzeige zeigt die berechnete Zeit, die der DB-Matcher vorraussichtlich noch für das Matching benötigt.
+-	Zu Diagnosezwecken wird die Anzahl an Array-zugriffen angezeigt
+-	Der Benutzer wird zu jeder Zeit durch das Programm geführt und jede Eingabe ist betitelt
 
-*powershell*
 
-    dotnet add package npoi; dotnet add package SeriLog; dotnet add package SeriLog.Sinks.Console; dotnet add package SeriLog.Sinks.File; dotnet restore; dotnet build; copy .\recoveryMenu.txt .\bin\Debug\net8.0\; dotnet run
+## English 
 
-5. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command in the directory containing *DB-Matcher-v5.sln*
-
-*cmd or powershell*
-
-    dotnet run
-
-**Manual installation (Windows 10/11) with git**
-
-first of all make shure you have dotnet SDK and git installed
-then follow these steps:
-
-1. open a terminal (either cmd.exe or powershell) in the directory in which you want to install DB-Matcher-v5
-2. simply copy-and-paste the command below in the terminal and hit ENTER
-
-*cmd*
-
-    git clone https://github.com/FaolanBig/DB-Matcher-v5 && cd \DB-Matcher-v5\ && dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && dotnet build && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
-
-*powershell*
-
-    git clone https://github.com/FaolanBig/DB-Matcher-v5; cd \DB-Matcher-v5\; dotnet add package npoi; dotnet add package SeriLog; dotnet add package SeriLog.Sinks.Console; dotnet add package SeriLog.Sinks.File; dotnet restore; dotnet build; copy .\recoveryMenu.txt .\bin\Debug\net8.0\; dotnet run
-
-3. after the first execution DB-Matcher-v5 can be launched by simply double-clicking DB-Matcher-v5.exe in .\bin\Debug\net8.0\ or running the following command in the directory containing *DB-Matcher-v5.sln*
-
-*cmd or powershell*
-
-    dotnet run
-
-**Manual installation (Linux) without git**
-
-this was tested on Debian@Kernel_6.6.0@Xfce_4.18.4 (Kali Linux@Kali_2024.2) and Ubuntu 24.04 LTS
-
-1. download the repo as a .zip file
-2. extract it to the preferred directory
-3. open the terminal of your choice in this directory
-4. execute the following command (only when executing the first time)
-
-    dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && dotnet build && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
-
-**Manual installation (Linux) with git**
-
-this was tested on Debian@Kernel_6.6.0@Xfce_4.18.4 (Kali Linux@Kali_2024.2) and Ubuntu 24.04 LTS
-
-1. open the terminal of your coice in the directory in which you want to install DB-Matcher-v5
-2. simply copy-and-paste the command below in the terminal and hit 
-
-    git clone https://github.com/FaolanBig/DB-Matcher-v5 && cd \DB-Matcher-v5\ && dotnet add package npoi && dotnet add package SeriLog && dotnet add package SeriLog.Sinks.Console && dotnet add package SeriLog.Sinks.File && dotnet restore && dotnet build && copy .\recoveryMenu.txt .\bin\Debug\net8.0\ && dotnet run
-
-3. after the first execution DB-Matcher-v5 can be launched by running the following command in the directory containing *DB-Matcher-v5.sln*
-
-    dotnet run
-
-**Description**
-
-*** English ***
+### Describtion
 
 DB-Matcher
 Data ---
 Programming language: Visual C#
 Ide: Visual Studio
-Length: ~1600 lines
 Interface: CMD / Terminal
-Platform: Windows 10/11
+Platform: Windows 10/11 and Linux
 Architecture: x64 (64bit)
-Primary algorithm: Levenshtein-Distance
-Secondary algorithm:	Hamming-Distance
-Tertiary algorithm: Jaccard index
+Primary algorithm:      Levenshtein-Distance
+Secondary algorithm:    Hamming-Distance
+Tertiary algorithm:     Jaccard index
 Summary ---
 Area of application: Merging two databases in Excel format (*.xlsx, *.xls)
 Basic function: The DB matcher calculates how similar a value from the primary database is to a value from the secondary database. It follows the following algorithm scheme: 
@@ -128,45 +93,7 @@ Functions:
 - The number of array accesses is displayed for diagnostic purposes
 - The user is guided through the programme at all times and each entry is labelled
 
-*** German ***
-
-DB-Matcher
-Daten ---
-Programmiersprache:	Visual C#
-Ide:				Visual Studio
-Länge:				~1600 Zeilen
-Oberfläche:			CMD / Terminal
-Plattform:			Windows 10/11
-Architektur:			x64 (64bit)
-Primärer Algorithmus:	Levenshtein-Distance
-Sekundärer Algorithmus:	Hamming-Distance
-Tertiärer Algorithmus:	Jaccard-Index
-Zusammenfassung ---
-Einsatzbereich:	Zusammenführung zweier Datenbanken im Excelformat (*.xlsx, *.xls)
-Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primären Datenbank einem Wert aus der sekundären Datenbank ist. Er folgt dabei dem folgenden Algorithmus-Schema: 
-
-    start    --> LD
-    fails    --> HD
-    fails    --> JD
-
-
-Funktionen:
--	Definierung einer eigenen Datenbank (mittels Wizard in DB-Matcher), in welcher bekannte Unterschiede (z.B. Firmenkürzel) gespeichert werden können. Diese Unterschiede werden beim Matching berücksichtigt. Die erzeugte Datenbank kann auch extern bearbeitet werden. 
--	Erstellen einer Sicherheitskopie der Excel-Datei um Datenverluste zu verhindern und den Komfort zu erhöhen, da die Ur-Datei weiter in Excel geöffnet bleiben kann, ohne dass es zu Datenstreamkonflikten kommt.
--	Automatische dynamische Ermittlung der Datenbanken: Die wahrscheinlich gewünschten Tabellenbereiche werden als default-Wert bei der Eingabe bereitgestellt. Sie können entweder mit ENTER akzeptiert oder per Texteingabe geändert werden. Die ermittelten default-Werte verhalten sich dynamisch zu der geleisteten Eingabe und werden in Echtzeit aktualisiert
--	Fehlerhafte Eingaben werden erkannt und an den Nutzer rückgemeldet.
--	Der eingegebene Pfad wird auf Echtheit überprüft
--	Der DB-Matcher verfügt über mehrere Einstellungsmöglichkeiten, welche in einer Konfigurationsdatei  gespeichert werden, sodass sie nicht bei jedem Start neu definiert werden müssen
--	Mögliche Interrupt-Sequenz beim Starten von DB-Matcher
--	Die Datenbanken müssen sich nicht auf dem gleichen Arbeitsblatt befinden. 
--	Die Resultate können ab einer beliebigen Spalte in ein beliebiges Arbeitsblatt geschrieben werden.
--	Bei den Resultaten besteht die Möglichkeit, nicht nur die geprüften Werte zu schreiben, sondern zusätzlich die dazugehörenden Zellen mitzuübertragen
--	Für Sicherheitsrelevante Datenbanken oder zur Registrierung in andere Prozesse, Programme oder Sicherheitssoftware wird automatisch die Prüfsumme (SHA256) vor und nach dem Matching berechnet und bereitgestellt. 
--	Ein Fortschrittsbalken wird in der untersten Zeile des Konsolenfensters in Kombination mit einer Zeitanzeige angezeigt. Der Fortschrittsbalken wird dynamisch an die Breite des Konsolenfensters angepasst. Die Zeitanzeige zeigt die berechnete Zeit, die der DB-Matcher vorraussichtlich noch für das Matching benötigt.
--	Zu Diagnosezwecken wird die Anzahl an Array-zugriffen angezeigt
--	Der Benutzer wird zu jeder Zeit durch das Programm geführt und jede Eingabe ist betitelt
-
-**Donations**
+## Donations
 
     Monero (XMR): 439avs1Cp5gcwWnxTqsicoJcvX5SiK69TdhumoXgULzVXYp94PJLbobAzKUPA9GkSqBdXP6cgRb4dEpSEGAgdUkTHjcVsaG
 
@@ -178,28 +105,3 @@ Funktionen:
 
     Bitcoin (BTC): bc1q2ss7n5gv3tr68dfqtmcvy830pj4clf7wqxztk5
 
-
-**Hold**
-
-    The DB-Matcher (including DB-Matcher-v5) is an easy-to-use console application written in C# and based on the .NET framework.
-    The DB-Matcher can merge two databases in Excel format (*.xlsx, *.xls). 
-    It follows the following algorithms in order of importance: Levenshtein distance, Hamming distance, Jaccard index. 
-    The DB-Matcher takes you by the hand at all times and guides you through the process of data matching. 
-    
-    Copyright (C) 2024  Carl Öttinger (Carl Oettinger)
-    
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    any later version.
-    
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
-    
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <https://www.gnu.org/licenses/>.
-    
-    You can contact me in the following ways:
-        EMail: oettinger.carl@web.de or big-programming@web.de
