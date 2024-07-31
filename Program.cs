@@ -215,6 +215,10 @@ namespace DB_Matching_main1
                         loadDataFile(dictionary);
                     }
                 }
+                else
+                {
+                    jsonChecker(dictionary);
+                }
             }
 
             bool verbose;

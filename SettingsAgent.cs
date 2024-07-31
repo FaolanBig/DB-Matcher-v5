@@ -226,6 +226,7 @@ namespace DB_Matcher_v5
                     if (i.Value == "true") { Console.Write($">>> {i.Key}//"); PrintIn.green(i.Value); }
                     else if (i.Value == "false") { Console.Write($">>> {i.Key}//"); PrintIn.red(i.Value); }
                     else { Console.WriteLine($">>> {i.Key}//"); PrintIn.yellow(i.Value); }
+                    Thread.Sleep(10);
                 }
                 //Console.WriteLine("⤒⤒⤒");
                 Console.WriteLine();
