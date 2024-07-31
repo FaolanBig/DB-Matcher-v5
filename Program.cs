@@ -1252,8 +1252,9 @@ namespace DB_Matching_main1
             }
             if (toggleRestartInNewInstance)
             {
-                var currentFileName = Assembly.GetExecutingAssembly().Location;
-                Process.Start(currentFileName);
+                //var currentFileName = Assembly.GetExecutingAssembly().Location;
+                var fileName = Process.GetCurrentProcess().MainModule.FileName;
+                Process.Start(fileName);
             }
             Console.Clear();
             Environment.Exit(0);
@@ -1390,7 +1391,7 @@ namespace DB_Matching_main1
             return (lastColumnWithValue);
         }
 
-        private static void writeToSettingsFile(string path, string settingName, string settingValue)
+        internal static void writeToSettingsFile(string path, string settingName, string settingValue)
         {
             Dictionary<string, string> settingsDict = new Dictionary<string, string>();
 
