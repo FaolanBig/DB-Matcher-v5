@@ -1577,7 +1577,6 @@ namespace DB_Matching_main1
             Console.WriteLine("No JSON data file found");
         createJsonStart:
             Console.Write("Create JSON data file (y/n): ");
-
             switch (Console.ReadKey(true).Key)
             {
                 case ConsoleKey.Y:
