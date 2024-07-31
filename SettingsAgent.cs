@@ -207,8 +207,9 @@ namespace DB_Matcher_v5
             {
                 PrintIn.red("no settings file found");
                 PrintIn.blue("try adding a settings configuration in recovery mode");
-                PrintIn.blue("returning to recovery menu");
-                PrintIn.WigglyStarInBorders();
+                //PrintIn.blue("returning to recovery menu");
+                //PrintIn.WigglyStarInBorders();
+                RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to return to recovery menu");
                 RecoveryHandler.RunRecovery();
             }
             else
@@ -221,7 +222,10 @@ namespace DB_Matcher_v5
                 //Console.WriteLine("⤓⤓⤓");
                 foreach (var i in VarHold.settings)
                 {
-                    Console.WriteLine($">>> {i.Key}//{i.Value}");
+                    //Console.WriteLine($">>> {i.Key}//{i.Value}");
+                    if (i.Value == "true") { Console.Write($">>> {i.Key}//"); PrintIn.green(i.Value); }
+                    else if (i.Value == "false") { Console.Write($">>> {i.Key}//"); PrintIn.red(i.Value); }
+                    else { Console.WriteLine($">>> {i.Key}//"); PrintIn.yellow(i.Value); }
                 }
                 //Console.WriteLine("⤒⤒⤒");
                 Console.WriteLine();
