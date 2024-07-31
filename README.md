@@ -20,21 +20,21 @@ Database (Excel) matching program written in C# with .NET-Framework using nPoi
 
 **Daten**
 
-Programmiersprache:	Visual C#
+- [x] Programmiersprache:	Visual C#
 
-Ide:				Visual Studio
+- [x] IDE:				Visual Studio
 
-Oberfläche:			CMD / Terminal
+- [x] Oberfläche:			CMD / Terminal
 
-Plattform:			Windows 10/11 und Linux
+- [x] Plattform:			Windows 10/11 und Linux
 
-Architektur:			x64 (64bit)
+- [x] Architektur:			x64 (64bit)
 
-Primärer Algorithmus:	Levenshtein-Distance
+- [x] Primärer Algorithmus:     Levenshtein-Distance
 
-Sekundärer Algorithmus:	Hamming-Distance
+- [x] Sekundärer Algorithmus:	Hamming-Distance
 
-Tertiärer Algorithmus:	Jaccard-Index
+- [x] Tertiärer Algorithmus:	Jaccard-Index
 
 **Zusammenfassung**
 
@@ -74,19 +74,19 @@ Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primäre
 
 Programming language: Visual C#
 
-Ide: Visual Studio
+- [x] IDE: Visual Studio
 
-Interface: CMD / Terminal
+- [x] Interface: CMD / Terminal
 
-Platform: Windows 10/11 and Linux
+- [x] Platform: Windows 10/11 and Linux
 
-Architecture: x64 (64bit)
+- [x] Architecture: x64 (64bit)
 
-Primary algorithm:      Levenshtein-Distance
+- [x] Primary algorithm:      Levenshtein-Distance
 
-Secondary algorithm:    Hamming-Distance
+- [x] Secondary algorithm:    Hamming-Distance
 
-Tertiary algorithm:     Jaccard index
+- [x] Tertiary algorithm:     Jaccard index
 
 **Summary**
 
