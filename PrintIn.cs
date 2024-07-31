@@ -27,6 +27,7 @@
 using DB_Matching_main1;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
@@ -120,19 +121,25 @@ namespace DB_Matcher_v5
                 {
                     ToLog.Inf("logo file detected");
                     logo = File.ReadAllText(VarHold.currentRecoveryMenuFile);
-                    PrintIn.blue(logo);
                 }
                 catch (Exception ex)
                 {
                     ToLog.Err($"can't load logo file - error: {ex.Message}");
-                    PrintIn.blue(logo);
                 }
             }
-            else
+            Stopwatch stopwatch = new Stopwatch();
+            Program.setConsoleColorToBlue();
+            foreach (char c in logo)
             {
-                //Console.WindowWidth = 140;
-                PrintIn.blue(logo);
+                Console.Write(c);
+                stopwatch.Restart();
+                //System.Threading.Thread.Sleep(1);
+                while (stopwatch.ElapsedTicks < (Stopwatch.Frequency / 1000)) {}
             }
+            Program.resetConsoleColor();
+            Thread.Sleep(200);
+            //Console.WriteLine();
+            //PrintIn.WigglyStarInBorders(runs: 1);
         }
     }
 }
