@@ -1,14 +1,3 @@
-<div style="background-color: #e0f7fa; padding: 10px; border-radius: 5px; font-size: 20px;">
-<pre>
-<code>
-    // Dein Code hier
-    double price = 19.99;
-    Console.WriteLine($"Der Preis beträgt ${price}");
-</code>
-</pre>
-</div>
-
-
 ```
  /$$$$$$$  /$$$$$$$  /$$      /$$             /$$               /$$                                            /$$$$$$$ 
 | $$__  $$| $$__  $$| $$$    /$$$            | $$              | $$                                           | $$____/ 
