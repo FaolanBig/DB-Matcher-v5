@@ -72,6 +72,9 @@ namespace DB_Matching_main1
         public static string logFileNameError = logFileNameInfo;
         public static string logoFilePath = "";
         public static string currentHoldFilePath = "";
+        public static string toPath = "";
+        public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
+        public const string dictionaryExcapeCharacterString = @"/\";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -432,6 +435,7 @@ namespace DB_Matching_main1
                 Console.WriteLine($"ERROR Message: {ex.Message}");
                 goto CheckIfToPathIsEmpty;
             }
+            VarHold.toPath = toPath;
             Console.WriteLine("New Path: " + toPath);
             Console.WriteLine();
 
@@ -1023,6 +1027,29 @@ namespace DB_Matching_main1
             Console.WriteLine("ArrayAccessLog: " + getSimilarityValueOBJ.getArrayAccess());
             Console.WriteLine();
             Console.WriteLine("Computing Duration: " + timeSpanString);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            if (SettingsAgent.GetSettingIsTrue("autoOpenExcel"))
+            {
+                try
+                {
+                    RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to open newly created excel file in excel.exe");
+                    PrintIn.blue("opening newly created excel file");
+                    PrintIn.blue("launching excel.exe");
+                    PrintIn.WigglyStarInBorders(runs: 1);
+
+                    //Process.Start("excel.exe", VarHold.toPath);
+                    Process.Start(VarHold.excelPath, VarHold.toPath);
+
+                    PrintIn.green("operation successful");
+                }
+                catch (Exception ex)
+                {
+                    ToLog.Err($"error when opening excel file in excel - error: {ex.Message}");
+                    PrintIn.red($"error when opening excel file in excel - error: {ex.Message}");
+                }
+            }
 
             //exit
             /*using (FileStream ffstream = new FileStream(path, FileMode.Open, FileAccess.Write))
@@ -1087,6 +1114,9 @@ namespace DB_Matching_main1
         }
         internal static void jsonChecker(Dictionary<string, string> dictionaryy, bool passRunFromRun = true)
         {
+            Console.Clear();
+            printFittedSizeAsterixSurroundedText("DATA FILE MODE");
+
             if (!File.Exists(VarHold.currentHoldFilePath))
             {
                 createDictionary(VarHold.currentHoldFilePath, passRunFromRun);
@@ -1153,10 +1183,11 @@ namespace DB_Matching_main1
                     {
                         case ConsoleKey.Y:
                             Console.WriteLine("y");
+                            PrintIn.blue("deleting: data file");
+                            PrintIn.WigglyStarInBorders(runs: 1);
                             File.Delete(VarHold.currentHoldFilePath);
-                            Console.WriteLine();
                             setConsoleColorToGreen();
-                            Console.WriteLine("*** deleted ***");
+                            PrintIn.green("deleted: data file");
                             resetConsoleColor();
                             /*Console.WriteLine();
                             printFittedSizeAsterixSurroundedText("RESTARTING");
@@ -1455,8 +1486,6 @@ namespace DB_Matching_main1
 
         internal static void createDictionary(string jsonPath, bool runFromRun = true)
         {
-            Console.Clear();
-            printFittedSizeAsterixSurroundedText("DATA FILE MODE");
             if (runFromRun) { Console.WriteLine("No DATA file found"); }
         createDictionaryStart:
             Console.Write("Create DATA file (y/n): ");
@@ -1482,7 +1511,7 @@ namespace DB_Matching_main1
             }
             Console.WriteLine();
             Console.WriteLine("### Eingabe der bekannten Übereinstimmungen ###");
-            Console.WriteLine($"### quit: '{VarHold.createDictionaryExitInput}' ###");
+            PrintIn.yellow($"### quit: '{VarHold.createDictionaryExitInput}' ###");
 
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
             int loopCnt = 0;
@@ -1523,7 +1552,7 @@ namespace DB_Matching_main1
                 {
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Der folgende Wert existiert bereits im Zusammenhang mit '{primaryValue}' und wurde nicht hinzugefügt: {secondaryValue}");
+                    PrintIn.red($"Der folgende Wert existiert bereits im Zusammenhang mit '{primaryValue}' und wurde nicht hinzugefügt: {secondaryValue}");
                     Console.ResetColor();
                     goto Start;
                 }
@@ -1531,9 +1560,8 @@ namespace DB_Matching_main1
                 dictionary.Add(primaryValue, secondaryValue);
             }
         CreateDictionarySave:
-            Console.WriteLine();
-            Console.WriteLine("*** saving to file ***");
-            Console.WriteLine();
+            PrintIn.blue("*** saving to file ***");
+            PrintIn.WigglyStarInBorders(runs: 1);
             using (StreamWriter file = new StreamWriter(jsonPath))
             {
                 foreach (var entry in dictionary)
