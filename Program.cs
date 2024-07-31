@@ -44,7 +44,8 @@ namespace DB_Matching_main1
 {
     internal static class VarHold
     {
-        public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
+        //public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
+        public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
 
         public static string currentMainFilePath;
         public static string getSimilarityMethodValue;
