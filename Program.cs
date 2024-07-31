@@ -72,6 +72,9 @@ namespace DB_Matching_main1
         public static string logFileNameError = logFileNameInfo;
         public static string logoFilePath = "";
         public static string currentHoldFilePath = "";
+        public static string toPath = "";
+        public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
+        public const string dictionaryExcapeCharacterString = @"/\";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -432,6 +435,7 @@ namespace DB_Matching_main1
                 Console.WriteLine($"ERROR Message: {ex.Message}");
                 goto CheckIfToPathIsEmpty;
             }
+            VarHold.toPath = toPath;
             Console.WriteLine("New Path: " + toPath);
             Console.WriteLine();
 
@@ -1023,6 +1027,29 @@ namespace DB_Matching_main1
             Console.WriteLine("ArrayAccessLog: " + getSimilarityValueOBJ.getArrayAccess());
             Console.WriteLine();
             Console.WriteLine("Computing Duration: " + timeSpanString);
+            Console.WriteLine();
+            Console.WriteLine();
+
+            if (SettingsAgent.GetSettingIsTrue("autoOpenExcel"))
+            {
+                try
+                {
+                    RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to open newly created excel file in excel.exe");
+                    PrintIn.blue("opening newly created excel file");
+                    PrintIn.blue("launching excel.exe");
+                    PrintIn.WigglyStarInBorders();
+
+                    //Process.Start("excel.exe", VarHold.toPath);
+                    Process.Start(VarHold.excelPath, VarHold.toPath);
+
+                    PrintIn.green("operation successful");
+                }
+                catch (Exception ex)
+                {
+                    ToLog.Err($"error when opening excel file in excel - error: {ex.Message}");
+                    PrintIn.red($"error when opening excel file in excel - error: {ex.Message}");
+                }
+            }
 
             //exit
             /*using (FileStream ffstream = new FileStream(path, FileMode.Open, FileAccess.Write))

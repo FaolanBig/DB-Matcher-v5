@@ -85,6 +85,9 @@ namespace DB_Matcher_v5
             addYesNo("verbose output", "verbose");
             addYesNo("always write results", "writeResults");
             addYesNo("get an auditive feedback when finishing processes (beep)", "consoleBeep");
+            bool useAutoOpenExcel = false;
+            if (VarHold.osIsWindows) { addYesNo("automatically open newly generated excel-file in excel", "autoOpenExcel"); useAutoOpenExcel = true; }
+            if (useAutoOpenExcel) { addValue("path to excel.exe", "path_excel.exe", VarHold.excelPath); }
 
             Console.WriteLine();
             PrintIn.yellow("changing the settings will overwrite any existing setting file");
@@ -147,6 +150,26 @@ namespace DB_Matcher_v5
                     PrintIn.red("bad input");
                     goto Start;
             }
+        }
+        internal static void addValue(string toAsk, string key, string defaultValue = "")
+        {
+            START:
+            if (!string.IsNullOrEmpty(defaultValue)) 
+            {
+                Console.Write(toAsk + $" - enter value (default: {defaultValue}): "); 
+            }
+            else { Console.Write(toAsk + " - enter value: "); }
+            string userInput = Console.ReadLine();
+
+            if (string.IsNullOrEmpty(userInput))
+            {
+                if (!string.IsNullOrEmpty(defaultValue)) { userInput = defaultValue; }
+                else { PrintIn.red("bad input"); goto START; }
+            }
+            //PrintIn.yellow($"confirm input: {key}//{userInput}");
+            bool getYesOrNo = RecoveryHandler.getYesOrNo($"confirm input: {key}//{userInput}");
+            if (getYesOrNo) { VarHold.settings.Add(key, userInput); PrintIn.green($"added: {key}//{userInput}"); }
+            else { PrintIn.red("abort, try again"); goto START; }
         }
         internal static void FileLookUp()
         {

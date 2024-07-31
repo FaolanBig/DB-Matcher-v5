@@ -132,7 +132,7 @@ namespace DB_Matcher_v5
                         return false;
                     }
                 }
-                catch ( Exception ex )
+                catch (Exception ex)
                 {
                     PrintIn.red($"an unexpected error occurred when reading {VarHold.currentRecoveryMenuFile}");
                     PrintIn.red($"error message: {ex.Message}");
@@ -152,7 +152,7 @@ namespace DB_Matcher_v5
                 Console.WriteLine();
                 Console.WriteLine(content);
                 Console.WriteLine();
-                EnterNumber:
+            EnterNumber:
                 Console.Write("enter number: ");
                 string userInput = Console.ReadLine();
 
@@ -193,7 +193,7 @@ namespace DB_Matcher_v5
                         PrintIn.red("bad input");
                         goto EnterNumber;
                 }
-                
+
                 return false;
             }
         }
@@ -201,6 +201,24 @@ namespace DB_Matcher_v5
         {
             PrintIn.blue(outputHold);
             while (Console.ReadKey(true).Key != ConsoleKey.Enter) { }
+        }
+        public static bool getYesOrNo(string toShow = "continue?")
+        {
+            START:
+            Program.setConsoleColorToYellow();
+            Console.Write(toShow + " (y/n): ");
+            string userInput = Console.ReadLine();
+
+            switch (userInput)
+            {
+                case "y":
+                    return true;
+                case "n":
+                    return false;
+                default:
+                    PrintIn.red("bad input");
+                    goto START;
+            }
         }
     }
 }
