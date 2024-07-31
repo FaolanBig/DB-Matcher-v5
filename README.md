@@ -18,8 +18,8 @@ Database (Excel) matching program written in C# with .NET-Framework using nPoi
 
 ### Beschreibung
 
-DB-Matcher
-Daten ---
+**Daten**
+
 Programmiersprache:	Visual C#
 Ide:				Visual Studio
 Oberfläche:			CMD / Terminal
@@ -37,7 +37,8 @@ Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primäre
     fails    --> JD
 
 
-Funktionen:
+**Funktionen**
+
 -	Definierung einer eigenen Datenbank (mittels Wizard in DB-Matcher), in welcher bekannte Unterschiede (z.B. Firmenkürzel) gespeichert werden können. Diese Unterschiede werden beim Matching berücksichtigt. Die erzeugte Datenbank kann auch extern bearbeitet werden. 
 -   Speicherung der Einstellungen für eine schnellere Bedienung und eine verbesserte Nutzungserfahrung
 -	Erstellen einer Sicherheitskopie der Excel-Datei um Datenverluste zu verhindern und den Komfort zu erhöhen, da die Ur-Datei weiter in Excel geöffnet bleiben kann, ohne dass es zu Datenstreamkonflikten kommt.
@@ -59,8 +60,8 @@ Funktionen:
 
 ### Describtion
 
-DB-Matcher
-Data ---
+**Data**
+
 Programming language: Visual C#
 Ide: Visual Studio
 Interface: CMD / Terminal
@@ -77,7 +78,8 @@ Basic function: The DB matcher calculates how similar a value from the primary d
     fails --> HD
     fails --> JD
 
-Functions:
+**Functions**
+
 - Definition of a separate database (using a wizard in DB-Matcher) in which known differences (e.g. company abbreviations) can be saved. These differences are taken into account during matching. The database created can also be edited externally. 
 - Create a backup copy of the Excel file to prevent data loss and increase convenience, as the original file can remain open in Excel without causing data stream conflicts.
 - Automatic dynamic determination of databases: The most likely desired table ranges are provided as default values during input. They can either be accepted by pressing ENTER or changed by entering text. The default values determined behave dynamically in relation to the input made and are updated in real time
