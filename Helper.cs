@@ -104,11 +104,11 @@ namespace DB_Matcher_v5
                 Stopwatch stopwatchIntern = new Stopwatch();
 
                 string line;
-                int row = 0;
+                int row = primaryFirstCellRow;
                 while ((line = reader.ReadLine()) != null)
                 {
                     IRow currentRow = tsheet.GetRow(row) ?? tsheet.CreateRow(row);
-                    ICell newCell = currentRow.CreateCell(1); // Neue Spalte
+                    ICell newCell = currentRow.CreateCell(primaryFirstCellColumn); // Neue Spalte
                     newCell.SetCellValue(line);
 
                     try
