@@ -75,6 +75,7 @@ namespace DB_Matching_main1
         public static string toPath = "";
         public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
         public const string dictionaryExcapeCharacterString = @"/\";
+        public static string helperFilePath = "";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -97,6 +98,7 @@ namespace DB_Matching_main1
         Start:
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
             VarHold.logoFilePath = currentHoldFilePath + "logo.txt";
+            VarHold.helperFilePath = currentHoldFilePath + "helperFileTemp.txt";
             string currentHoldFilePathBAK = currentHoldFilePath;
             string currentHoldFilePath2 = currentHoldFilePath;
             string currentSettingsFilePathHold = currentHoldFilePath;
@@ -614,7 +616,6 @@ namespace DB_Matching_main1
             //printFittedSizeAsterixSurroundedText($"STARTING COMPUTATION WITH {VarHold.getSimilarityMethodValue} ALGORITHM");
             //printFittedSizeAsterixSurroundedText($"STARTING COMPUTING WITH LEVENSHTEIN-DISTANCE ALGORITHM");
             //printFittedSizeAsterixSurroundedText($"COMPUTING SUPPORT VIA JACCARD-DISTANCE ALGORITHM");
-            printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
             int matchedCells = 0;
             int matchedCellsIdentical = 0;
             if (verbose) { Console.WriteLine("starting stopwatch"); }
@@ -628,6 +629,10 @@ namespace DB_Matching_main1
                 byte[] checksum = sha.ComputeHash(fileStream);
                 VarHold.checksumConvertedOriginal = BitConverter.ToString(checksum).Replace("-", String.Empty);
             }
+
+            Helper.writeContentToFile(workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
+
+            printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
 
             Stopwatch stopwatchIntern = new Stopwatch();
             stopwatchIntern.Start();
@@ -980,7 +985,11 @@ namespace DB_Matching_main1
                     //}
                 }
             }
-            //Console.WriteLine("schreiben");
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Helper.writeFileToContent(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
+
             Console.WriteLine();
             Console.WriteLine();
             if (writeResults) { printFittedSizeAsterixSurroundedText("SAVING"); }
@@ -1006,7 +1015,7 @@ namespace DB_Matching_main1
             string timeSpanString = String.Format("{0:00}h:{1:00}m:{2:00}s:{3:00}ms", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
 
             setConsoleColorToGreen();
-            printFittedSizeAsterixSurroundedText("COMPUING--FINISHED");
+            printFittedSizeAsterixSurroundedText("COMPUTING--FINISHED");
             resetConsoleColor();
 
             Console.WriteLine();
