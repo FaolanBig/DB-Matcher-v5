@@ -45,7 +45,8 @@ namespace DB_Matching_main1
     internal static class VarHold
     {
         //public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
-        public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
+        public const string repoURLReportIssue = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
+        public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
         public const string updateFileRepoUrl = "https://raw.githubusercontent.com/faolanbig/db-matcher-v5/master/version.txt";
 
         public static string currentMainFilePath;

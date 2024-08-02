@@ -58,14 +58,15 @@ namespace DB_Matcher_v5
             if (string.IsNullOrEmpty(VarHold.latestVersion)) { return false; }
             else if (VarHold.currentVersion != VarHold.latestVersion)
             {
-                ToLog.Inf($"new version awailable on {VarHold.repoURL} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
-                PrintIn.blue($"new version awailable on {VarHold.repoURL} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
+                ToLog.Inf($"new version awailable on {VarHold.repoURLReportIssue} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
+                PrintIn.blue($"new version awailable on {VarHold.repoURL}");
+                PrintIn.blue($"current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion}");
                 RecoveryHandler.WaitForKeystrokeENTER();
                 return true;
             }
             else if (VarHold.currentVersion == VarHold.latestVersion)
             {
-                ToLog.Inf("currently using the latest version of DB-Matcher-v5");
+                ToLog.Inf($"currently using the latest version of DB-Matcher-v5 (version: {VarHold.currentVersion})");
                 PrintIn.green("currenly running the latest version of DB-Matcher-v5");
                 return false;
             }
