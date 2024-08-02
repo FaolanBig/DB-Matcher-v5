@@ -94,7 +94,7 @@ namespace DB_Matcher_v5
             Program.setConsoleColorToYellow();
 
             AskToSave:
-            Console.Write("continue and save new settings? (y/n) ");
+            Console.Write("continue and save new settings? (y/n): ");
             string userInput = Console.ReadLine();
 
             switch (userInput)

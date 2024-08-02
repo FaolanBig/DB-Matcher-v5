@@ -46,6 +46,7 @@ namespace DB_Matching_main1
     {
         //public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
         public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
+        public const string updateFileRepoUrl = "https://raw.githubusercontent.com/faolanbig/db-matcher-v5/master/version.txt";
 
         public static string currentMainFilePath;
         public static string getSimilarityMethodValue;
@@ -76,6 +77,9 @@ namespace DB_Matching_main1
         public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
         public const string dictionaryExcapeCharacterString = @"/\";
         public static string helperFilePath = "";
+        public static string baseDirectory = "";
+        public static string latestVersion = "";
+        public static string currentVersion = "";
 
         public static Dictionary<string, string> settings = new Dictionary<string, string>();
     }
@@ -97,6 +101,7 @@ namespace DB_Matching_main1
 
         Start:
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
+            VarHold.baseDirectory = currentHoldFilePath + "version.txt";
             VarHold.logoFilePath = currentHoldFilePath + "logo.txt";
             VarHold.helperFilePath = currentHoldFilePath + "helperFileTemp.txt";
             string currentHoldFilePathBAK = currentHoldFilePath;
