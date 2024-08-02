@@ -59,7 +59,7 @@ namespace DB_Matcher_v5
                 PrintIn.red("error when detecting the operating system");
                 PrintIn.red("proceeding as Linux");
                 PrintIn.red("this may be ignored");
-                PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                PrintIn.red($"if this is a bug, please report it by creating an issue on {VarHold.repoURLReportIssue}");
                 VarHold.osIsWindows = false;
             }
 
@@ -102,12 +102,12 @@ namespace DB_Matcher_v5
                 PrintIn.red("no menu file found");
                 PrintIn.red("to fix this problem, follow the following steps");
                 Console.WriteLine();
-                Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURL}");
+                Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURLReportIssue}");
                 Console.WriteLine($"   2. move \"recoveryMenu.txt\" to {VarHold.currentRecoveryMenuFile}");
                 Console.WriteLine("   3. restart DB-Matcher-v5");
                 Console.WriteLine();
                 PrintIn.blue("this should fix the problem");
-                PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURLReportIssue}");
                 WaitForKeystrokeENTER();
                 return true;
             }
@@ -124,12 +124,12 @@ namespace DB_Matcher_v5
 
                         PrintIn.red("to fix this problem, follow the following steps");
                         Console.WriteLine();
-                        Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURL}");
+                        Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURLReportIssue}");
                         Console.WriteLine($"   2. replace {VarHold.currentRecoveryMenuFile} with the newly downloaded file");
                         Console.WriteLine("    3. restart DB-Matcher-v5");
                         Console.WriteLine();
                         PrintIn.blue("this should fix the problem");
-                        PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                        PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURLReportIssue}");
                         WaitForKeystrokeENTER();
                         return false;
                     }
@@ -141,12 +141,12 @@ namespace DB_Matcher_v5
 
                     PrintIn.red("to fix this problem, follow the following steps");
                     Console.WriteLine();
-                    Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURL}");
+                    Console.WriteLine($"   1. download \"recoveryMenu.txt\" from {VarHold.repoURLReportIssue}");
                     Console.WriteLine($"   2. replace {VarHold.currentRecoveryMenuFile} with the newly downloaded file");
                     Console.WriteLine("    3. restart DB-Matcher-v5");
                     Console.WriteLine();
                     PrintIn.blue("this should fix the problem");
-                    PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURL}");
+                    PrintIn.blue($"if this is a bug, please report it by creating an issue on {VarHold.repoURLReportIssue}");
                     WaitForKeystrokeENTER();
                     return true;
                 }
@@ -193,8 +193,8 @@ namespace DB_Matcher_v5
                         break;
                     case "5":
                         Console.Clear();
-                        if (!UpdateAgent.CheckForUpdates()) { PrintIn.green("no updates available"); WaitForKeystrokeENTER(); }
-                        Menu();
+                        if (!UpdateAgent.CheckForUpdates()) { PrintIn.green("no updates available"); WaitForKeystrokeENTER("hit ENTER to return to recovery menu"); }
+                        RunRecovery();
                         break;
                     default:
                         PrintIn.red("bad input");
