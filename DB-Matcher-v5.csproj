@@ -11,10 +11,14 @@
 
   <ItemGroup>
     <None Remove="recoveryMenu.txt" />
+    <None Remove="version.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="recoveryMenu.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="version.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

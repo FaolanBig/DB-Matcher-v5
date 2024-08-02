@@ -77,7 +77,7 @@ namespace DB_Matching_main1
         public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
         public const string dictionaryExcapeCharacterString = @"/\";
         public static string helperFilePath = "";
-        public static string baseDirectory = "";
+        public static string updateFilePath = "";
         public static string latestVersion = "";
         public static string currentVersion = "";
 
@@ -101,7 +101,7 @@ namespace DB_Matching_main1
 
         Start:
             string currentHoldFilePath = AppDomain.CurrentDomain.BaseDirectory;
-            VarHold.baseDirectory = currentHoldFilePath + "version.txt";
+            VarHold.updateFilePath = currentHoldFilePath + "version.txt";
             VarHold.logoFilePath = currentHoldFilePath + "logo.txt";
             VarHold.helperFilePath = currentHoldFilePath + "helperFileTemp.txt";
             string currentHoldFilePathBAK = currentHoldFilePath;

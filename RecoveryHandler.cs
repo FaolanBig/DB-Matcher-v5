@@ -63,6 +63,8 @@ namespace DB_Matcher_v5
                 VarHold.osIsWindows = false;
             }
 
+            UpdateAgent.CheckForUpdates();
+
             PrintIn.blue("press ESC to enter recovery mode");
 
             var stopwatch = Stopwatch.StartNew();
@@ -188,6 +190,11 @@ namespace DB_Matcher_v5
                         break;
                     case "4":
                         Program.jsonChecker(Program.dictionary, false);
+                        break;
+                    case "5":
+                        Console.Clear();
+                        if (!UpdateAgent.CheckForUpdates()) { PrintIn.green("no updates available"); WaitForKeystrokeENTER(); }
+                        Menu();
                         break;
                     default:
                         PrintIn.red("bad input");
