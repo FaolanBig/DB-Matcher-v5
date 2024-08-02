@@ -122,7 +122,7 @@ namespace DB_Matcher_v5
             catch (Exception ex)
             {
                 PrintIn.red($"an unexpected error occurred: {ex.Message}");
-                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURLReportIssue}");
+                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURLReleases}");
             }
             
             PrintIn.blue("DB-Matcher-v5 needs to be restarted");
@@ -198,7 +198,7 @@ namespace DB_Matcher_v5
             catch (Exception ex)
             {
                 PrintIn.red($"an unexpected error occured: {ex.Message}");
-                PrintIn.red($"please report it to {VarHold.repoURLReportIssue}");
+                PrintIn.red($"please report it to {VarHold.repoURLReleases}");
             }
         }
         internal static void SaveSettings()
@@ -216,7 +216,7 @@ namespace DB_Matcher_v5
             catch (Exception ex)
             {
                 PrintIn.red($"an unexpected error occured: {ex.Message}");
-                PrintIn.red($"please report it to {VarHold.repoURLReportIssue}");
+                PrintIn.red($"please report it to {VarHold.repoURLReleases}");
             }
         }
         internal static void ViewSettings()
@@ -266,7 +266,7 @@ namespace DB_Matcher_v5
                 PrintIn.red($"error when reading key-value (value is null or empty) of key: {keyToCheck}");
                 PrintIn.red("this could be caused by a currupt settings file");
                 PrintIn.red("to solve this, reconfigure the settings in recovery mode");
-                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURLReportIssue}");
+                PrintIn.red($"if this is a bug, please report it on {VarHold.repoURLReleases}");
                 RecoveryHandler.WaitForKeystrokeENTER();
                 PrintIn.blue("launching recovery mode");
                 PrintIn.WigglyStarInBorders();
