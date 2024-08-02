@@ -78,7 +78,7 @@ namespace DB_Matcher_v5
                     string remainingTimeString = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
 
                     double tprogress = (row * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / primaryLastCellRow);
-                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
+                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
 
                 }
             }
@@ -135,7 +135,7 @@ namespace DB_Matcher_v5
 
                         double tprogress = (row * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / primaryLastCellRow);
                         //double tprogress = Convert.ToInt32(row) / Convert.ToDouble(totalIterations);
-                        Console.Write($"[{new string('#', 1 + Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - 1 - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
+                        Console.Write($"[{new string('#', 1 + Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - 1 - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
                     }
                     catch (Exception ex)
                     {

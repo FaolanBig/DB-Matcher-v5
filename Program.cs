@@ -893,7 +893,7 @@ namespace DB_Matching_main1
                     string remainingTimeString = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
 
                     double tprogress = (cnt * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / primaryLastCellRow);
-                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
+                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
 
                     //Thread.Sleep(100);
                 }
@@ -1298,7 +1298,7 @@ namespace DB_Matching_main1
                 Console.SetCursorPosition(0, Console.WindowHeight - 1);
 
                 double tprogress = (i * (Console.WindowWidth - 6) / 100);
-                Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string(' ', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
+                Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - 6) - Convert.ToInt32(tprogress))}]{i}%");
                 Thread.Sleep(1);
             }
             if (toggleRestartInNewInstance)
