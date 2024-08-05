@@ -31,6 +31,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -628,6 +629,12 @@ namespace DB_Matching_main1
             int matchedCellsIdentical = 0;
             if (verbose) { Console.WriteLine("starting stopwatch"); }
             stopwatch.Start();
+
+            if (SettingsAgent.GetSettingIsTrue("colorGradient"))
+            {
+                if (verbose) { Console.WriteLine("generating styles"); }
+
+            }
 
             //Generating Checksum
             if (verbose) { printFittedSizeAsterixSurroundedText("COMPUTING CHECKSUM"); }
