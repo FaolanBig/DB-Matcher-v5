@@ -86,15 +86,17 @@ namespace DB_Matcher_v5
             addYesNo("verbose output", "verbose");
             addYesNo("always write results", "writeResults");
             addYesNo("get an auditive feedback when finishing processes (beep)", "consoleBeep");
+            addYesNo("visualize matching grade with color gradients", "colorGradient");
+
             bool useAutoOpenExcel = false;
-            if (VarHold.osIsWindows) { addYesNo("automatically open newly generated excel-file in excel", "autoOpenExcel"); useAutoOpenExcel = true; }
+            if (VarHold.osIsWindows) { useAutoOpenExcel = addYesNo("automatically open newly generated excel-file in excel", "autoOpenExcel"); }
             if (useAutoOpenExcel && !File.Exists(VarHold.excelPath)) 
             {
                 PrintIn.red($"file not found: excel.exe in {VarHold.excelPath}");
                 if (RecoveryHandler.getYesOrNo("add a custom path to open excel files?")) { addValue("path to open excel files", "pathTo_excel.exe", VarHold.excelPath); }
 
             }
-            else { PrintIn.blue($"using excel.exe in {VarHold.excelPath}"); }
+            else if (useAutoOpenExcel) { PrintIn.blue($"using excel.exe in {VarHold.excelPath}"); }
 
             Console.WriteLine();
             PrintIn.yellow("changing the settings will overwrite any existing setting file");
