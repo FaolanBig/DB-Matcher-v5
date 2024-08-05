@@ -44,48 +44,6 @@ using System.Threading;
 
 namespace DB_Matching_main1
 {
-    internal static class VarHold
-    {
-        //public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
-        public const string repoURLReportIssue = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
-        public const string repoURLReleases = "https://github.com/FaolanBig/DB-Matcher-v5/releases";
-        public const string updateFileRepoUrl = "https://raw.githubusercontent.com/faolanbig/db-matcher-v5/master/version.txt";
-
-        public static string currentMainFilePath;
-        public static string getSimilarityMethodValue;
-        /*public string GetSimilarityMethodValue
-        {
-            get { return getSimilarityMethodValue; }
-            set { GetSimilarityMethodValue = value; }
-        }*/
-        //public BigInteger arrayAccess = BigInteger.Parse("0");
-        public static long arrayAccess = 0;
-        public static long cyclesLog = 0;
-        public static string checksumConvertedOriginal = "NULL";
-        public static string checksumConvertedNew = "NULL";
-        public static int runHold1 = 0;
-        public static int runHold2 = 0;
-        public static string createJsonExitInput = "JSONEXIT";
-        public static string createDictionaryExitInput = "DIREXIT";
-        public static bool useDataFile = true;
-        public static bool toggleConsoleColor = true;
-        public static string currentSettingsFilePathHold = "";
-        public static string currentRecoveryMenuFile = "";
-        public static bool osIsWindows; //true: Windows; false: Linux
-        public static string logFileNameInfo = "logfile.txt";
-        public static string logFileNameError = logFileNameInfo;
-        public static string logoFilePath = "";
-        public static string currentHoldFilePath = "";
-        public static string toPath = "";
-        public static string excelPath = @"C:\Program Files\Microsoft Office\root\Office16\EXCEL.EXE";
-        public const string dictionaryExcapeCharacterString = @"/\";
-        public static string helperFilePath = "";
-        public static string updateFilePath = "";
-        public static string latestVersion = "";
-        public static string currentVersion = "";
-
-        public static Dictionary<string, string> settings = new Dictionary<string, string>();
-    }
     internal class Program
     {
         internal static Dictionary<string, string> dictionary = new Dictionary<string, string>();
@@ -95,7 +53,6 @@ namespace DB_Matching_main1
             Console.Clear();
             run();
         }
-
         internal static void run(bool jsonCheck = true)
         {
             Console.Title = "DB-MATCHER-v5";
@@ -303,6 +260,7 @@ namespace DB_Matching_main1
                         break;
                 }
             }
+            VarHold.writeResults = writeResults;
 
             /*ToggleConsoleColor:
                 Console.WriteLine();
@@ -670,357 +628,382 @@ namespace DB_Matching_main1
             Stopwatch stopwatchIntern = new Stopwatch();
             stopwatchIntern.Start();
             FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite);
-            for (int cnt = primaryFirstCellRow; cnt <= primaryLastCellRow; cnt++)
+            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) > 4)
             {
-                //stopwatchIntern.Start();
-                ISheet sheet = workbook.GetSheetAt(sheetInput1);
+                ToLog.Inf("multi threading enabled");
+                PrintIn.yellow("multi threading is enabled");
+                ToLog.Inf("starting thread1");
+                Thread thread1 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
 
-                string activeMatchValue = "NOT FOUND";
-                int activeMatchRow = 0;
-                int activeMatchColumn = 0;
-                double activeMatchPercentage = 100;
-                int activeMatchHammingDistance = 100;
-                double activeMatchJaccardIndex = 1.0;
+                ToLog.Inf("starting thread2");
+                Thread thread2 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
 
-                string activeSecondaryCellValue = "NOT FOUND";
-                string activePrimaryCellValueOld = null;
-                string activeSecondaryCellValueOld = null;
+                ToLog.Inf("starting thread3");
+                Thread thread3 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
 
-                IRow activePrimaryCellRow = sheet.GetRow(cnt);
-                if (activePrimaryCellRow == null)
+                ToLog.Inf("starting thread4");
+                Thread thread4 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
+
+                while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
-                    activePrimaryCellRow = sheet.CreateRow(cnt);
-                }
-                ICell activePrimaryCell = activePrimaryCellRow.GetCell(primaryFirstCellColumn);
-                if (activePrimaryCell == null)
-                {
-                    activePrimaryCell = activePrimaryCellRow.CreateCell(primaryFirstCellColumn);
+                    Helper.printProgressBar(0, VarHold.thread1_progress)
                 }
 
-                string activePrimaryCellValue = activePrimaryCell.ToString();
-
-                if (VarHold.useDataFile)
+            }
+            else
+            {
+                for (int cnt = primaryFirstCellRow; cnt <= primaryLastCellRow; cnt++)
                 {
-                    foreach (var entry in dictionary)
+                    //stopwatchIntern.Start();
+                    ISheet sheet = workbook.GetSheetAt(sheetInput1);
+
+                    string activeMatchValue = "NOT FOUND";
+                    int activeMatchRow = 0;
+                    int activeMatchColumn = 0;
+                    double activeMatchPercentage = 100;
+                    int activeMatchHammingDistance = 100;
+                    double activeMatchJaccardIndex = 1.0;
+
+                    string activeSecondaryCellValue = "NOT FOUND";
+                    string activePrimaryCellValueOld = null;
+                    string activeSecondaryCellValueOld = null;
+
+                    IRow activePrimaryCellRow = sheet.GetRow(cnt);
+                    if (activePrimaryCellRow == null)
                     {
-                        if (activePrimaryCellValue.Contains(entry.Key))
-                        {
-                            activePrimaryCellValueOld = activePrimaryCellValue;
-                            activePrimaryCellValue = activePrimaryCellValue.Replace(entry.Key, entry.Value);
-                            break;
-                        }
+                        activePrimaryCellRow = sheet.CreateRow(cnt);
                     }
-                }
-
-                for (int sCnt = secondaryFirstCellRow; sCnt <= secondaryLastCellRow; sCnt++)
-                {
-                    sheet = workbook.GetSheetAt(sheetInput2);
-
-                    bool compareIdentical = false;
-                    bool compareMatch = false;
-
-
-                    IRow activeSecondaryCellRow = sheet.GetRow(sCnt);
-                    if (activeSecondaryCellRow == null)
+                    ICell activePrimaryCell = activePrimaryCellRow.GetCell(primaryFirstCellColumn);
+                    if (activePrimaryCell == null)
                     {
-                        activeSecondaryCellRow = sheet.CreateRow(sCnt);
-                    }
-                    ICell activeSecondaryCell = activeSecondaryCellRow.GetCell(secondaryFirstCellColumn);
-                    if (activeSecondaryCell == null)
-                    {
-                        activeSecondaryCell = activeSecondaryCellRow.CreateCell(secondaryFirstCellColumn);
+                        activePrimaryCell = activePrimaryCellRow.CreateCell(primaryFirstCellColumn);
                     }
 
-                    activeSecondaryCellValue = activeSecondaryCell.ToString();
+                    string activePrimaryCellValue = activePrimaryCell.ToString();
 
                     if (VarHold.useDataFile)
                     {
                         foreach (var entry in dictionary)
                         {
-                            if (activeSecondaryCellValue.Contains(entry.Key))
+                            if (activePrimaryCellValue.Contains(entry.Key))
                             {
-                                activeSecondaryCellValueOld = activeSecondaryCellValue;
-                                activeSecondaryCellValue = activeSecondaryCellValue.Replace(entry.Key, entry.Value);
+                                activePrimaryCellValueOld = activePrimaryCellValue;
+                                activePrimaryCellValue = activePrimaryCellValue.Replace(entry.Key, entry.Value);
                                 break;
                             }
                         }
                     }
 
-                    //Vergleichen
-                    double compareMatchPercentage = getSimilarityValueOBJ.getLevenshteinDistance(activePrimaryCellValue, activeSecondaryCellValue);
-                    int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
-                    double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
-                    //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
-                    if (activeSecondaryCellValue == activePrimaryCellValue)
+                    for (int sCnt = secondaryFirstCellRow; sCnt <= secondaryLastCellRow; sCnt++)
                     {
-                        matchedCells++;
-                        matchedCellsIdentical++;
-                        compareIdentical = true;
-                        compareMatch = true;
-                        compareMatchPercentage = 0;
-                        activeMatchColumn = secondaryFirstCellColumn;
-                        activeMatchRow = sCnt;
-                        activeMatchPercentage = compareMatchPercentage;
-                        activeMatchValue = activeSecondaryCellValue;
-                        if (verbose == true) { Console.WriteLine(); printFittedSizeAsterixSurroundedText("MATCH--FOUND"); }
-                    }
-                    else if (compareMatchPercentage < activeMatchPercentage)
-                    {
-                        matchedCells++;
-                        activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
-                        activeMatchRow = sCnt;
-                        activeMatchPercentage = compareMatchPercentage;
-                        compareMatch = true;
-                        //compareMatchPercentage = getSimilarityValue(activePrimaryCellValue, activeSecondaryCellValue);
+                        sheet = workbook.GetSheetAt(sheetInput2);
+
+                        bool compareIdentical = false;
+                        bool compareMatch = false;
+
+
+                        IRow activeSecondaryCellRow = sheet.GetRow(sCnt);
+                        if (activeSecondaryCellRow == null)
+                        {
+                            activeSecondaryCellRow = sheet.CreateRow(sCnt);
+                        }
+                        ICell activeSecondaryCell = activeSecondaryCellRow.GetCell(secondaryFirstCellColumn);
+                        if (activeSecondaryCell == null)
+                        {
+                            activeSecondaryCell = activeSecondaryCellRow.CreateCell(secondaryFirstCellColumn);
+                        }
+
+                        activeSecondaryCellValue = activeSecondaryCell.ToString();
+
+                        if (VarHold.useDataFile)
+                        {
+                            foreach (var entry in dictionary)
+                            {
+                                if (activeSecondaryCellValue.Contains(entry.Key))
+                                {
+                                    activeSecondaryCellValueOld = activeSecondaryCellValue;
+                                    activeSecondaryCellValue = activeSecondaryCellValue.Replace(entry.Key, entry.Value);
+                                    break;
+                                }
+                            }
+                        }
+
+                        //Vergleichen
+                        double compareMatchPercentage = getSimilarityValueOBJ.getLevenshteinDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                        int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                        double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
+                        //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                        if (activeSecondaryCellValue == activePrimaryCellValue)
+                        {
+                            matchedCells++;
+                            matchedCellsIdentical++;
+                            compareIdentical = true;
+                            compareMatch = true;
+                            compareMatchPercentage = 0;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            activeMatchPercentage = compareMatchPercentage;
+                            activeMatchValue = activeSecondaryCellValue;
+                            if (verbose == true) { Console.WriteLine(); printFittedSizeAsterixSurroundedText("MATCH--FOUND"); }
+                        }
+                        else if (compareMatchPercentage < activeMatchPercentage)
+                        {
+                            matchedCells++;
+                            activeMatchValue = activeSecondaryCellValue;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            activeMatchPercentage = compareMatchPercentage;
+                            compareMatch = true;
+                            //compareMatchPercentage = getSimilarityValue(activePrimaryCellValue, activeSecondaryCellValue);
+                            if (verbose == true)
+                            {
+                                Console.WriteLine(); printFittedSizeAsterixSurroundedText("MATCH--FOUND");
+                            }
+                        }
+                        /*else if (compareMatchPercentage == activeMatchPercentage && compareMatchJaccardIndex < activeMatchJaccardIndex)
+                        {
+                            matchedCells++;
+                            activeMatchValue = activeSecondaryCellValue;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            //activeMatchPercentage = compareMatchPercentage;
+                            activeMatchJaccardIndex = compareMatchJaccardIndex;
+                        }*/
+                        else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance < activeMatchHammingDistance)
+                        {
+                            matchedCells++;
+                            activeMatchValue = activeSecondaryCellValue;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            activeMatchPercentage = compareMatchPercentage;
+                            activeMatchHammingDistance = compareMatchHammingDistance;
+                        }
+                        else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance == activeMatchHammingDistance && compareMatchJaccardIndex < activeMatchJaccardIndex)
+                        {
+                            matchedCells++;
+                            activeMatchValue = activeSecondaryCellValue;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            activeMatchPercentage = compareMatchPercentage;
+                            activeMatchJaccardIndex = compareMatchJaccardIndex;
+                            activeMatchJaccardIndex = compareMatchJaccardIndex;
+
+                        }
+                        else
+                        {
+                            compareMatch = false;
+                        }
+
+
                         if (verbose == true)
                         {
-                            Console.WriteLine(); printFittedSizeAsterixSurroundedText("MATCH--FOUND");
+                            if (compareMatch) { printFittedSizeAsterixRowCompact(); setConsoleBackgroundColorToGreen(); setConsoleColorToBlack(); }
+                            /*Console.Write("Active Computing: ");
+                            Console.Write("Matched Cells: " + matchedCells + " | ");
+                            Console.Write("Matched Cells Identical: " + matchedCellsIdentical + " | ");
+                            Console.Write("Active Primary Row: " + (cnt + 1) + " | ");
+                            Console.Write("Active Secondary Row: " + (sCnt + 1) + " | ");
+                            Console.Write("ActivePrimaryCellValue: " + activePrimaryCellValue + " | ");
+                            Console.Write("ActiveSecondaryCellValue: " + activeSecondaryCellValue + " | ");
+                            Console.Write("CompareIdentical: " + compareIdentical + " | ");
+                            Console.Write("CompareMatch: " + compareMatch + " | ");
+                            Console.Write("CompareMatchPercentage: " + compareMatchPercentage);
+                            Console.WriteLine();*/
+
+                            string outputHold = "";
+                            outputHold += ("Active Computing: ");
+                            outputHold += ("Matched Cells: " + matchedCells + " | ");
+                            outputHold += ("Matched Cells Identical: " + matchedCellsIdentical + " | ");
+                            outputHold += ("Active Primary Row: " + (cnt + 1) + " | ");
+                            outputHold += ("Active Secondary Row: " + (sCnt + 1) + " | ");
+                            outputHold += ("ActivePrimaryCellValue: " + activePrimaryCellValue + " | ");
+                            if (VarHold.useDataFile) { outputHold += ("ActivePrimaryCellValueOld: " + activePrimaryCellValueOld + " | "); }
+                            outputHold += ("ActiveSecondaryCellValue: " + activeSecondaryCellValue + " | ");
+                            if (VarHold.useDataFile) { outputHold += ("ActiveSecondaryCellValueOld: " + activeSecondaryCellValueOld + " | "); }
+                            outputHold += ("CompareIdentical: " + compareIdentical + " | ");
+                            outputHold += ("CompareMatch: " + compareMatch + " | ");
+                            outputHold += ("CompareMatchPercentage: " + compareMatchPercentage + " | ");
+                            outputHold += ("CompareMatchHammingDistance: " + compareMatchHammingDistance + " | ");
+                            outputHold += ("CompareMatchJaccardIndex: " + compareMatchJaccardIndex);
+
+                            Console.WriteLine(outputHold);
+
+                            if (compareMatch) { resetConsoleColor(); ; printFittedSizeAsterixRowCompact(); }
+                            /*
+                            progress = cnt / (primaryLastCellRow - primaryFirstCellRow);
+                            string progressHold = "";
+                            string progressOutputHold = "";
+                            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                            Console.Write(new string(' ', Console.WindowWidth));
+                            Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                            for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
+                            {
+                                progressOutputHold += "#";
+                            }
+                            Console.Write(progressOutputHold);*/
                         }
-                    }
-                    /*else if (compareMatchPercentage == activeMatchPercentage && compareMatchJaccardIndex < activeMatchJaccardIndex)
-                    {
-                        matchedCells++;
-                        activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
-                        activeMatchRow = sCnt;
-                        //activeMatchPercentage = compareMatchPercentage;
-                        activeMatchJaccardIndex = compareMatchJaccardIndex;
-                    }*/
-                    else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance < activeMatchHammingDistance)
-                    {
-                        matchedCells++;
-                        activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
-                        activeMatchRow = sCnt;
-                        activeMatchPercentage = compareMatchPercentage;
-                        activeMatchHammingDistance = compareMatchHammingDistance;
-                    }
-                    else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance == activeMatchHammingDistance && compareMatchJaccardIndex < activeMatchJaccardIndex)
-                    {
-                        matchedCells++;
-                        activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
-                        activeMatchRow = sCnt;
-                        activeMatchPercentage = compareMatchPercentage;
-                        activeMatchJaccardIndex = compareMatchJaccardIndex;
-                        activeMatchJaccardIndex = compareMatchJaccardIndex;
-
-                    }
-                    else
-                    {
-                        compareMatch = false;
-                    }
-
-
-                    if (verbose == true)
-                    {
-                        if (compareMatch) { printFittedSizeAsterixRowCompact(); setConsoleBackgroundColorToGreen(); setConsoleColorToBlack(); }
-                        /*Console.Write("Active Computing: ");
-                        Console.Write("Matched Cells: " + matchedCells + " | ");
-                        Console.Write("Matched Cells Identical: " + matchedCellsIdentical + " | ");
-                        Console.Write("Active Primary Row: " + (cnt + 1) + " | ");
-                        Console.Write("Active Secondary Row: " + (sCnt + 1) + " | ");
-                        Console.Write("ActivePrimaryCellValue: " + activePrimaryCellValue + " | ");
-                        Console.Write("ActiveSecondaryCellValue: " + activeSecondaryCellValue + " | ");
-                        Console.Write("CompareIdentical: " + compareIdentical + " | ");
-                        Console.Write("CompareMatch: " + compareMatch + " | ");
-                        Console.Write("CompareMatchPercentage: " + compareMatchPercentage);
-                        Console.WriteLine();*/
-
-                        string outputHold = "";
-                        outputHold += ("Active Computing: ");
-                        outputHold += ("Matched Cells: " + matchedCells + " | ");
-                        outputHold += ("Matched Cells Identical: " + matchedCellsIdentical + " | ");
-                        outputHold += ("Active Primary Row: " + (cnt + 1) + " | ");
-                        outputHold += ("Active Secondary Row: " + (sCnt + 1) + " | ");
-                        outputHold += ("ActivePrimaryCellValue: " + activePrimaryCellValue + " | ");
-                        if (VarHold.useDataFile) { outputHold += ("ActivePrimaryCellValueOld: " + activePrimaryCellValueOld + " | "); }
-                        outputHold += ("ActiveSecondaryCellValue: " + activeSecondaryCellValue + " | ");
-                        if (VarHold.useDataFile) { outputHold += ("ActiveSecondaryCellValueOld: " + activeSecondaryCellValueOld + " | "); }
-                        outputHold += ("CompareIdentical: " + compareIdentical + " | ");
-                        outputHold += ("CompareMatch: " + compareMatch + " | ");
-                        outputHold += ("CompareMatchPercentage: " + compareMatchPercentage + " | ");
-                        outputHold += ("CompareMatchHammingDistance: " + compareMatchHammingDistance + " | ");
-                        outputHold += ("CompareMatchJaccardIndex: " + compareMatchJaccardIndex);
-
-                        Console.WriteLine(outputHold);
-
-                        if (compareMatch) { resetConsoleColor(); ; printFittedSizeAsterixRowCompact(); }
-                        /*
-                        progress = cnt / (primaryLastCellRow - primaryFirstCellRow);
-                        string progressHold = "";
+                        /*progress = cnt / primaryLastCellRow;
+                        double progressHold = 0.0;
                         string progressOutputHold = "";
                         Console.SetCursorPosition(0, Console.WindowHeight - 1);
                         Console.Write(new string(' ', Console.WindowWidth));
                         Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                        for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
+                        /*for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
                         {
                             progressOutputHold += "#";
                         }
-                        Console.Write(progressOutputHold);*/
-                    }
-                    /*progress = cnt / primaryLastCellRow;
-                    double progressHold = 0.0;
-                    string progressOutputHold = "";
-                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                    /*for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
-                    {
-                        progressOutputHold += "#";
-                    }
-                    for (int i = 0; i < Convert.ToInt32(Console.WindowWidth * progress); i++)
-                    {
-                        progressOutputHold += "#";
-                    }
-                    Console.Write(progressOutputHold);
-                    Thread.Sleep(100);*/
-                    VarHold.cyclesLog++;
-                }
-                //if (verbose) Console.WriteLine();
-                if (!verbose)
-                {
-                    //stopwatchIntern.Stop();
-                    TimeSpan timeSpanIntern = stopwatchIntern.Elapsed;
-                    string timeSpanStringIntern = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
-                    //double timeSpanInternDouble = stopwatchIntern.Elapsed.TotalMilliseconds / ((cnt - primaryFirstCellRow) + 1);
-                    //string timeSpanStringInternViaDouble = String.Format("{0:00}:{1:00}:{2:00}", Total, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
-
-                    double timeSpanMillisecondsDoubleHold = stopwatchIntern.ElapsedMilliseconds;
-                    double timeSpanMillisecondsPerIterationHold = timeSpanMillisecondsDoubleHold / ((cnt - primaryFirstCellRow) + 1);
-                    int totalIterations = primaryLastCellRow - primaryFirstCellRow;
-                    double remainingTime = timeSpanMillisecondsPerIterationHold * (totalIterations - (cnt - primaryFirstCellRow));
-
-                    TimeSpan timeSpanRemainingTimeFormatted = TimeSpan.FromMilliseconds(remainingTime);
-                    string timeSpanRemainingTimeStringFormatted = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", timeSpanRemainingTimeFormatted.Hours, timeSpanRemainingTimeFormatted.Minutes, timeSpanRemainingTimeFormatted.Seconds);
-
-                    /*progress = (cnt - primaryFirstCellRow) / (primaryLastCellRow - primaryFirstCellRow);
-                    float progressHold = cnt / primaryLastCellRow;
-                    string progressOutputHold = "";*/
-                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                    Console.Write(new string(' ', Console.WindowWidth));
-                    Console.SetCursorPosition(0, Console.WindowHeight - 1);
-                    /*for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
-                    {
-                        progressOutputHold += "#";
-                    }*/
-                    /*for (int i = 0; i < (Console.WindowWidth * progressHold); i++)
-                    {
-                        //progressOutputHold += "#";
-                        Console.Write("#");
-                    }
-                    //Console.Write(progressOutputHold);*/
-                    /*int tprogress = (cnt * (primaryLastCellRow - primaryFirstCellRow) / primaryLastCellRow);
-                    Console.Write($"[{new string('#', tprogress)}{new string(' ', (primaryLastCellRow - primaryFirstCellRow) - tprogress)}] {cnt}%");*/
-                    /*int tprogress = (cnt * (Console.WindowWidth - 2) / primaryLastCellRow);
-                    Console.Write($"[{new string('#', tprogress)}{new string(' ', (Console.WindowWidth - 2) - tprogress)}]");*/
-                    int progressPercentage = Convert.ToInt32(Convert.ToDouble(cnt - primaryFirstCellRow) / (primaryLastCellRow - primaryFirstCellRow) * 100);
-
-                    string remainingTimeString = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
-
-                    double tprogress = (cnt * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / primaryLastCellRow);
-                    Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
-
-                    //Thread.Sleep(100);
-                }
-                //Gefundene Werte in definierten Bereich schreiben
-                if (writeResults)
-                {
-                    //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite))
-                    //{
-                    string cellValueTransferHold;
-                    for (int i = secondaryFirstCellColumn; i <= secondaryLastCellColumn; i++)
-                    {
-                        //read
-                        string outputHold = null;
-                        if (verbose) { outputHold = "*** prepare for copy ***"; }
-                        if (verbose) { Console.WriteLine(outputHold); }
-
-                        sheet = workbook.GetSheetAt(sheetInput2);
-                        IRow fromRow = sheet.GetRow(activeMatchRow);
-                        if (fromRow == null)
+                        for (int i = 0; i < Convert.ToInt32(Console.WindowWidth * progress); i++)
                         {
-                            fromRow = sheet.CreateRow(cnt);
+                            progressOutputHold += "#";
                         }
-                        ICell fromCell = fromRow.GetCell(i);
-                        if (fromCell == null)
-                        {
-                            fromCell = activePrimaryCellRow.CreateCell(primaryFirstCellColumn);
-                        }
-                        cellValueTransferHold = fromCell.ToString();
+                        Console.Write(progressOutputHold);
+                        Thread.Sleep(100);*/
+                        VarHold.cyclesLog++;
+                    }
+                    //if (verbose) Console.WriteLine();
+                    if (!verbose)
+                    {
+                        //stopwatchIntern.Stop();
+                        TimeSpan timeSpanIntern = stopwatchIntern.Elapsed;
+                        string timeSpanStringIntern = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
+                        //double timeSpanInternDouble = stopwatchIntern.Elapsed.TotalMilliseconds / ((cnt - primaryFirstCellRow) + 1);
+                        //string timeSpanStringInternViaDouble = String.Format("{0:00}:{1:00}:{2:00}", Total, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
 
-                        //write
-                        if (verbose) { outputHold = "*** copy ***"; }
-                        if (verbose) { Console.WriteLine(outputHold); }
-                        //Console.WriteLine(1);
-                        sheet = workbook.GetSheetAt(resultSheet);
-                        //Console.WriteLine(2);
-                        IRow toRow = sheet.GetRow(cnt);
-                        //Console.WriteLine(3);
-                        ICell toCell = toRow.CreateCell(resultColumn + (i - secondaryFirstCellColumn));
-                        //Console.WriteLine(4);
-                        //toCell.SetCellValue(cellValueTransferHold);
-                        toCell.SetCellValue(cellValueTransferHold);
-                        //Console.WriteLine(5);
+                        double timeSpanMillisecondsDoubleHold = stopwatchIntern.ElapsedMilliseconds;
+                        double timeSpanMillisecondsPerIterationHold = timeSpanMillisecondsDoubleHold / ((cnt - primaryFirstCellRow) + 1);
+                        int totalIterations = primaryLastCellRow - primaryFirstCellRow;
+                        double remainingTime = timeSpanMillisecondsPerIterationHold * (totalIterations - (cnt - primaryFirstCellRow));
 
-                        /*using (FileStream ffstream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                        TimeSpan timeSpanRemainingTimeFormatted = TimeSpan.FromMilliseconds(remainingTime);
+                        string timeSpanRemainingTimeStringFormatted = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", timeSpanRemainingTimeFormatted.Hours, timeSpanRemainingTimeFormatted.Minutes, timeSpanRemainingTimeFormatted.Seconds);
+
+                        /*progress = (cnt - primaryFirstCellRow) / (primaryLastCellRow - primaryFirstCellRow);
+                        float progressHold = cnt / primaryLastCellRow;
+                        string progressOutputHold = "";*/
+                        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                        Console.Write(new string(' ', Console.WindowWidth));
+                        Console.SetCursorPosition(0, Console.WindowHeight - 1);
+                        /*for (int i = 0; i < (Console.WindowWidth - (Console.WindowWidth - progress)); i++)
                         {
-                            workbook.Write(ffstream);
+                            progressOutputHold += "#";
                         }*/
-                        //workbook.Write(fileStream);
-                    }
-                    //Console.WriteLine(6);
-                    //workbook.Write(ffstream);
-                    //Console.WriteLine(7);
-                    //ffstream.Close();
-                    //}
-                    //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.Write))
-                    //{
-                    //Console.WriteLine("Anhang schreiben");
-                    int columnHold = 0;
+                        /*for (int i = 0; i < (Console.WindowWidth * progressHold); i++)
+                        {
+                            //progressOutputHold += "#";
+                            Console.Write("#");
+                        }
+                        //Console.Write(progressOutputHold);*/
+                        /*int tprogress = (cnt * (primaryLastCellRow - primaryFirstCellRow) / primaryLastCellRow);
+                        Console.Write($"[{new string('#', tprogress)}{new string(' ', (primaryLastCellRow - primaryFirstCellRow) - tprogress)}] {cnt}%");*/
+                        /*int tprogress = (cnt * (Console.WindowWidth - 2) / primaryLastCellRow);
+                        Console.Write($"[{new string('#', tprogress)}{new string(' ', (Console.WindowWidth - 2) - tprogress)}]");*/
+                        int progressPercentage = Convert.ToInt32(Convert.ToDouble(cnt - primaryFirstCellRow) / (primaryLastCellRow - primaryFirstCellRow) * 100);
 
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    IRow rrrow = sheet.GetRow(cnt);
-                    ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                    cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
-                    cccell.SetCellValue(cellValueTransferHold);
-                    if (SettingsAgent.GetSettingIsTrue("colorGradient"))
+                        string remainingTimeString = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
+
+                        double tprogress = (cnt * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / primaryLastCellRow);
+                        Console.Write($"[{new string('#', Convert.ToInt32(tprogress))}{new string('.', (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) - Convert.ToInt32(tprogress))}]{progressPercentage}% | {timeSpanRemainingTimeStringFormatted}");
+
+                        //Thread.Sleep(100);
+                    }
+                    //Gefundene Werte in definierten Bereich schreiben
+                    if (writeResults)
                     {
-                        if (Convert.ToInt32(activeMatchPercentage) < 10) { cccell.CellStyle = styles[Convert.ToInt32(activeMatchPercentage)]; }
-                        else { cccell.CellStyle = styles[10]; }
-                    }
+                        //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite))
+                        //{
+                        string cellValueTransferHold;
+                        for (int i = secondaryFirstCellColumn; i <= secondaryLastCellColumn; i++)
+                        {
+                            //read
+                            string outputHold = null;
+                            if (verbose) { outputHold = "*** prepare for copy ***"; }
+                            if (verbose) { Console.WriteLine(outputHold); }
 
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                    cellValueTransferHold = $"HD-Value: {activeMatchHammingDistance}";
-                    cccell.SetCellValue(cellValueTransferHold);
+                            sheet = workbook.GetSheetAt(sheetInput2);
+                            IRow fromRow = sheet.GetRow(activeMatchRow);
+                            if (fromRow == null)
+                            {
+                                fromRow = sheet.CreateRow(cnt);
+                            }
+                            ICell fromCell = fromRow.GetCell(i);
+                            if (fromCell == null)
+                            {
+                                fromCell = activePrimaryCellRow.CreateCell(primaryFirstCellColumn);
+                            }
+                            cellValueTransferHold = fromCell.ToString();
 
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                    cellValueTransferHold = $"JD-Value: {activeMatchJaccardIndex}";
-                    cccell.SetCellValue(cellValueTransferHold);
+                            //write
+                            if (verbose) { outputHold = "*** copy ***"; }
+                            if (verbose) { Console.WriteLine(outputHold); }
+                            //Console.WriteLine(1);
+                            sheet = workbook.GetSheetAt(resultSheet);
+                            //Console.WriteLine(2);
+                            IRow toRow = sheet.GetRow(cnt);
+                            //Console.WriteLine(3);
+                            ICell toCell = toRow.CreateCell(resultColumn + (i - secondaryFirstCellColumn));
+                            //Console.WriteLine(4);
+                            //toCell.SetCellValue(cellValueTransferHold);
+                            toCell.SetCellValue(cellValueTransferHold);
+                            //Console.WriteLine(5);
 
-                    if (VarHold.useDataFile && (activePrimaryCellValueOld != null || activeSecondaryCellValueOld != null))
-                    {
+                            /*using (FileStream ffstream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
+                            {
+                                workbook.Write(ffstream);
+                            }*/
+                            //workbook.Write(fileStream);
+                        }
+                        //Console.WriteLine(6);
+                        //workbook.Write(ffstream);
+                        //Console.WriteLine(7);
+                        //ffstream.Close();
+                        //}
+                        //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.Write))
+                        //{
+                        //Console.WriteLine("Anhang schreiben");
+                        int columnHold = 0;
+
                         sheet = workbook.GetSheetAt(resultSheet);
-                        IRow rrow = sheet.GetRow(cnt);
-                        ICell ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                        cellValueTransferHold = $"PrimaryValueTransform (old --> new): {activePrimaryCellValueOld} --> {activePrimaryCellValue}";
-                        ccell.SetCellValue(cellValueTransferHold);
+                        IRow rrrow = sheet.GetRow(cnt);
+                        ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                        cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
+                        cccell.SetCellValue(cellValueTransferHold);
+                        if (SettingsAgent.GetSettingIsTrue("colorGradient"))
+                        {
+                            if (Convert.ToInt32(activeMatchPercentage) < 10) { cccell.CellStyle = styles[Convert.ToInt32(activeMatchPercentage)]; }
+                            else { cccell.CellStyle = styles[10]; }
+                        }
 
                         sheet = workbook.GetSheetAt(resultSheet);
-                        rrow = sheet.GetRow(cnt);
-                        ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                        cellValueTransferHold = $"SecondaryValueTransform (old --> new): {activeSecondaryCellValueOld} --> {activeSecondaryCellValue}";
-                        ccell.SetCellValue(cellValueTransferHold);
-                    }
+                        rrrow = sheet.GetRow(cnt);
+                        cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                        cellValueTransferHold = $"HD-Value: {activeMatchHammingDistance}";
+                        cccell.SetCellValue(cellValueTransferHold);
 
-                    //workbook.Write(ffstream);
-                    //ffstream.Close();
-                    //}
+                        sheet = workbook.GetSheetAt(resultSheet);
+                        rrrow = sheet.GetRow(cnt);
+                        cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                        cellValueTransferHold = $"JD-Value: {activeMatchJaccardIndex}";
+                        cccell.SetCellValue(cellValueTransferHold);
+
+                        if (VarHold.useDataFile && (activePrimaryCellValueOld != null || activeSecondaryCellValueOld != null))
+                        {
+                            sheet = workbook.GetSheetAt(resultSheet);
+                            IRow rrow = sheet.GetRow(cnt);
+                            ICell ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                            cellValueTransferHold = $"PrimaryValueTransform (old --> new): {activePrimaryCellValueOld} --> {activePrimaryCellValue}";
+                            ccell.SetCellValue(cellValueTransferHold);
+
+                            sheet = workbook.GetSheetAt(resultSheet);
+                            rrow = sheet.GetRow(cnt);
+                            ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                            cellValueTransferHold = $"SecondaryValueTransform (old --> new): {activeSecondaryCellValueOld} --> {activeSecondaryCellValue}";
+                            ccell.SetCellValue(cellValueTransferHold);
+                        }
+
+                        //workbook.Write(ffstream);
+                        //ffstream.Close();
+                        //}
+                    }
                 }
             }
 
@@ -1047,6 +1030,12 @@ namespace DB_Matching_main1
             }
 
             if (toggleConsoleBeep) { Console.Beep(); }
+
+            if (VarHold.matchedCells != 0 && VarHold.matchedCellsIdentical != 0)
+            {
+                matchedCells = VarHold.matchedCells;
+                matchedCellsIdentical = VarHold.matchedCellsIdentical;
+            }
 
             //stopwatch.Stop();
             TimeSpan timeSpan = stopwatch.Elapsed;
