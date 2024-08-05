@@ -11,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace DB_Matcher_v5
 {
-    internal class ThreadingAgent
+    internal class ThreadingAgentInternal
     {
-        internal static void Matcher(short threadCount, ref XSSFWorkbook workbook, ICellStyle[] styles, Dictionary<string, string> dictionary, int sheetInput1, int sheetInput2, int resultSheet, int resultColumn, int primaryFirstCellRow, int primaryLastCellRow, int primaryFirstCellColumn, int primaryLastCellColumn, int secondaryFirstCellRow, int secondaryLastCellRow, int secondaryFirstCellColumn, int secondaryLastCellColumn)
+        internal static void Matcher(IWorkbook workbook, short threadCount, ICellStyle[] styles, Dictionary<string, string> dictionary, int sheetInput1, int sheetInput2, int resultSheet, int resultColumn, int primaryFirstCellRow, int primaryLastCellRow, int primaryFirstCellColumn, int primaryLastCellColumn, int secondaryFirstCellRow, int secondaryLastCellRow, int secondaryFirstCellColumn, int secondaryLastCellColumn)
         {
             GetSimilarityValue getSimilarityValueOBJ = new GetSimilarityValue();
             Stopwatch stopwatchIntern = new Stopwatch();

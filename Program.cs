@@ -633,22 +633,22 @@ namespace DB_Matching_main1
                 ToLog.Inf("multi threading enabled");
                 PrintIn.yellow("multi threading is enabled");
                 ToLog.Inf("starting thread1");
-                Thread thread1 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
+                Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(workbook, threadCount: 1, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread2");
-                Thread thread2 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
+                Thread thread2 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 2, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread3");
-                Thread thread3 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
+                Thread thread3 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 3, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread4");
-                Thread thread4 = new Thread(new ThreadStart(ThreadingAgent.Matcher));
+                Thread thread4 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 4, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
-                    Helper.printProgressBar(0, VarHold.thread1_progress)
+                    Helper.printProgressBar(0, VarHold.thread1_progress);
                 }
-
+                ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn);
             }
             else
             {
