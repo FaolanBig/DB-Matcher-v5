@@ -46,10 +46,15 @@ namespace DB_Matcher_v5
         public static string latestVersion = "";
         public static string currentVersion = "";
 
-        public static int thread1_progress = 0;
-        public static int thread2_progress = 0;
-        public static int thread3_progress = 0;
-        public static int thread4_progress = 0;
+        public static double thread1_progress = 0;
+        public static double thread2_progress = 0;
+        public static double thread3_progress = 0;
+        public static double thread4_progress = 0;
+
+        public static int thread1_progressPercentage = 0;
+        public static int thread2_progressPercentage = 0;
+        public static int thread3_progressPercentage = 0;
+        public static int thread4_progressPercentage = 0;
 
         public static string thread1_remainingTime = "";
         public static string thread2_remainingTime = "";

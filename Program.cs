@@ -628,7 +628,7 @@ namespace DB_Matching_main1
             Stopwatch stopwatchIntern = new Stopwatch();
             stopwatchIntern.Start();
             FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite);
-            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) > 4)
+            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= 4)
             {
                 ToLog.Inf("multi threading enabled");
                 PrintIn.yellow("multi threading is enabled");
@@ -646,23 +646,33 @@ namespace DB_Matching_main1
                 int primaryLastCellRow4 = primaryLastCellRow;
 
                 ToLog.Inf("starting thread1");
+                PrintIn.blue("starting thread1");
                 Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow1, primaryLastCellRow: primaryLastCellRow1, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                thread1.Start();
 
                 ToLog.Inf("starting thread2");
+                PrintIn.blue("starting thread2");
                 Thread thread2 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 2, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow2, primaryLastCellRow: primaryLastCellRow2, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                thread2.Start();
 
                 ToLog.Inf("starting thread3");
+                PrintIn.blue("starting thread3");
                 Thread thread3 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 3, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow3, primaryLastCellRow: primaryLastCellRow3, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                thread3.Start();
 
                 ToLog.Inf("starting thread4");
+                PrintIn.blue("starting thread4");
                 Thread thread4 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 4, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow4, primaryLastCellRow: primaryLastCellRow4, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                thread4.Start();
 
                 while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
-                    Helper.printProgressBar(0, VarHold.thread1_progress, 100, 4, VarHold.thread1_remainingTime);
-                    Helper.printProgressBar(1, VarHold.thread2_progress, 100, 4, VarHold.thread2_remainingTime);
-                    Helper.printProgressBar(2, VarHold.thread3_progress, 100, 4, VarHold.thread3_remainingTime);
-                    Helper.printProgressBar(3, VarHold.thread4_progress, 100, 4, VarHold.thread4_remainingTime);
+                    Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
+                    Helper.printProgressBar(0, VarHold.thread1_progress, 100, 4, VarHold.thread1_remainingTime, VarHold.thread1_progressPercentage);
+                    Helper.printProgressBar(1, VarHold.thread2_progress, 100, 4, VarHold.thread2_remainingTime, VarHold.thread2_progressPercentage);
+                    Helper.printProgressBar(2, VarHold.thread3_progress, 100, 4, VarHold.thread3_remainingTime, VarHold.thread3_progressPercentage);
+                    Helper.printProgressBar(3, VarHold.thread4_progress, 100, 4, VarHold.thread4_remainingTime, VarHold.thread4_progressPercentage);
+                    Thread.Sleep(50);
                 }
                 ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn);
             }

@@ -153,19 +153,12 @@ namespace DB_Matcher_v5
             if (errorCount == 0) { PrintIn.green("cleaning finished successful"); }
             else { PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
         }
-        internal static void printProgressBar(int line, int progress, int total, int barCount, string remainingTime)
+        internal static void printProgressBar(int line, double progress, int total, int barCount, string remainingTime, int progressPercentage)
         {
-            int progressBarLenth = 100;
+            int progressBarLenth = 50;
             Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
-            Console.Write("[");
-            int pos = progressBarLenth * progress / total;
-            for (int i = 0; i < progressBarLenth; i++)
-            {
-                if (i < pos) Console.Write("=");
-                else if (i == pos) Console.Write(">");
-                else Console.Write(" ");
-            }
-            Console.Write("] {0}% | {1}\n", progress, remainingTime);
+
+            Console.Write($"[{new string('#', Convert.ToInt32(progress))}{new string('.', (Console.WindowWidth - (9 + remainingTime.Length)) - Convert.ToInt32(progress))}]{progressPercentage}% | {remainingTime} \n");
         }
     }
 }
