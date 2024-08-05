@@ -1049,9 +1049,8 @@ namespace DB_Matching_main1
             {
                 try
                 {
-                    RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to open newly created excel file in excel.exe");
+                    RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to open newly created excel file");
                     PrintIn.blue("opening newly created excel file");
-                    PrintIn.blue("launching excel.exe");
                     PrintIn.WigglyStarInBorders(runs: 1);
 
                     //Process.Start("excel.exe", VarHold.toPath);
@@ -1061,8 +1060,10 @@ namespace DB_Matching_main1
                 }
                 catch (Exception ex)
                 {
-                    ToLog.Err($"error when opening excel file in excel - error: {ex.Message}");
-                    PrintIn.red($"error when opening excel file in excel - error: {ex.Message}");
+                    ToLog.Err($"error when opening excel file - error: {ex.Message}");
+                    PrintIn.red($"error when opening excel file");
+                    PrintIn.red("see lóg for more information");
+                    PrintIn.blue("retrying");
                 }
             }
 
