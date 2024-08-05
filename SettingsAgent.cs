@@ -28,6 +28,7 @@ using DB_Matching_main1;
 using MathNet.Numerics.RootFinding;
 using NPOI.POIFS.Crypt;
 using NPOI.SS.Formula.Functions;
+using SixLabors.ImageSharp.Advanced;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -87,7 +88,13 @@ namespace DB_Matcher_v5
             addYesNo("get an auditive feedback when finishing processes (beep)", "consoleBeep");
             bool useAutoOpenExcel = false;
             if (VarHold.osIsWindows) { addYesNo("automatically open newly generated excel-file in excel", "autoOpenExcel"); useAutoOpenExcel = true; }
-            if (useAutoOpenExcel) { addValue("path to excel.exe", "pathTo_excel.exe", VarHold.excelPath); }
+            if (useAutoOpenExcel && !File.Exists(VarHold.excelPath)) 
+            {
+                PrintIn.red($"file not found: excel.exe in {VarHold.excelPath}");
+                if (RecoveryHandler.getYesOrNo("add a custom path to open excel files?")) { addValue("path to open excel files", "pathTo_excel.exe", VarHold.excelPath); }
+
+            }
+            else { PrintIn.blue($"using excel.exe in {VarHold.excelPath}"); }
 
             Console.WriteLine();
             PrintIn.yellow("changing the settings will overwrite any existing setting file");
@@ -151,7 +158,7 @@ namespace DB_Matcher_v5
                     goto Start;
             }
         }
-        internal static void addValue(string toAsk, string key, string defaultValue = "")
+        internal static string addValue(string toAsk, string key, string defaultValue = "")
         {
             START:
             if (!string.IsNullOrEmpty(defaultValue)) 
@@ -168,7 +175,7 @@ namespace DB_Matcher_v5
             }
             //PrintIn.yellow($"confirm input: {key}//{userInput}");
             bool getYesOrNo = RecoveryHandler.getYesOrNo($"confirm input: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}");
-            if (getYesOrNo) { VarHold.settings.Add(key, userInput); PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}"); }
+            if (getYesOrNo) { VarHold.settings.Add(key, userInput); PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}"); return userInput; }
             else { PrintIn.red("abort, try again"); goto START; }
         }
         internal static void FileLookUp()
