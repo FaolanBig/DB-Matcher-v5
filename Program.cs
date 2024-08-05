@@ -616,6 +616,8 @@ namespace DB_Matching_main1
                 }
             }
 
+            RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to start computation");
+
             //Fortlaufendes Lesen der Zellen Zellbereich 1
             GetSimilarityValue getSimilarityValueOBJ = new GetSimilarityValue();
             Console.WriteLine();
