@@ -156,7 +156,7 @@ namespace DB_Matcher_v5
         internal static void printProgressBar(int line, double progress, int total, int barCount, string remainingTime, int progressPercentage)
         {
             int progressBarLenth = 50;
-            Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line));
 
             Console.Write($"[{new string('#', Convert.ToInt32(progress))}{new string('.', (Console.WindowWidth - (9 + remainingTime.Length)) - Convert.ToInt32(progress))}]{progressPercentage}% | {remainingTime} \n");
         }
