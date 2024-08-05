@@ -27,10 +27,12 @@
 using DB_Matcher_v5;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
+using NPOI.SS.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -629,6 +631,29 @@ namespace DB_Matching_main1
             if (verbose) { Console.WriteLine("starting stopwatch"); }
             stopwatch.Start();
 
+            ICellStyle[] styles = new ICellStyle[11];
+            for (int i = 0; i < styles.Length; i++) { styles[i] = workbook.CreateCellStyle(); }
+            if (SettingsAgent.GetSettingIsTrue("colorGradient"))
+            {
+                if (verbose) { Console.WriteLine("generating styles"); }
+
+                styles[0].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.BrightGreen.Index;
+                styles[1].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Turquoise.Index;
+                styles[2].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightGreen.Index;
+                styles[3].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightTurquoise.Index;
+                styles[4].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.LightYellow.Index;
+                styles[5].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Yellow.Index;
+                styles[6].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.DarkYellow.Index;
+                styles[7].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Orange.Index;
+                styles[8].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
+                styles[9].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.DarkRed.Index;
+                styles[10].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+            }
+            for (int i = 0; i < styles.Length; i++)
+            {
+                styles[i].FillPattern = FillPattern.SolidForeground;
+            }
+
             //Generating Checksum
             if (verbose) { printFittedSizeAsterixSurroundedText("COMPUTING CHECKSUM"); }
             using (FileStream fileStream = File.OpenRead(toPath))
@@ -960,6 +985,11 @@ namespace DB_Matching_main1
                     ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
                     cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
                     cccell.SetCellValue(cellValueTransferHold);
+                    if (SettingsAgent.GetSettingIsTrue("colorGradient"))
+                    {
+                        if (Convert.ToInt32(activeMatchPercentage) < 10) { cccell.CellStyle = styles[Convert.ToInt32(activeMatchPercentage)]; }
+                        else { cccell.CellStyle = styles[10]; }
+                    }
 
                     sheet = workbook.GetSheetAt(resultSheet);
                     rrrow = sheet.GetRow(cnt);
