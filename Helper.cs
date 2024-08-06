@@ -160,5 +160,33 @@ namespace DB_Matcher_v5
 
             Console.Write($"[{new string('#', Convert.ToInt32(progress))}{new string('.', (Console.WindowWidth - (9 + remainingTime.Length)) - Convert.ToInt32(progress))}]{progressPercentage}% | {remainingTime} \n");
         }
+        internal static void DrawProgressBar(int line, int progress, int total, int barCount, string remainingTime)
+        {
+            Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            Console.Write($"thread{line}: [");
+            int pos = 50 * progress / total;
+            for (int i = 0; i < 50; i++)
+            {
+                if (i < pos) Console.Write("=");
+                else if (i == pos) Console.Write(">");
+                else Console.Write(" ");
+            }
+            Console.Write($"] {progress}% | {remainingTime}");
+        }
+        internal static string returnProgressBar(int line, int progress, int total, int barCount, string remainingTime)
+        {
+            string returnHold = $"thread{line}: [";
+
+            int pos = 50 * progress / total;
+            for (int i = 0; i < 50; i++)
+            {
+                if (i < pos) returnHold += "=";
+                else if (i == pos) returnHold += ">";
+                else returnHold += " ";
+            }
+            returnHold += $"] {progress}% | {remainingTime}";
+            return returnHold;
+        }
+
     }
 }
