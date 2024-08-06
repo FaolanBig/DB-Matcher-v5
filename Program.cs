@@ -1216,6 +1216,7 @@ namespace DB_Matching_main1
         }
         internal static void loadDataFile(Dictionary<string, string> dictionaryy)
         {
+            ToLog.Inf("loading data file");
             if (File.Exists(VarHold.currentHoldFilePath))
             {
                 using (StreamReader file = new StreamReader(VarHold.currentHoldFilePath))
@@ -1230,6 +1231,8 @@ namespace DB_Matching_main1
                         }
                     }
                 }
+                ToLog.Inf("loading data file: success");
+
                 Console.WriteLine("Current Dictionary Content: ");
 
                 foreach (var entry in dictionaryy)
@@ -1253,6 +1256,8 @@ namespace DB_Matching_main1
                         goto UseDataFile;
                         break;
                 }
+                if (VarHold.useDataFile) { ToLog.Inf("using data file"); } 
+                else { ToLog.Inf("not using data file"); }
             }
             else
             {
@@ -1295,6 +1300,7 @@ namespace DB_Matching_main1
             //Console.WriteLine("### quit: ^C ###");
             Console.WriteLine();
 
+            ToLog.Inf("writing contents to new data file");
             using (StreamReader file = new StreamReader(VarHold.currentHoldFilePath))
             {
                 string line;
@@ -1334,6 +1340,7 @@ namespace DB_Matching_main1
                             PrintIn.blue("deleting: data file");
                             PrintIn.WigglyStarInBorders(runs: 1);
                             File.Delete(VarHold.currentHoldFilePath);
+                            ToLog.Inf("file deleted: data file");
                             setConsoleColorToGreen();
                             PrintIn.green("deleted: data file");
                             resetConsoleColor();
@@ -1397,7 +1404,8 @@ namespace DB_Matching_main1
                     goto UseDataFile;
                     break;
             }
-
+            if (VarHold.useDataFile) { ToLog.Inf("using data file"); }
+            else { ToLog.Inf("not using data file"); }
         }
         public static void shutdownOrRestart()
         {
@@ -1438,9 +1446,11 @@ namespace DB_Matching_main1
             {
                 //var currentFileName = Assembly.GetExecutingAssembly().Location;
                 var fileName = Process.GetCurrentProcess().MainModule.FileName;
+                ToLog.Inf($"restarting DB-Matcher-v5 - process: {fileName}");
                 Process.Start(fileName);
             }
             Console.Clear();
+            ToLog.Inf("shutting down: DB-Matcher-v5");
             Environment.Exit(0);
 
         }
@@ -1710,6 +1720,7 @@ namespace DB_Matching_main1
         CreateDictionarySave:
             PrintIn.blue("*** saving to file ***");
             PrintIn.WigglyStarInBorders(runs: 1);
+            ToLog.Inf("saving dictionary");
             using (StreamWriter file = new StreamWriter(jsonPath))
             {
                 foreach (var entry in dictionary)
