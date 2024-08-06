@@ -44,12 +44,14 @@ namespace DB_Matcher_v5
     {
         public static void EditMode(bool editManually = false)
         {
+            ToLog.Inf("SettingsAgent: @EditMode");
             Console.Clear();
             Program.printFittedSizeAsterixSurroundedText("Settings Agent");
             if (editManually)
             {
                 if (File.Exists(VarHold.currentSettingsFilePathHold))
                 {
+                    ToLog.Inf("SettingsAgent: launching in external editor");
                     PrintIn.blue("launching in external editor");
                     if (VarHold.osIsWindows) { Process.Start(new ProcessStartInfo(VarHold.currentSettingsFilePathHold) { UseShellExecute = true }); }
                     if (!VarHold.osIsWindows) { Process.Start("nano", VarHold.currentSettingsFilePathHold); }
@@ -59,6 +61,7 @@ namespace DB_Matcher_v5
                 }
                 else
                 {
+                    ToLog.Err("SettingsAgent: settings file not found");
                     PrintIn.red("settings file not found");
                     PrintIn.red("proceding with launcher");
                 }
@@ -69,11 +72,14 @@ namespace DB_Matcher_v5
 
             try
             {
+                ToLog.Inf("SettingsAgent: erasing current configuration");
                 VarHold.settings.Clear();
                 PrintIn.green("erasing successful");
+                ToLog.Inf("SettingsAgent: operation finished: success");
             }
             catch (Exception ex)
             {
+                ToLog.Err($"SettingsAgent: an unexpected error occurred when erasing current configuration - error: {ex.Message}");
                 PrintIn.red($"an unexpected error occurred: {ex.Message}");
                 PrintIn.blue("proceeding");
             }
@@ -124,13 +130,16 @@ namespace DB_Matcher_v5
 
             try
             {
+                ToLog.Inf("SettingsAgent: saving settings");
                 PrintIn.blue("saving settings");
                 PrintIn.WigglyStarInBorders(runs: 1);
                 SaveSettings();
                 PrintIn.green("saving successful");
+                ToLog.Inf("SettingsAgent: operation finished: success");
             }
             catch (Exception ex)
             {
+                ToLog.Err($"SettingsAgent: an unexpected error occurred when saving settings - error: {ex.Message}");
                 PrintIn.red($"an unexpected error occurred: {ex.Message}");
                 PrintIn.red($"if this is a bug, please report it on {VarHold.repoURLReleases}");
             }
@@ -148,10 +157,12 @@ namespace DB_Matcher_v5
             {
                 case "y":
                     //Console.WriteLine("y");
+                    ToLog.Inf($"SettingsAgent: setting added: {key}{VarHold.dictionaryExcapeCharacterString}{valueYes}");
                     VarHold.settings.Add(key, valueYes);
                     PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{valueYes}");
                     return true;
                 case "n":
+                    ToLog.Inf($"SettingsAgent: setting added: {key}{VarHold.dictionaryExcapeCharacterString}{valueYes}");
                     VarHold.settings.Add(key, valueNo);
                     PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{valueNo}");
                     //Console.WriteLine("n");
@@ -178,13 +189,24 @@ namespace DB_Matcher_v5
             }
             //PrintIn.yellow($"confirm input: {key}//{userInput}");
             bool getYesOrNo = RecoveryHandler.getYesOrNo($"confirm input: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}");
-            if (getYesOrNo) { VarHold.settings.Add(key, userInput); PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}"); return userInput; }
-            else { PrintIn.red("abort, try again"); goto START; }
+            if (getYesOrNo) 
+            {
+                ToLog.Inf($"SettingsAgent: setting added: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}");
+                VarHold.settings.Add(key, userInput);
+                PrintIn.green($"added: {key}{VarHold.dictionaryExcapeCharacterString}{userInput}"); 
+                return userInput; 
+            }
+            else 
+            { 
+                PrintIn.red("abort, try again");
+                goto START; 
+            }
         }
         internal static void FileLookUp()
         {
             if (!File.Exists(VarHold.currentSettingsFilePathHold))
             {
+                ToLog.Err("SettingsAgent: error: settings file not found");
                 PrintIn.red("no settings file found");
                 PrintIn.blue("launching recovery mode");
                 PrintIn.WigglyStarInBorders();
@@ -194,6 +216,7 @@ namespace DB_Matcher_v5
         }
         internal static void LoadSettings()
         {
+            ToLog.Inf("SettingsAgent: loading settings");
             try
             {
                 foreach (var line in File.ReadLines(VarHold.currentSettingsFilePathHold))
@@ -204,15 +227,18 @@ namespace DB_Matcher_v5
                         VarHold.settings[parts[0].Trim()] = parts[1].Trim();
                     }
                 }
+                ToLog.Inf("SettingsAgent: operation finished: success");
             }
             catch (Exception ex)
             {
-                PrintIn.red($"an unexpected error occured: {ex.Message}");
+                ToLog.Err($"SettingsAgent: an unexpected error occurred when loading settings - error: {ex.Message}");
+                PrintIn.red($"an unexpected error occured - see log for more information");
                 PrintIn.red($"please report it to {VarHold.repoURLReleases}");
             }
         }
         internal static void SaveSettings()
         {
+            ToLog.Inf("SettingsAgent: saving settings");
             try
             {
                 using (StreamWriter file = new StreamWriter(VarHold.currentSettingsFilePathHold))
@@ -222,15 +248,18 @@ namespace DB_Matcher_v5
                         file.WriteLine($"{entry.Key}{VarHold.dictionaryExcapeCharacterString}{entry.Value}");
                     }
                 }
+                ToLog.Inf("SettingsAgent: operation finished: success");
             }
             catch (Exception ex)
             {
-                PrintIn.red($"an unexpected error occured: {ex.Message}");
+                ToLog.Err($"SettingsAgent: an unexpected error occurred when saving settings - error: {ex.Message}");
+                PrintIn.red($"an unexpected error occured - see log for more information");
                 PrintIn.red($"please report it to {VarHold.repoURLReleases}");
             }
         }
         internal static void ViewSettings()
         {
+            ToLog.Inf("SettingsAgent: viewing settings");
             Console.Clear();
             Program.printFittedSizeAsterixSurroundedText("Settings Agent");
 
@@ -238,6 +267,7 @@ namespace DB_Matcher_v5
 
             if (!File.Exists(VarHold.currentSettingsFilePathHold))
             {
+                ToLog.Err("SettingsAgent: no settings file found");
                 PrintIn.red("no settings file found");
                 PrintIn.blue("try adding a settings configuration in recovery mode");
                 //PrintIn.blue("returning to recovery menu");
@@ -272,7 +302,7 @@ namespace DB_Matcher_v5
             VarHold.settings.TryGetValue(keyToCheck, out string value);
             if (string.IsNullOrEmpty(value))
             {
-                ToLog.Err($"value is null or empty - key: {keyToCheck} @GetSettingValue()");
+                ToLog.Err($"SettingsAgent: value is null or empty - key: {keyToCheck} @GetSettingValue()");
                 PrintIn.red($"error when reading key-value (value is null or empty) of key: {keyToCheck}");
                 PrintIn.red("this could be caused by a currupt settings file");
                 PrintIn.red("to solve this, reconfigure the settings in recovery mode");
