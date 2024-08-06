@@ -13,6 +13,7 @@ namespace DB_Matcher_v5
     {
         internal static string GetVersionLatest()
         {
+            ToLog.Inf("UpdateAgent: running host process");
             try
             {
                 var task = GetVersionHandler();
@@ -31,14 +32,14 @@ namespace DB_Matcher_v5
             {
                 try
                 {
-                    ToLog.Inf($"pulling latest version number from {VarHold.updateFileRepoUrl}");
+                    ToLog.Inf($"UpdateAgent: pulling latest version number from {VarHold.updateFileRepoUrl}");
                     HttpResponseMessage response = await client.GetAsync(VarHold.updateFileRepoUrl);
                     response.EnsureSuccessStatusCode();
                     VarHold.latestVersion = await response.Content.ReadAsStringAsync();
                 }
                 catch (Exception ex)
                 {
-                    ToLog.Err($"an error occurred during version check - error: {ex.Message}");
+                    ToLog.Err($"UpdateAgent: an error occurred during version check - error: {ex.Message}");
                     PrintIn.red("an error occurred during version check");
                     PrintIn.red("see log for more information");
                     PrintIn.blue("check your internet connection");
@@ -58,7 +59,7 @@ namespace DB_Matcher_v5
             if (string.IsNullOrEmpty(VarHold.latestVersion)) { return false; }
             else if (VarHold.currentVersion != VarHold.latestVersion)
             {
-                ToLog.Inf($"new version awailable on {VarHold.repoURLReportIssue} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
+                ToLog.Inf($"UpdateAgent: new version awailable on {VarHold.repoURLReportIssue} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
                 PrintIn.blue($"new version awailable on {VarHold.repoURLReleases}");
                 PrintIn.blue($"current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion}");
                 RecoveryHandler.WaitForKeystrokeENTER();
@@ -66,11 +67,11 @@ namespace DB_Matcher_v5
             }
             else if (VarHold.currentVersion == VarHold.latestVersion)
             {
-                ToLog.Inf($"currently using the latest version of DB-Matcher-v5 (version: {VarHold.currentVersion})");
+                ToLog.Inf($"UpdateAgent: currently using the latest version of DB-Matcher-v5 (version: {VarHold.currentVersion})");
                 PrintIn.green("currenly running the latest version of DB-Matcher-v5");
                 return false;
             }
-            ToLog.Err("cursed error at versio check");
+            ToLog.Err("UpdateAgent: cursed error at version check occurred");
             return false;
         }
     }
