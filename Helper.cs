@@ -14,19 +14,24 @@ namespace DB_Matcher_v5
     {
         internal static void writeContentToFile(IWorkbook workbook, int sheet, int primaryFirstCellColumn, int primaryFirstCellRow, int primaryLastCellColumn, int primaryLastCellRow)
         {
+            ToLog.Inf("writing content to file @Helper.cs");
             int errorCount = 0;
             PrintIn.blue("running preparation");
 
             if (File.Exists(VarHold.helperFilePath))
             {
+                ToLog.Err("previously used helperFile detected");
                 PrintIn.yellow("previously used helperFile detected");
                 RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to delete the helperFile and continue");
+                ToLog.Inf($"deleting file: {VarHold.helperFilePath}");
                 File.Delete(VarHold.helperFilePath);
+                ToLog.Inf("file deleted: success");
             }
 
             ISheet tsheet = workbook.GetSheetAt(sheet);
             using (StreamWriter writer = new StreamWriter(VarHold.helperFilePath))
             {
+                ToLog.Inf("starting stopwatch(intern) @Helper.cs");
                 Stopwatch stopwatchIntern = new Stopwatch();
 
                 for (int row = primaryFirstCellRow; row <= primaryLastCellRow; row++)
@@ -82,10 +87,10 @@ namespace DB_Matcher_v5
 
                 }
             }
-            if (errorCount == 0) { PrintIn.green("preparation finished successful"); }
-            else { PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
+            if (errorCount == 0) { ToLog.Inf("operation has finished: writing content to file"); PrintIn.green("preparation finished successful"); }
+            else { ToLog.Err($"operation has finished: writing content to file - {errorCount} minor errors occurred"); PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
         }
-        internal static void writeFileToContent(ref IWorkbook workbook, int sheet, int primaryFirstCellColumn, int primaryFirstCellRow, int primaryLastCellColumn, int primaryLastCellRow)
+        internal static void readContentFromFile(ref IWorkbook workbook, int sheet, int primaryFirstCellColumn, int primaryFirstCellRow, int primaryLastCellColumn, int primaryLastCellRow)
         {
             int errorCount = 0;
 
@@ -93,6 +98,7 @@ namespace DB_Matcher_v5
 
             if (!File.Exists(VarHold.helperFilePath))
             {
+                ToLog.Err("no file found: helper file - abort");
                 PrintIn.red("no helperFile found");
                 PrintIn.red("no cleaning possible");
                 RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to continue without cleaning");
@@ -101,6 +107,7 @@ namespace DB_Matcher_v5
             ISheet tsheet = workbook.GetSheetAt(sheet);
             using (StreamReader reader = new(VarHold.helperFilePath))
             {
+                ToLog.Inf("starting stopwatch(intern)");
                 Stopwatch stopwatchIntern = new Stopwatch();
 
                 string line;
@@ -148,10 +155,12 @@ namespace DB_Matcher_v5
                     row++;
                 }
             }
+            ToLog.Inf("deleting file: helper file");
             File.Delete(VarHold.helperFilePath);
+            ToLog.Inf("helper file deleted: success");
 
-            if (errorCount == 0) { PrintIn.green("cleaning finished successful"); }
-            else { PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
+            if (errorCount == 0) { ToLog.Inf("operation has finished: reading content from file"); PrintIn.green("cleaning finished successful"); }
+            else { ToLog.Err($"operation has finished: reading content from file - {errorCount} minor errors occurred"); PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
         }
         internal static void printProgressBar(int line, double progress, int total, int barCount, string remainingTime, int progressPercentage)
         {
