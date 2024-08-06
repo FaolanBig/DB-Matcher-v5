@@ -42,20 +42,24 @@ namespace DB_Matcher_v5
     {
         public static void StartUp()
         {
+            ToLog.Inf("RecoveryHandler: running from startup");
             PrintIn.blue("detecting operating system");
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
+                ToLog.Inf("RecoveryHandler: OS set to Microsoft Windows");
                 PrintIn.green("detected: Microsoft Windows");
                 VarHold.osIsWindows = true;
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
+                ToLog.Inf("RecoveryHandler: OS set to Linux");
                 PrintIn.green("detected: Linux");
                 VarHold.osIsWindows = false;
             }
             else
             {
+                ToLog.Err("RecoveryHandler: an error occurred when detecting the operating system --> proceeding as Linux");
                 PrintIn.red("error when detecting the operating system");
                 PrintIn.red("proceeding as Linux");
                 PrintIn.red("this may be ignored");
@@ -81,10 +85,11 @@ namespace DB_Matcher_v5
 
                 Thread.Sleep(50);
             }
-
+            ToLog.Inf("RecoveryHandler: returning to main process");
         }
         public static void RunRecovery()
         {
+            ToLog.Inf("RecoveryHandler: @runRecovery");
             Console.Clear();
             Program.printFittedSizeAsterixSurroundedText("Recovery");
 
@@ -95,10 +100,13 @@ namespace DB_Matcher_v5
         }
         internal static bool Menu()
         {
+            ToLog.Inf("RecoveryHandler: @Menu");
+
             string content;
             Console.WriteLine("launching recovery menu");
             if (!File.Exists(VarHold.currentRecoveryMenuFile))
             {
+                ToLog.Err("RecoveryHandler: no menu file found");
                 PrintIn.red("no menu file found");
                 PrintIn.red("to fix this problem, follow the following steps");
                 Console.WriteLine();
@@ -115,11 +123,13 @@ namespace DB_Matcher_v5
             {
                 try
                 {
+                    ToLog.Inf("RecoveryHandler: loading recoveryMenuFile");
                     Console.WriteLine($"loading recovery menu from {VarHold.currentRecoveryMenuFile}");
                     content = File.ReadAllText(VarHold.currentRecoveryMenuFile);
 
                     if (string.IsNullOrEmpty(content))
                     {
+                        ToLog.Err("RecoveryHandler: error: recoveryMenuFile is null or empty");
                         PrintIn.red($"an unexpected error occurred when reading {VarHold.currentRecoveryMenuFile}: content is null or empty");
 
                         PrintIn.red("to fix this problem, follow the following steps");
@@ -136,6 +146,7 @@ namespace DB_Matcher_v5
                 }
                 catch (Exception ex)
                 {
+                    ToLog.Err($"RecoveryHandler: an unexpected error occurred when reading recoveryMenuFile - error: {ex.Message}");
                     PrintIn.red($"an unexpected error occurred when reading {VarHold.currentRecoveryMenuFile}");
                     PrintIn.red($"error message: {ex.Message}");
 
@@ -150,6 +161,7 @@ namespace DB_Matcher_v5
                     WaitForKeystrokeENTER();
                     return true;
                 }
+                ToLog.Inf("RecoveryHandler: loading recoveryMenuFile finished: success");
                 PrintIn.green("loading finished");
                 Console.WriteLine();
                 Console.WriteLine(content);
@@ -170,7 +182,7 @@ namespace DB_Matcher_v5
                     PrintIn.red("bad input");
                     goto EnterNumber;
                 }
-
+                ToLog.Inf($"RecoveryHandler: enter menu option {userInput}");
                 switch (userInput)
                 {
                     case "0":
@@ -197,10 +209,10 @@ namespace DB_Matcher_v5
                         RunRecovery();
                         break;
                     default:
+                        ToLog.Err($"RecoveryHandler: bad input: {userInput} @Menu");
                         PrintIn.red("bad input");
                         goto EnterNumber;
                 }
-
                 return false;
             }
         }
