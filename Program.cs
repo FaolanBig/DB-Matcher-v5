@@ -1114,7 +1114,7 @@ namespace DB_Matching_main1
 
             Console.WriteLine();
             Console.WriteLine();
-            Helper.writeFileToContent(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
+            Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             Console.WriteLine();
             Console.WriteLine();
