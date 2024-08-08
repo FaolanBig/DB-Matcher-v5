@@ -1,4 +1,5 @@
 ﻿using DB_Matching_main1;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
@@ -298,9 +299,6 @@ namespace DB_Matcher_v5
 
             for (int cnt = obj.fromPrimary; cnt <= obj.toPrimary; cnt++)
             {
-                //stopwatchIntern.Start();
-                ISheet sheet = workbook.GetSheetAt(sheetInput1);
-
                 string activeMatchValue = "NOT FOUND";
                 int activeMatchRow = 0;
                 int activeMatchColumn = 0;
@@ -312,44 +310,22 @@ namespace DB_Matcher_v5
                 string activePrimaryCellValueOld = null;
                 string activeSecondaryCellValueOld = null;
 
-                IRow activePrimaryCellRow = sheet.GetRow(cnt);
-                if (activePrimaryCellRow == null)
-                {
-                    activePrimaryCellRow = sheet.CreateRow(cnt);
-                }
-                ICell activePrimaryCell = activePrimaryCellRow.GetCell(obj.primaryColumn);
-                if (activePrimaryCell == null)
-                {
-                    activePrimaryCell = activePrimaryCellRow.CreateCell(obj.primaryColumn);
-                }
-
-                string activePrimaryCellValue = activePrimaryCell.ToString();
+                string activePrimaryCellValue = obj.primaryContents[cnt];
 
                 for (int sCnt = obj.fromSecondary; sCnt <= obj.toSecondary; sCnt++)
                 {
-                    sheet = workbook.GetSheetAt(sheetInput2);
-
                     bool compareIdentical = false;
                     bool compareMatch = false;
 
-
-                    IRow activeSecondaryCellRow = sheet.GetRow(sCnt);
-                    if (activeSecondaryCellRow == null)
-                    {
-                        activeSecondaryCellRow = sheet.CreateRow(sCnt);
-                    }
-                    ICell activeSecondaryCell = activeSecondaryCellRow.GetCell(obj.secondaryColumn);
-                    if (activeSecondaryCell == null)
-                    {
-                        activeSecondaryCell = activeSecondaryCellRow.CreateCell(obj.secondaryColumn);
-                    }
-
-                    activeSecondaryCellValue = activeSecondaryCell.ToString();
+                    activeSecondaryCellValue = obj.secondaryContents[cnt];
 
                     //Vergleichen
                     double compareMatchPercentage = getSimilarityValueOBJ.getLevenshteinDistance(activePrimaryCellValue, activeSecondaryCellValue);
                     int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
                     double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
+                    
+                    obj.setMatchingValue(cnt, Convert.ToInt32(compareMatchPercentage), compareMatchHammingDistance, Convert.ToInt32(compareMatchJaccardIndex));
+
                     //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
                     if (activeSecondaryCellValue == activePrimaryCellValue)
                     {

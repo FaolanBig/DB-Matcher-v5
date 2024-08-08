@@ -36,10 +36,11 @@ namespace DB_Matcher_v5
         protected ICellStyle[] styles;
         protected Dictionary<string, string> dictionary;
 
-        public readonly string[] primaryContents;
-        public readonly string[] secondaryContents;
-        public int[] resultRow; //first: row
-        public int[] ld_value; //first: row
+        internal string[] primaryContents;
+        internal string[] secondaryContents;
+        internal int[] resultRow; //first: row
+        internal int[] ld_value; //first: row
+        internal string[] matchingValue;
         public dataTransferHoldObj(int objectID,
                                    IWorkbook workbook,
                                    ICellStyle[] styles,
@@ -163,7 +164,7 @@ namespace DB_Matcher_v5
                 IRow resultIrow = resultSheet.GetRow(row);
 
                 ICell resultCell = resultIrow.CreateCell(this.resultColumn);
-                resultCell.SetCellValue("");
+                resultCell.SetCellValue(this.matchingValue[row]);
                 if (this.ld_value[row] < 10) { resultCell.CellStyle = this.styles[this.ld_value[row]]; }
                 else { resultCell.CellStyle = this.styles[10]; }
 
@@ -175,6 +176,10 @@ namespace DB_Matcher_v5
                     resultCell.SetCellValue(cell.ToString() ?? "");
                 }
             }
+        }
+        internal void setMatchingValue(int row, int ld, int hd, int jd)
+        {
+            this.matchingValue[row] = $"(ld|hd|jd): ({ld}|{hd}|{jd})";
         }
     }
 }
