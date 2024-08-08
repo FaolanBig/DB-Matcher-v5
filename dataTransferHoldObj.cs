@@ -1,6 +1,7 @@
 ﻿using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
+//using NPOI.XWPF.UserModel;
 using Org.BouncyCastle.Tls.Crypto;
 using System;
 using System.Collections.Generic;
@@ -28,14 +29,18 @@ namespace DB_Matcher_v5
         protected int secondarytoColumn;
         protected int resultSheet;
         protected int resultColumn;
+        protected bool useStyles = false;
 
         protected IWorkbook workbook;
+        protected ICellStyle[] styles;
 
         public readonly string[] primaryContents;
         public readonly string[] secondaryContents;
-        public readonly int[] resultRow; //second: row
+        public int[] resultRow; //first: row
+        public int[] styleToUse; //first: row
         public dataTransferHoldObj(int objectID,
                                    IWorkbook workbook,
+                                   ICellStyle[] styles,
                                    int primarySheet,
                                    int fromPrimary,
                                    int toPrimary,
@@ -62,9 +67,12 @@ namespace DB_Matcher_v5
             this.secondarytoColumn = secondarytoColumn;
             this.resultSheet = resultSheet;
             this.resultColumn = resultColumn;
+            this.useStyles = SettingsAgent.GetSettingIsTrue("colorGradient");
 
             this.workbook = workbook;
+            this.styles = styles;
             this.resultRow = new int[this.toPrimary - this.fromPrimary];
+            this.styleToUse = new int[this.toPrimary - this.fromPrimary];
 
             ToLog.Inf($"new dataTransferHoldObj initialized - objectID: {this.objectID} - parameters (sheet: from --> to): primary({this.primarySheet}: {fromPrimary} --> {toPrimary} - secondary({this.secondarySheet}: {fromSecondary} --> {toSecondary}))");
 
@@ -112,12 +120,15 @@ namespace DB_Matcher_v5
                 IRow irow = tsheet.GetRow(this.resultRow[row]);
                 IRow resultIrow = resultSheet.GetRow(row);
 
-                for(int col = this.secondaryfromColumn; col < this.secondarytoColumn; col++)
+                ICell resultCell = resultIrow.CreateCell(this.resultColumn);
+                resultCell.SetCellValue("");
+                resultCell.CellStyle = this.styles[this.styleToUse[row]];
+                for (int col = this.secondaryfromColumn; col < this.secondarytoColumn; col++)
                 {
                     ICell cell = irow.GetCell(col);
-                    ICell resultCell = resultIrow.GetCell(this.resultColumn + (col - this.secondaryfromColumn));
+                    resultCell = resultIrow.CreateCell(this.resultColumn + 1 + (col - this.secondaryfromColumn));
 
-                    resultCell.SetCellValue(cell.ToString());
+                    resultCell.SetCellValue(cell.ToString() ?? "");
                 }
             }
         }
