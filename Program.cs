@@ -42,6 +42,7 @@ using System.Text.Json;
 using System.Threading;
 using Org.BouncyCastle.Bcpg;
 using NPOI.OpenXmlFormats.Spreadsheet;
+using EnumsNET;
 
 
 namespace DB_Matching_main1
@@ -674,6 +675,14 @@ namespace DB_Matching_main1
             ToLog.Inf("stopwatch started: intern");
             stopwatchIntern.Start();
             FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite);
+
+
+            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= VarHold.threadsQuantity)
+            {
+
+            }
+
+            
             if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= 4)
             {
                 ToLog.Inf("threading enabled");
