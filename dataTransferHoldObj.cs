@@ -4,6 +4,7 @@ using NPOI.SS.UserModel;
 //using NPOI.XWPF.UserModel;
 using Org.BouncyCastle.Tls.Crypto;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -16,31 +17,33 @@ namespace DB_Matcher_v5
 {
     internal class dataTransferHoldObj : IDisposable
     {
-        protected int objectID;
-        protected int primarySheet;
-        protected int fromPrimary;
-        protected int toPrimary;
-        protected int secondarySheet;
-        protected int fromSecondary;
-        protected int toSecondary;
-        protected int primaryColumn;
-        protected int secondaryColumn;
-        protected int secondaryfromColumn;
-        protected int secondarytoColumn;
-        protected int resultSheet;
-        protected int resultColumn;
-        protected bool useStyles = false;
+        internal int objectID;
+        internal int primarySheet;
+        internal int fromPrimary;
+        internal int toPrimary;
+        internal int secondarySheet;
+        internal int fromSecondary;
+        internal int toSecondary;
+        internal int primaryColumn;
+        internal int secondaryColumn;
+        internal int secondaryfromColumn;
+        internal int secondarytoColumn;
+        internal int resultSheet;
+        internal int resultColumn;
+        internal bool useStyles = false;
 
         protected IWorkbook workbook;
         protected ICellStyle[] styles;
+        protected Dictionary<string, string> dictionary;
 
         public readonly string[] primaryContents;
         public readonly string[] secondaryContents;
         public int[] resultRow; //first: row
-        public int[] styleToUse; //first: row
+        public int[] ld_value; //first: row
         public dataTransferHoldObj(int objectID,
                                    IWorkbook workbook,
                                    ICellStyle[] styles,
+                                   Dictionary<string, string> dictionary,
                                    int primarySheet,
                                    int fromPrimary,
                                    int toPrimary,
@@ -71,8 +74,9 @@ namespace DB_Matcher_v5
 
             this.workbook = workbook;
             this.styles = styles;
+            this.dictionary = dictionary;
             this.resultRow = new int[this.toPrimary - this.fromPrimary];
-            this.styleToUse = new int[this.toPrimary - this.fromPrimary];
+            this.ld_value = new int[this.toPrimary - this.fromPrimary];
 
             ToLog.Inf($"new dataTransferHoldObj initialized - objectID: {this.objectID} - parameters (sheet: from --> to): primary({this.primarySheet}: {fromPrimary} --> {toPrimary} - secondary({this.secondarySheet}: {fromSecondary} --> {toSecondary}))");
 
@@ -109,6 +113,44 @@ namespace DB_Matcher_v5
                     else { this.secondaryContents[row] = ""; }
                 }
             }
+            
+            if (VarHold.useDataFile)
+            {
+                foreach (var entry in dictionary)
+                {
+                    int foreachRuns = 0;
+                    foreach (string item in this.primaryContents)
+                    {
+                        bool added = false;
+                        if (item.Contains(entry.Key))
+                        {
+                            this.primaryContents[foreachRuns] = item.Replace(entry.Key, entry.Value);
+                            added = true;
+                        }
+                        foreachRuns++;
+                        if (added) { break; }
+                    }
+                }
+            }
+
+            if (VarHold.useDataFile)
+            {
+                foreach (var entry in dictionary)
+                {
+                    int foreachRuns = 0;
+                    foreach (string item in this.secondaryContents)
+                    {
+                        bool added = false;
+                        if (item.Contains(entry.Key))
+                        {
+                            this.primaryContents[foreachRuns] = item.Replace(entry.Key, entry.Value);
+                            added = true;
+                        }
+                        foreachRuns++;
+                        if (added) { break; }
+                    }
+                }
+            }
         }
         public void Dispose()
         {
@@ -122,7 +164,9 @@ namespace DB_Matcher_v5
 
                 ICell resultCell = resultIrow.CreateCell(this.resultColumn);
                 resultCell.SetCellValue("");
-                resultCell.CellStyle = this.styles[this.styleToUse[row]];
+                if (this.ld_value[row] < 10) { resultCell.CellStyle = this.styles[this.ld_value[row]]; }
+                else { resultCell.CellStyle = this.styles[10]; }
+
                 for (int col = this.secondaryfromColumn; col < this.secondarytoColumn; col++)
                 {
                     ICell cell = irow.GetCell(col);
