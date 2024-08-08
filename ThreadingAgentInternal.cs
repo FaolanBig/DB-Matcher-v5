@@ -1,4 +1,5 @@
 ﻿using DB_Matching_main1;
+using MathNet.Numerics.Optimization;
 using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
@@ -6,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -324,7 +326,8 @@ namespace DB_Matcher_v5
                     int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
                     double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
                     
-                    obj.setMatchingValue(cnt, Convert.ToInt32(compareMatchPercentage), compareMatchHammingDistance, Convert.ToInt32(compareMatchJaccardIndex));
+                    obj.setMatchingValue(sCnt, Convert.ToInt32(compareMatchPercentage), compareMatchHammingDistance, Convert.ToInt32(compareMatchJaccardIndex));
+                    obj.ld_value[sCnt] = Convert.ToInt32(compareMatchPercentage);
 
                     //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
                     if (activeSecondaryCellValue == activePrimaryCellValue)
@@ -386,99 +389,8 @@ namespace DB_Matcher_v5
 
                     VarHold.cyclesLog++;
                 }
-                if (VarHold.writeResults)
-                {
-                    //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite))
-                    //{
-                    string cellValueTransferHold;
-                    for (int i = obj.secondaryColumn; i <= secondaryLastCellColumn; i++)
-                    {
-                        //read
-                        string outputHold = null;
 
-                        sheet = workbook.GetSheetAt(sheetInput2);
-                        IRow fromRow = sheet.GetRow(activeMatchRow);
-                        if (fromRow == null)
-                        {
-                            fromRow = sheet.CreateRow(cnt);
-                        }
-                        ICell fromCell = fromRow.GetCell(i);
-                        if (fromCell == null)
-                        {
-                            fromCell = activePrimaryCellRow.CreateCell(obj.primaryColumn);
-                        }
-                        cellValueTransferHold = fromCell.ToString();
-
-                        //write
-                        //Console.WriteLine(1);
-                        sheet = workbook.GetSheetAt(resultSheet);
-                        //Console.WriteLine(2);
-                        IRow toRow = sheet.GetRow(cnt);
-                        //Console.WriteLine(3);
-                        ICell toCell = toRow.CreateCell(resultColumn + (i - obj.secondaryColumn));
-                        //Console.WriteLine(4);
-                        //toCell.SetCellValue(cellValueTransferHold);
-                        toCell.SetCellValue(cellValueTransferHold);
-                        //Console.WriteLine(5);
-
-                        /*using (FileStream ffstream = new FileStream(path, FileMode.Open, FileAccess.ReadWrite))
-                        {
-                            workbook.Write(ffstream);
-                        }*/
-                        //workbook.Write(fileStream);
-                    }
-                    //Console.WriteLine(6);
-                    //workbook.Write(ffstream);
-                    //Console.WriteLine(7);
-                    //ffstream.Close();
-                    //}
-                    //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.Write))
-                    //{
-                    //Console.WriteLine("Anhang schreiben");
-                    int columnHold = 0;
-
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    IRow rrrow = sheet.GetRow(cnt);
-                    ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
-                    cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
-                    cccell.SetCellValue(cellValueTransferHold);
-                    if (SettingsAgent.GetSettingIsTrue("colorGradient"))
-                    {
-                        if (Convert.ToInt32(activeMatchPercentage) < 10) { cccell.CellStyle = styles[Convert.ToInt32(activeMatchPercentage)]; }
-                        else { cccell.CellStyle = styles[10]; }
-                    }
-
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
-                    cellValueTransferHold = $"HD-Value: {activeMatchHammingDistance}";
-                    cccell.SetCellValue(cellValueTransferHold);
-
-                    sheet = workbook.GetSheetAt(resultSheet);
-                    rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
-                    cellValueTransferHold = $"JD-Value: {activeMatchJaccardIndex}";
-                    cccell.SetCellValue(cellValueTransferHold);
-
-                    if (VarHold.useDataFile && (activePrimaryCellValueOld != null || activeSecondaryCellValueOld != null))
-                    {
-                        sheet = workbook.GetSheetAt(resultSheet);
-                        IRow rrow = sheet.GetRow(cnt);
-                        ICell ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
-                        cellValueTransferHold = $"PrimaryValueTransform (old --> new): {activePrimaryCellValueOld} --> {activePrimaryCellValue}";
-                        ccell.SetCellValue(cellValueTransferHold);
-
-                        sheet = workbook.GetSheetAt(resultSheet);
-                        rrow = sheet.GetRow(cnt);
-                        ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
-                        cellValueTransferHold = $"SecondaryValueTransform (old --> new): {activeSecondaryCellValueOld} --> {activeSecondaryCellValue}";
-                        ccell.SetCellValue(cellValueTransferHold);
-                    }
-
-                    //workbook.Write(ffstream);
-                    //ffstream.Close();
-                    //}
-                }
+                obj.resultRow[cnt] = activeMatchRow;
 
                 TimeSpan timeSpanIntern = stopwatchIntern.Elapsed;
                 string timeSpanStringIntern = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);

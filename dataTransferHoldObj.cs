@@ -155,25 +155,28 @@ namespace DB_Matcher_v5
         }
         public void Dispose()
         {
-            ISheet tsheet = workbook.GetSheetAt(this.secondarySheet);
-            ISheet resultSheet = workbook.GetSheetAt(this.resultSheet);
-            
-            for(int row = this.fromPrimary; row < this.toPrimary; row++)
+            if (VarHold.writeResults)
             {
-                IRow irow = tsheet.GetRow(this.resultRow[row]);
-                IRow resultIrow = resultSheet.GetRow(row);
+                ISheet tsheet = workbook.GetSheetAt(this.secondarySheet);
+                ISheet resultSheet = workbook.GetSheetAt(this.resultSheet);
 
-                ICell resultCell = resultIrow.CreateCell(this.resultColumn);
-                resultCell.SetCellValue(this.matchingValue[row]);
-                if (this.ld_value[row] < 10) { resultCell.CellStyle = this.styles[this.ld_value[row]]; }
-                else { resultCell.CellStyle = this.styles[10]; }
-
-                for (int col = this.secondaryfromColumn; col < this.secondarytoColumn; col++)
+                for (int row = this.fromPrimary; row < this.toPrimary; row++)
                 {
-                    ICell cell = irow.GetCell(col);
-                    resultCell = resultIrow.CreateCell(this.resultColumn + 1 + (col - this.secondaryfromColumn));
+                    IRow irow = tsheet.GetRow(this.resultRow[row]);
+                    IRow resultIrow = resultSheet.GetRow(row);
 
-                    resultCell.SetCellValue(cell.ToString() ?? "");
+                    ICell resultCell = resultIrow.CreateCell(this.resultColumn);
+                    resultCell.SetCellValue(this.matchingValue[row]);
+                    if (this.ld_value[row] < 10) { resultCell.CellStyle = this.styles[this.ld_value[row]]; }
+                    else { resultCell.CellStyle = this.styles[10]; }
+
+                    for (int col = this.secondaryfromColumn; col < this.secondarytoColumn; col++)
+                    {
+                        ICell cell = irow.GetCell(col);
+                        resultCell = resultIrow.CreateCell(this.resultColumn + 1 + (col - this.secondaryfromColumn));
+
+                        resultCell.SetCellValue(cell.ToString() ?? "");
+                    }
                 }
             }
         }
