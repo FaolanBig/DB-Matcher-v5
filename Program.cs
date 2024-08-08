@@ -679,7 +679,60 @@ namespace DB_Matching_main1
 
             if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= VarHold.threadsQuantity)
             {
+                ToLog.Inf("threading enabled");
+                PrintIn.yellow("multi threading is enabled");
+                PrintIn.blue("preparing");
 
+                VarHold.threadsQuantity = Convert.ToInt32(SettingsAgent.GetSettingValue("threadQuantity"));
+                VarHold.threads_progress = new double[VarHold.threadsQuantity];
+                VarHold.threads_remainingTime = new double[VarHold.threadsQuantity];
+                Thread[] threads;
+                DataTransferHoldObj[] objects = new DataTransferHoldObj[VarHold.threadsQuantity];
+
+                int segment = (primaryLastCellRow - primaryFirstCellRow) / VarHold.threadsQuantity;
+
+                for (int objectID = 0; objectID < VarHold.threadsQuantity; objectID++)
+                {
+                    if (objectID == VarHold.threadsQuantity - 1)
+                    {
+                        objects[objectID] = new DataTransferHoldObj(objectID: objectID,
+                                  workbook: workbook,
+                                  styles: styles,
+                                  dictionary: dictionary,
+                                  primaryColumn: primaryFirstCellColumn,
+                                  secondaryColumn: secondaryFirstCellColumn,
+                                  fromSecondary: secondaryFirstCellRow,
+                                  toSecondary: secondaryLastCellRow,
+                                  secondaryfromColumn: VarHold.secondaryFromColumn,
+                                  secondarytoColumn: VarHold.secondaryToColumn,
+                                  resultSheet: resultSheet,
+                                  resultColumn: resultColumn,
+                                  primarySheet: sheetInput1,
+                                  secondarySheet: sheetInput2,
+                                  fromPrimary: primaryFirstCellRow + segment * objectID,
+                                  toPrimary: primaryLastCellRow);
+
+                    }
+                    else
+                    {
+                        objects[objectID] = new DataTransferHoldObj(objectID: objectID,
+                                                          workbook: workbook,
+                                                          styles: styles,
+                                                          dictionary: dictionary,
+                                                          primaryColumn: primaryFirstCellColumn,
+                                                          secondaryColumn: secondaryFirstCellColumn,
+                                                          fromSecondary: secondaryFirstCellRow,
+                                                          toSecondary: secondaryLastCellRow,
+                                                          secondaryfromColumn: VarHold.secondaryFromColumn,
+                                                          secondarytoColumn: VarHold.secondaryToColumn,
+                                                          resultSheet: resultSheet,
+                                                          resultColumn: resultColumn,
+                                                          primarySheet: sheetInput1,
+                                                          secondarySheet: sheetInput2,
+                                                          fromPrimary: primaryFirstCellRow + segment * objectID,
+                                                          toPrimary: primaryFirstCellRow + segment * (objectID + 1));
+                    }
+                }
             }
 
             

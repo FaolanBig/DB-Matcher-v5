@@ -293,7 +293,7 @@ namespace DB_Matcher_v5
 
             }
         }
-        internal static void Matcher_objTransfer(dataTransferHoldObj obj)
+        internal static void Matcher_objTransfer(DataTransferHoldObj obj)
         {
             GetSimilarityValue getSimilarityValueOBJ = new GetSimilarityValue();
             Stopwatch stopwatchIntern = new Stopwatch();
@@ -411,21 +411,6 @@ namespace DB_Matcher_v5
                 else if (threadCount == 3) { VarHold.thread3_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread3_remainingTime = timeSpanRemainingTimeStringFormatted; }
                 else if (threadCount == 4) { VarHold.thread4_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread4_remainingTime = timeSpanRemainingTimeStringFormatted; }
                 */
-                if (threadCount == 1) { VarHold.thread1_progress = tprogress; }
-                else if (threadCount == 2) { VarHold.thread2_progress = tprogress; }
-                else if (threadCount == 3) { VarHold.thread3_progress = tprogress; }
-                else if (threadCount == 4) { VarHold.thread4_progress = tprogress; }
-
-                if (threadCount == 1) { VarHold.thread1_remainingTime = timeSpanRemainingTimeStringFormatted; }
-                else if (threadCount == 2) { VarHold.thread2_remainingTime = timeSpanRemainingTimeStringFormatted; }
-                else if (threadCount == 3) { VarHold.thread3_remainingTime = timeSpanRemainingTimeStringFormatted; }
-                else if (threadCount == 4) { VarHold.thread4_remainingTime = timeSpanRemainingTimeStringFormatted; }
-
-                if (threadCount == 1) { VarHold.thread1_progressPercentage = progressPercentage; }
-                else if (threadCount == 2) { VarHold.thread2_progressPercentage = progressPercentage; }
-                else if (threadCount == 3) { VarHold.thread3_progressPercentage = progressPercentage; }
-                else if (threadCount == 4) { VarHold.thread4_progressPercentage = progressPercentage; }
-
             }
         }
 

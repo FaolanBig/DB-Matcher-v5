@@ -15,7 +15,7 @@ using static NPOI.HSSF.Util.HSSFColor;
 
 namespace DB_Matcher_v5
 {
-    internal class dataTransferHoldObj : IDisposable
+    internal class DataTransferHoldObj : IDisposable
     {
         internal int objectID;
         internal int primarySheet;
@@ -41,7 +41,7 @@ namespace DB_Matcher_v5
         internal int[] resultRow; //first: row
         internal int[] ld_value; //first: row
         internal string[] matchingValue;
-        public dataTransferHoldObj(int objectID,
+        public DataTransferHoldObj(int objectID,
                                    IWorkbook workbook,
                                    ICellStyle[] styles,
                                    Dictionary<string, string> dictionary,
