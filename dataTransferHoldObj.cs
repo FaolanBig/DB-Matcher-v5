@@ -79,11 +79,12 @@ namespace DB_Matcher_v5
             this.resultRow = new int[this.toPrimary - this.fromPrimary];
             this.ld_value = new int[this.toPrimary - this.fromPrimary];
 
+
             ToLog.Inf($"new dataTransferHoldObj initialized - objectID: {this.objectID} - parameters (sheet: from --> to): primary({this.primarySheet}: {fromPrimary} --> {toPrimary} - secondary({this.secondarySheet}: {fromSecondary} --> {toSecondary}))");
 
             ToLog.Inf($"loading primary content from sheet: {this.primarySheet}");
 
-            this.primaryContents = new string[this.toPrimary - this.fromPrimary];
+            this.primaryContents = new string[this.toPrimary];
             ISheet tsheet = this.workbook.GetSheetAt(this.primarySheet);
             for (int row = this.fromPrimary; row < this.toPrimary; row++)
             {
@@ -180,7 +181,7 @@ namespace DB_Matcher_v5
                 }
             }
         }
-        internal void setMatchingValue(int row, int ld, int hd, int jd)
+        public void setMatchingValue(int row, int ld, int hd, int jd)
         {
             this.matchingValue[row] = $"(ld|hd|jd): ({ld}|{hd}|{jd})";
         }

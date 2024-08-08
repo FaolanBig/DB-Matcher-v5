@@ -686,11 +686,12 @@ namespace DB_Matching_main1
                 VarHold.threadsQuantity = Convert.ToInt32(SettingsAgent.GetSettingValue("threadQuantity"));
                 VarHold.threads_progress = new double[VarHold.threadsQuantity];
                 VarHold.threads_remainingTime = new double[VarHold.threadsQuantity];
-                Thread[] threads;
+                Thread[] threads = new Thread[VarHold.threadsQuantity];
                 DataTransferHoldObj[] objects = new DataTransferHoldObj[VarHold.threadsQuantity];
 
                 int segment = (primaryLastCellRow - primaryFirstCellRow) / VarHold.threadsQuantity;
 
+                ToLog.Inf($"initializing {VarHold.threadsQuantity} objects for threading transfer");
                 for (int objectID = 0; objectID < VarHold.threadsQuantity; objectID++)
                 {
                     if (objectID == VarHold.threadsQuantity - 1)
@@ -733,6 +734,22 @@ namespace DB_Matching_main1
                                                           toPrimary: primaryFirstCellRow + segment * (objectID + 1));
                     }
                 }
+
+                for (int threadID = 0; threadID < VarHold.threadsQuantity; threadID++)
+                {
+                    ToLog.Inf($"initializing thread{threadID}");
+                    threads[threadID] = new Thread(() => ThreadingAgentInternal.Matcher_objTransfer(objects[threadID]));
+                    ToLog.Inf($"starting thread{threadID}");
+                    threads[threadID].Start();
+                }
+                bool stillRunning = false;
+                do
+                {
+                    foreach (var item in threads)
+                    {
+                        if (item.IsAlive) { stillRunning = true; }
+                    }
+                } while (stillRunning);
             }
 
             
