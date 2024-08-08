@@ -325,20 +325,7 @@ namespace DB_Matcher_v5
 
                 string activePrimaryCellValue = activePrimaryCell.ToString();
 
-                if (VarHold.useDataFile)
-                {
-                    foreach (var entry in dictionary)
-                    {
-                        if (activePrimaryCellValue.Contains(entry.Key))
-                        {
-                            activePrimaryCellValueOld = activePrimaryCellValue;
-                            activePrimaryCellValue = activePrimaryCellValue.Replace(entry.Key, entry.Value);
-                            break;
-                        }
-                    }
-                }
-
-                for (int sCnt = secondaryFirstCellRow; sCnt <= secondaryLastCellRow; sCnt++)
+                for (int sCnt = obj.fromSecondary; sCnt <= obj.toSecondary; sCnt++)
                 {
                     sheet = workbook.GetSheetAt(sheetInput2);
 
@@ -351,26 +338,13 @@ namespace DB_Matcher_v5
                     {
                         activeSecondaryCellRow = sheet.CreateRow(sCnt);
                     }
-                    ICell activeSecondaryCell = activeSecondaryCellRow.GetCell(secondaryFirstCellColumn);
+                    ICell activeSecondaryCell = activeSecondaryCellRow.GetCell(obj.secondaryColumn);
                     if (activeSecondaryCell == null)
                     {
-                        activeSecondaryCell = activeSecondaryCellRow.CreateCell(secondaryFirstCellColumn);
+                        activeSecondaryCell = activeSecondaryCellRow.CreateCell(obj.secondaryColumn);
                     }
 
                     activeSecondaryCellValue = activeSecondaryCell.ToString();
-
-                    if (VarHold.useDataFile)
-                    {
-                        foreach (var entry in dictionary)
-                        {
-                            if (activeSecondaryCellValue.Contains(entry.Key))
-                            {
-                                activeSecondaryCellValueOld = activeSecondaryCellValue;
-                                activeSecondaryCellValue = activeSecondaryCellValue.Replace(entry.Key, entry.Value);
-                                break;
-                            }
-                        }
-                    }
 
                     //Vergleichen
                     double compareMatchPercentage = getSimilarityValueOBJ.getLevenshteinDistance(activePrimaryCellValue, activeSecondaryCellValue);
@@ -384,7 +358,7 @@ namespace DB_Matcher_v5
                         compareIdentical = true;
                         compareMatch = true;
                         compareMatchPercentage = 0;
-                        activeMatchColumn = secondaryFirstCellColumn;
+                        activeMatchColumn = obj.secondaryColumn;
                         activeMatchRow = sCnt;
                         activeMatchPercentage = compareMatchPercentage;
                         activeMatchValue = activeSecondaryCellValue;
@@ -393,7 +367,7 @@ namespace DB_Matcher_v5
                     {
                         VarHold.matchedCells++;
                         activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
+                        activeMatchColumn = obj.secondaryColumn;
                         activeMatchRow = sCnt;
                         activeMatchPercentage = compareMatchPercentage;
                         compareMatch = true;
@@ -403,7 +377,7 @@ namespace DB_Matcher_v5
                     {
                         matchedCells++;
                         activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
+                        activeMatchColumn = obj.secondaryColumn;
                         activeMatchRow = sCnt;
                         //activeMatchPercentage = compareMatchPercentage;
                         activeMatchJaccardIndex = compareMatchJaccardIndex;
@@ -412,7 +386,7 @@ namespace DB_Matcher_v5
                     {
                         VarHold.matchedCells++;
                         activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
+                        activeMatchColumn = obj.secondaryColumn;
                         activeMatchRow = sCnt;
                         activeMatchPercentage = compareMatchPercentage;
                         activeMatchHammingDistance = compareMatchHammingDistance;
@@ -421,7 +395,7 @@ namespace DB_Matcher_v5
                     {
                         VarHold.matchedCells++;
                         activeMatchValue = activeSecondaryCellValue;
-                        activeMatchColumn = secondaryFirstCellColumn;
+                        activeMatchColumn = obj.secondaryColumn;
                         activeMatchRow = sCnt;
                         activeMatchPercentage = compareMatchPercentage;
                         activeMatchJaccardIndex = compareMatchJaccardIndex;
@@ -441,7 +415,7 @@ namespace DB_Matcher_v5
                     //using (FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite))
                     //{
                     string cellValueTransferHold;
-                    for (int i = secondaryFirstCellColumn; i <= secondaryLastCellColumn; i++)
+                    for (int i = obj.secondaryColumn; i <= secondaryLastCellColumn; i++)
                     {
                         //read
                         string outputHold = null;
@@ -465,7 +439,7 @@ namespace DB_Matcher_v5
                         //Console.WriteLine(2);
                         IRow toRow = sheet.GetRow(cnt);
                         //Console.WriteLine(3);
-                        ICell toCell = toRow.CreateCell(resultColumn + (i - secondaryFirstCellColumn));
+                        ICell toCell = toRow.CreateCell(resultColumn + (i - obj.secondaryColumn));
                         //Console.WriteLine(4);
                         //toCell.SetCellValue(cellValueTransferHold);
                         toCell.SetCellValue(cellValueTransferHold);
@@ -489,7 +463,7 @@ namespace DB_Matcher_v5
 
                     sheet = workbook.GetSheetAt(resultSheet);
                     IRow rrrow = sheet.GetRow(cnt);
-                    ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                    ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
                     cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
                     cccell.SetCellValue(cellValueTransferHold);
                     if (SettingsAgent.GetSettingIsTrue("colorGradient"))
@@ -500,13 +474,13 @@ namespace DB_Matcher_v5
 
                     sheet = workbook.GetSheetAt(resultSheet);
                     rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
                     cellValueTransferHold = $"HD-Value: {activeMatchHammingDistance}";
                     cccell.SetCellValue(cellValueTransferHold);
 
                     sheet = workbook.GetSheetAt(resultSheet);
                     rrrow = sheet.GetRow(cnt);
-                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                    cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
                     cellValueTransferHold = $"JD-Value: {activeMatchJaccardIndex}";
                     cccell.SetCellValue(cellValueTransferHold);
 
@@ -514,13 +488,13 @@ namespace DB_Matcher_v5
                     {
                         sheet = workbook.GetSheetAt(resultSheet);
                         IRow rrow = sheet.GetRow(cnt);
-                        ICell ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                        ICell ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
                         cellValueTransferHold = $"PrimaryValueTransform (old --> new): {activePrimaryCellValueOld} --> {activePrimaryCellValue}";
                         ccell.SetCellValue(cellValueTransferHold);
 
                         sheet = workbook.GetSheetAt(resultSheet);
                         rrow = sheet.GetRow(cnt);
-                        ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
+                        ccell = rrow.CreateCell(resultColumn + (secondaryLastCellColumn - obj.secondaryColumn) + ++columnHold);
                         cellValueTransferHold = $"SecondaryValueTransform (old --> new): {activeSecondaryCellValueOld} --> {activeSecondaryCellValue}";
                         ccell.SetCellValue(cellValueTransferHold);
                     }
