@@ -51,7 +51,21 @@ namespace DB_Matcher_v5
         internal static bool CheckForUpdates() //0: aktuell; 1: veraltet
         {
             GetVersionLatest();
-            VarHold.currentVersion = File.ReadAllText(VarHold.updateFilePath);
+
+            try
+            {
+                ToLog.Inf("getting current version");
+                VarHold.currentVersion = File.ReadAllText(VarHold.updateFilePath);
+                ToLog.Inf($"process finished: success - current version: {VarHold.currentVersion}");
+            }
+            catch (Exception ex)
+            {
+                ToLog.Err($"an error occurred when reading file: {VarHold.updateFilePath} - error: {ex.Message}");
+
+                PrintIn.red($"an error occurred when reading file: {VarHold.updateFilePath}");
+                PrintIn.red($"try downloading the latest release of DB-Matcher-v5 on {VarHold.repoURLReleases}");
+                PrintIn.red("see log for more information");
+            }
 
             VarHold.currentVersion = VarHold.currentVersion.TrimEnd('\r', '\n');
             VarHold.latestVersion = VarHold.latestVersion.TrimEnd('\r', '\n');
