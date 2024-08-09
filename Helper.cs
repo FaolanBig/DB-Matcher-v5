@@ -3,6 +3,7 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -196,6 +197,26 @@ namespace DB_Matcher_v5
             returnHold += $"] {progress}% | {remainingTime}";
             return returnHold;
         }
+        internal static void openURLinDefaultBrowser(string url = VarHold.repoURLReportIssue)
+        {
+            PrintIn.blue($"loading URL in default browser: {url}");
 
+            try
+            {
+                Process.Start("cmd", $"/C start {url}");
+            }
+            catch (System.ComponentModel.Win32Exception noDefaultBrowser)
+            {
+                ToLog.Err($"error when launching URL in default browser: {noDefaultBrowser.Message}");
+                PrintIn.red("error when launching URL in default browser");
+                PrintIn.red("see log for more information");
+            }
+            catch (Exception ex)
+            {
+                ToLog.Err($"error when launching URL in default browser: {ex.Message}");
+                PrintIn.red($"error when launching URL in default browser");
+                PrintIn.red("see log for more information");
+            }
+        }
     }
 }

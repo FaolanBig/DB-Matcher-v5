@@ -751,9 +751,7 @@ namespace DB_Matching_main1
                     }
                 } while (stillRunning);
             }
-
-            
-            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= 4)
+            else if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= 4)
             {
                 ToLog.Inf("threading enabled");
                 PrintIn.yellow("multi threading is enabled");

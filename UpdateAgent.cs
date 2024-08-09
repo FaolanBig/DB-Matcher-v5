@@ -68,7 +68,7 @@ namespace DB_Matcher_v5
             else if (VarHold.currentVersion == VarHold.latestVersion)
             {
                 ToLog.Inf($"UpdateAgent: currently using the latest version of DB-Matcher-v5 (version: {VarHold.currentVersion})");
-                PrintIn.green("currenly running the latest version of DB-Matcher-v5");
+                PrintIn.green($"currenly running the latest version of DB-Matcher-v5: {VarHold.currentVersion}");
                 return false;
             }
             ToLog.Err("UpdateAgent: cursed error at version check occurred");
