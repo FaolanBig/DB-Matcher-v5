@@ -172,16 +172,24 @@ namespace DB_Matcher_v5
         }
         internal static void DrawProgressBar(int line, int progress, int total, int barCount, string remainingTime)
         {
+            //Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            //Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            string outputHold = $"thread{line}: [";
             Console.Write($"thread{line}: [");
             int pos = 50 * progress / total;
             for (int i = 0; i < 50; i++)
             {
-                if (i < pos) Console.Write("=");
-                else if (i == pos) Console.Write(">");
-                else Console.Write(" ");
+                if (i < pos) {Console.Write("="); outputHold += "="; }
+                else if (i == pos) {Console.Write(">"); outputHold += ">"; }
+                else {Console.Write(" "); outputHold += " "; }
             }
+            outputHold += $"] {progress}% | {remainingTime}";
+            //outputHold += new string(' ', Console.WindowWidth - 1 - outputHold.Length) + "\n";
             Console.Write($"] {progress}% | {remainingTime}");
+            Console.SetCursorPosition(outputHold.Length, Console.WindowHeight - (barCount - line + 1));
+            Console.Write(new string(' ', 5));
+            //Console.Write(outputHold);
         }
         internal static string returnProgressBar(int line, int progress, int total, int barCount, string remainingTime)
         {

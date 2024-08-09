@@ -629,9 +629,6 @@ namespace DB_Matching_main1
             //printFittedSizeAsterixSurroundedText($"COMPUTING SUPPORT VIA JACCARD-DISTANCE ALGORITHM");
             int matchedCells = 0;
             int matchedCellsIdentical = 0;
-            if (verbose) { Console.WriteLine("starting stopwatch"); }
-            stopwatch.Start();
-            ToLog.Inf("stopwatch started");
 
             ICellStyle[] styles = new ICellStyle[11];
             for (int i = 0; i < styles.Length; i++) { styles[i] = workbook.CreateCellStyle(); }
@@ -671,6 +668,10 @@ namespace DB_Matching_main1
             Helper.writeContentToFile(workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
+
+            if (verbose) { Console.WriteLine("starting stopwatch"); }
+            stopwatch.Start();
+            ToLog.Inf("stopwatch started");
 
             Stopwatch stopwatchIntern = new Stopwatch();
             ToLog.Inf("stopwatch started: intern");
@@ -772,19 +773,19 @@ namespace DB_Matching_main1
                 ToLog.Inf("setting up: threads");
 
                 ToLog.Inf("starting thread1");
-                PrintIn.blue("starting thread1");
+                //PrintIn.blue("starting thread1");
                 Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow1, primaryLastCellRow: primaryLastCellRow1, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread2");
-                PrintIn.blue("starting thread2");
+                //PrintIn.blue("starting thread2");
                 Thread thread2 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 2, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow2, primaryLastCellRow: primaryLastCellRow2, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread3");
-                PrintIn.blue("starting thread3");
+                //PrintIn.blue("starting thread3");
                 Thread thread3 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 3, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow3, primaryLastCellRow: primaryLastCellRow3, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread4");
-                PrintIn.blue("starting thread4");
+                //PrintIn.blue("starting thread4");
                 Thread thread4 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 4, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow4, primaryLastCellRow: primaryLastCellRow4, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting threads");
@@ -1195,7 +1196,6 @@ namespace DB_Matching_main1
 
             Console.WriteLine();
             Console.WriteLine();
-            Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             Console.WriteLine();
             Console.WriteLine();
@@ -1203,6 +1203,8 @@ namespace DB_Matching_main1
 
             stopwatch.Stop();
             ToLog.Inf("stopwatch stopped");
+
+            Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             //if (writeResults) { workbook.Write(ffstream); }
             ToLog.Inf("writing workbook back to file");
