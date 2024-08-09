@@ -1,10 +1,13 @@
 ﻿using DB_Matching_main1;
+using MathNet.Numerics.Optimization;
+using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -290,5 +293,126 @@ namespace DB_Matcher_v5
 
             }
         }
+        internal static void Matcher_objTransfer(DataTransferHoldObj obj)
+        {
+            GetSimilarityValue getSimilarityValueOBJ = new GetSimilarityValue();
+            Stopwatch stopwatchIntern = new Stopwatch();
+            stopwatchIntern.Start();
+
+            for (int cnt = obj.fromPrimary; cnt <= obj.toPrimary; cnt++)
+            {
+                string activeMatchValue = "NOT FOUND";
+                int activeMatchRow = 0;
+                int activeMatchColumn = 0;
+                double activeMatchPercentage = 100;
+                int activeMatchHammingDistance = 100;
+                double activeMatchJaccardIndex = 1.0;
+
+                string activeSecondaryCellValue = "NOT FOUND";
+                string activePrimaryCellValueOld = null;
+                string activeSecondaryCellValueOld = null;
+
+                string activePrimaryCellValue = obj.primaryContents[cnt];
+
+                for (int sCnt = obj.fromSecondary; sCnt <= obj.toSecondary; sCnt++)
+                {
+                    bool compareIdentical = false;
+                    bool compareMatch = false;
+
+                    activeSecondaryCellValue = obj.secondaryContents[cnt];
+
+                    //Vergleichen
+                    double compareMatchPercentage = getSimilarityValueOBJ.getLevenshteinDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                    int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                    double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
+                    
+                    obj.setMatchingValue(sCnt, Convert.ToInt32(compareMatchPercentage), compareMatchHammingDistance, Convert.ToInt32(compareMatchJaccardIndex));
+                    obj.ld_value[sCnt] = Convert.ToInt32(compareMatchPercentage);
+
+                    //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
+                    if (activeSecondaryCellValue == activePrimaryCellValue)
+                    {
+                        VarHold.matchedCells++;
+                        VarHold.matchedCellsIdentical++;
+                        compareIdentical = true;
+                        compareMatch = true;
+                        compareMatchPercentage = 0;
+                        activeMatchColumn = obj.secondaryColumn;
+                        activeMatchRow = sCnt;
+                        activeMatchPercentage = compareMatchPercentage;
+                        activeMatchValue = activeSecondaryCellValue;
+                    }
+                    else if (compareMatchPercentage < activeMatchPercentage)
+                    {
+                        VarHold.matchedCells++;
+                        activeMatchValue = activeSecondaryCellValue;
+                        activeMatchColumn = obj.secondaryColumn;
+                        activeMatchRow = sCnt;
+                        activeMatchPercentage = compareMatchPercentage;
+                        compareMatch = true;
+                        //compareMatchPercentage = getSimilarityValue(activePrimaryCellValue, activeSecondaryCellValue);
+                    }
+                    /*else if (compareMatchPercentage == activeMatchPercentage && compareMatchJaccardIndex < activeMatchJaccardIndex)
+                    {
+                        matchedCells++;
+                        activeMatchValue = activeSecondaryCellValue;
+                        activeMatchColumn = obj.secondaryColumn;
+                        activeMatchRow = sCnt;
+                        //activeMatchPercentage = compareMatchPercentage;
+                        activeMatchJaccardIndex = compareMatchJaccardIndex;
+                    }*/
+                    else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance < activeMatchHammingDistance)
+                    {
+                        VarHold.matchedCells++;
+                        activeMatchValue = activeSecondaryCellValue;
+                        activeMatchColumn = obj.secondaryColumn;
+                        activeMatchRow = sCnt;
+                        activeMatchPercentage = compareMatchPercentage;
+                        activeMatchHammingDistance = compareMatchHammingDistance;
+                    }
+                    else if (compareMatchPercentage == activeMatchPercentage && compareMatchHammingDistance == activeMatchHammingDistance && compareMatchJaccardIndex < activeMatchJaccardIndex)
+                    {
+                        VarHold.matchedCells++;
+                        activeMatchValue = activeSecondaryCellValue;
+                        activeMatchColumn = obj.secondaryColumn;
+                        activeMatchRow = sCnt;
+                        activeMatchPercentage = compareMatchPercentage;
+                        activeMatchJaccardIndex = compareMatchJaccardIndex;
+                        activeMatchJaccardIndex = compareMatchJaccardIndex;
+
+                    }
+                    else
+                    {
+                        compareMatch = false;
+                    }
+
+
+                    VarHold.cyclesLog++;
+                }
+
+                obj.resultRow[cnt] = activeMatchRow;
+
+                TimeSpan timeSpanIntern = stopwatchIntern.Elapsed;
+                string timeSpanStringIntern = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
+
+                double timeSpanMillisecondsDoubleHold = stopwatchIntern.ElapsedMilliseconds;
+                double timeSpanMillisecondsPerIterationHold = timeSpanMillisecondsDoubleHold / ((cnt - obj.fromPrimary) + 1);
+                int totalIterations = obj.toPrimary - obj.fromPrimary;
+                double remainingTime = timeSpanMillisecondsPerIterationHold * (totalIterations - (cnt - obj.fromPrimary));
+
+                TimeSpan timeSpanRemainingTimeFormatted = TimeSpan.FromMilliseconds(remainingTime);
+                string timeSpanRemainingTimeStringFormatted = string.Format("{0:D2}h:{1:D2}m:{2:D2}s", timeSpanRemainingTimeFormatted.Hours, timeSpanRemainingTimeFormatted.Minutes, timeSpanRemainingTimeFormatted.Seconds);
+
+                double tprogress = (cnt * (Console.WindowWidth - (9 + timeSpanRemainingTimeStringFormatted.Length)) / obj.toPrimary);
+                int progressPercentage = Convert.ToInt32(Convert.ToDouble(cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary) * 100);
+
+                /*if (threadCount == 1) { VarHold.thread1_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread1_remainingTime = timeSpanRemainingTimeStringFormatted; }
+                else if (threadCount == 2) { VarHold.thread2_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread2_remainingTime = timeSpanRemainingTimeStringFormatted; }
+                else if (threadCount == 3) { VarHold.thread3_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread3_remainingTime = timeSpanRemainingTimeStringFormatted; }
+                else if (threadCount == 4) { VarHold.thread4_progress = Convert.ToInt32(((cnt - obj.fromPrimary) / (obj.toPrimary - obj.fromPrimary)) * 100); VarHold.thread4_remainingTime = timeSpanRemainingTimeStringFormatted; }
+                */
+            }
+        }
+
     }
 }

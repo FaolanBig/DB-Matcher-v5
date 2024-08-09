@@ -208,6 +208,11 @@ namespace DB_Matcher_v5
                         if (!UpdateAgent.CheckForUpdates()) { PrintIn.green("no updates available"); WaitForKeystrokeENTER("hit ENTER to return to recovery menu"); }
                         RunRecovery();
                         break;
+                    case "6":
+                        PrintIn.blue($"redirecting to {VarHold.repoURLReportIssue}");
+                        Helper.openURLinDefaultBrowser(VarHold.repoURLReportIssue);
+                        RunRecovery();
+                        break;
                     default:
                         ToLog.Err($"RecoveryHandler: bad input: {userInput} @Menu");
                         PrintIn.red("bad input");

@@ -3,6 +3,7 @@ using NPOI.SS.Formula.Functions;
 using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -171,16 +172,24 @@ namespace DB_Matcher_v5
         }
         internal static void DrawProgressBar(int line, int progress, int total, int barCount, string remainingTime)
         {
+            //Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            //Console.Write(new string(' ', Console.WindowWidth));
             Console.SetCursorPosition(0, Console.WindowHeight - (barCount - line + 1));
+            string outputHold = $"thread{line}: [";
             Console.Write($"thread{line}: [");
             int pos = 50 * progress / total;
             for (int i = 0; i < 50; i++)
             {
-                if (i < pos) Console.Write("=");
-                else if (i == pos) Console.Write(">");
-                else Console.Write(" ");
+                if (i < pos) {Console.Write("="); outputHold += "="; }
+                else if (i == pos) {Console.Write(">"); outputHold += ">"; }
+                else {Console.Write(" "); outputHold += " "; }
             }
+            outputHold += $"] {progress}% | {remainingTime}";
+            //outputHold += new string(' ', Console.WindowWidth - 1 - outputHold.Length) + "\n";
             Console.Write($"] {progress}% | {remainingTime}");
+            Console.SetCursorPosition(outputHold.Length, Console.WindowHeight - (barCount - line + 1));
+            Console.Write(new string(' ', 5));
+            //Console.Write(outputHold);
         }
         internal static string returnProgressBar(int line, int progress, int total, int barCount, string remainingTime)
         {
@@ -196,6 +205,26 @@ namespace DB_Matcher_v5
             returnHold += $"] {progress}% | {remainingTime}";
             return returnHold;
         }
+        internal static void openURLinDefaultBrowser(string url = VarHold.repoURLReportIssue)
+        {
+            PrintIn.blue($"loading URL in default browser: {url}");
 
+            try
+            {
+                Process.Start("cmd", $"/C start {url}");
+            }
+            catch (System.ComponentModel.Win32Exception noDefaultBrowser)
+            {
+                ToLog.Err($"error when launching URL in default browser: {noDefaultBrowser.Message}");
+                PrintIn.red("error when launching URL in default browser");
+                PrintIn.red("see log for more information");
+            }
+            catch (Exception ex)
+            {
+                ToLog.Err($"error when launching URL in default browser: {ex.Message}");
+                PrintIn.red($"error when launching URL in default browser");
+                PrintIn.red("see log for more information");
+            }
+        }
     }
 }

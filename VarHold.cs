@@ -46,6 +46,10 @@ namespace DB_Matcher_v5
         public static string latestVersion = "";
         public static string currentVersion = "";
 
+        public static int threadsQuantity = 0;
+        public static double[] threads_progress;
+        public static double[] threads_remainingTime;
+
         public static double thread1_progress = 0;
         public static double thread2_progress = 0;
         public static double thread3_progress = 0;
@@ -67,5 +71,7 @@ namespace DB_Matcher_v5
         public static int matchedCellsIdentical = 0;
 
         public static bool writeResults = false;
+        public static int secondaryFromColumn;
+        public static int secondaryToColumn;
     }
 }
