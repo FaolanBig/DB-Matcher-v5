@@ -59,7 +59,7 @@ namespace DB_Matcher_v5
             if (string.IsNullOrEmpty(VarHold.latestVersion)) { return false; }
             else if (VarHold.currentVersion != VarHold.latestVersion)
             {
-                ToLog.Inf($"UpdateAgent: new version awailable on {VarHold.repoURLReportIssue} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
+                ToLog.Inf($"UpdateAgent: new version awailable on {VarHold.repoURLReleases} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
                 PrintIn.blue($"new version awailable on {VarHold.repoURLReleases}");
                 PrintIn.blue($"current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion}");
                 RecoveryHandler.WaitForKeystrokeENTER();
