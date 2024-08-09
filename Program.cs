@@ -449,6 +449,7 @@ namespace DB_Matching_main1
                 workbook = new XSSFWorkbook(fs);
             }
 
+            ToLog.Inf("loading workbook: task complete");
             if (toggleConsoleBeep) { Console.Beep(); }
 
         SheetInput:
