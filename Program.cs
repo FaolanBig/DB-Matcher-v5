@@ -677,7 +677,7 @@ namespace DB_Matching_main1
             FileStream ffstream = new FileStream(toPath, FileMode.Create, FileAccess.ReadWrite);
 
 
-            if (SettingsAgent.GetSettingIsTrue("multiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= VarHold.threadsQuantity)
+            if (SettingsAgent.GetSettingIsTrue("experimentalMultiThreading") && (primaryLastCellRow - primaryFirstCellRow) >= VarHold.threadsQuantity)
             {
                 ToLog.Inf("threading enabled");
                 PrintIn.yellow("multi threading is enabled");

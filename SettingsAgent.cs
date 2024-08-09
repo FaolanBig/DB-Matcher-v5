@@ -93,8 +93,10 @@ namespace DB_Matcher_v5
             addYesNo("always write results", "writeResults");
             addYesNo("get an auditive feedback when finishing processes (beep)", "consoleBeep");
             addYesNo("visualize matching grade with color gradients", "colorGradient");
-            addYesNo("enable multi threading (experimental)", "multiThreading");
+            addYesNo("enable multi threading", "multiThreading");
+            addYesNo("enable new experimental multi threading (maybe unstable)", "experimentalMultiThreading");
             addValue("number of threads", "threadQuantity", "4");
+
 
             bool useAutoOpenExcel = false;
             if (VarHold.osIsWindows) { useAutoOpenExcel = addYesNo("automatically open newly generated excel-file in excel", "autoOpenExcel"); }
