@@ -757,7 +757,7 @@ namespace DB_Matching_main1
                 PrintIn.yellow("multi threading is enabled");
 
                 ToLog.Inf("calculating segments");
-                int segment = (primaryLastCellRow - primaryFirstCellRow) / 2;
+                int segment = (primaryLastCellRow - primaryFirstCellRow) / 4;
 
                 int primaryFirstCellRow1 = primaryFirstCellRow;
                 int primaryLastCellRow1 = primaryFirstCellRow1 + segment;
@@ -793,6 +793,8 @@ namespace DB_Matching_main1
                 thread3.Start();
                 thread4.Start();
 
+                bool statusThread0 = true, statusThread1 = true, statusThread2 = true, statusThread3 = true;
+
                 while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
                     Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
@@ -803,9 +805,9 @@ namespace DB_Matching_main1
                     Thread.Sleep(50);*/
 
                     Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
-                    Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
-                    Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
-                    Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
+                    Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread2_progress), 100, 4, VarHold.thread2_remainingTime);
+                    Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread3_progress), 100, 4, VarHold.thread3_remainingTime);
+                    Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread4_progress), 100, 4, VarHold.thread4_remainingTime);
                     Thread.Sleep(50);
 
                     /*Console.SetCursorPosition(0, Console.WindowHeight - 6);
@@ -816,17 +818,18 @@ namespace DB_Matching_main1
                     Console.Write(progressOutputHold);
                     Thread.Sleep(50);*/
 
-                    if (!thread1.IsAlive) { ToLog.Inf("thread0: computing has finished"); }
-                    if (!thread2.IsAlive) { ToLog.Inf("thread1: computing has finished"); }
-                    if (!thread3.IsAlive) { ToLog.Inf("thread2: computing has finished"); }
-                    if (!thread4.IsAlive) { ToLog.Inf("thread3: computing has finished"); }
+                    if (!thread1.IsAlive && statusThread0) { Helper.DrawProgressBar(0, 100, 100, 4, "finished"); ToLog.Inf("thread0: computing has finished"); statusThread0 = false; }
+                    if (!thread2.IsAlive && statusThread1) { Helper.DrawProgressBar(1, 100, 100, 4, "finished"); ToLog.Inf("thread1: computing has finished"); statusThread1 = false; }
+                    if (!thread3.IsAlive && statusThread2) { Helper.DrawProgressBar(2, 100, 100, 4, "finished"); ToLog.Inf("thread2: computing has finished"); statusThread2 = false; }
+                    if (!thread4.IsAlive && statusThread3) { Helper.DrawProgressBar(3, 100, 100, 4, "finished"); ToLog.Inf("thread3: computing has finished"); statusThread3 = false; }
+                    Thread.Sleep(100);
                 }
                 ToLog.Inf("all threads ended execution");
 
-                Helper.DrawProgressBar(0, 100, 100, 4, VarHold.thread1_remainingTime);
-                Helper.DrawProgressBar(1, 100, 100, 4, VarHold.thread2_remainingTime);
-                Helper.DrawProgressBar(2, 100, 100, 4, VarHold.thread3_remainingTime);
-                Helper.DrawProgressBar(3, 100, 100, 4, VarHold.thread4_remainingTime);
+                Helper.DrawProgressBar(0, 100, 100, 4, "finished");
+                Helper.DrawProgressBar(1, 100, 100, 4, "finished");
+                Helper.DrawProgressBar(2, 100, 100, 4, "finished");
+                Helper.DrawProgressBar(3, 100, 100, 4, "finished");
 
                 //ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn);
             }
