@@ -771,7 +771,7 @@ namespace DB_Matching_main1
                 int primaryLastCellRow4 = primaryLastCellRow;
 
                 ToLog.Inf("setting up: threads");
-
+                Console.Write("\n\n\n\n");
                 ToLog.Inf("starting thread1");
                 //PrintIn.blue("starting thread1");
                 Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow1, primaryLastCellRow: primaryLastCellRow1, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
