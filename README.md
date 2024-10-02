@@ -1,4 +1,4 @@
-﻿```
+```
  /$$$$$$$  /$$$$$$$  /$$      /$$             /$$               /$$                                            /$$$$$$$ 
 | $$__  $$| $$__  $$| $$$    /$$$            | $$              | $$                                           | $$____/ 
 | $$  \ $$| $$  \ $$| $$$$  /$$$$  /$$$$$$  /$$$$$$    /$$$$$$$| $$$$$$$   /$$$$$$   /$$$$$$        /$$    /$$| $$      
@@ -68,7 +68,7 @@ Basisfunktion:		Der DB-Matcher berechnet, wie ähnlich ein Wert aus der primäre
 
 ## English 
 
-### Describtion
+### Description
 
 **Data**
 
