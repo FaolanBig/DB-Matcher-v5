@@ -13,6 +13,8 @@
 Database (Excel) matching program written in C# with .NET-Framework using nPoi
 
 ## [WIKI](https://github.com/FaolanBig/DB-Matcher-v5/wiki)
+- [Installation-DE](https://github.com/FaolanBig/DB-Matcher-v5/wiki/Installation#deutsch-german)
+- [Installation-EN](https://github.com/FaolanBig/DB-Matcher-v5/wiki/Installation#english)
 
 ## Deutsch (German)
 
