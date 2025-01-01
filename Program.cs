@@ -43,6 +43,7 @@ using System.Threading;
 using Org.BouncyCastle.Bcpg;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using EnumsNET;
+using Microsoft.VisualBasic;
 
 
 namespace DB_Matching_main1
@@ -848,6 +849,7 @@ namespace DB_Matching_main1
                     int activeMatchRow = 0;
                     int activeMatchColumn = 0;
                     double activeMatchPercentage = 100;
+                    double activeMatchLD_value = 9999;
                     int activeMatchHammingDistance = 100;
                     double activeMatchJaccardIndex = 1.0;
 
@@ -920,7 +922,20 @@ namespace DB_Matching_main1
                         int compareMatchHammingDistance = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
                         double compareMatchJaccardIndex = getSimilarityValueOBJ.getJaccardIndex(activePrimaryCellValue, activeSecondaryCellValue);
                         //double compareMatchPercentage = getSimilarityValueOBJ.getHammingDistance(activePrimaryCellValue, activeSecondaryCellValue);
-                        if (activeSecondaryCellValue == activePrimaryCellValue)
+                        /*if (activeSecondaryCellValue == activePrimaryCellValue)
+                        {
+                            matchedCells++;
+                            matchedCellsIdentical++;
+                            compareIdentical = true;
+                            compareMatch = true;
+                            compareMatchPercentage = 0;
+                            activeMatchColumn = secondaryFirstCellColumn;
+                            activeMatchRow = sCnt;
+                            activeMatchPercentage = compareMatchPercentage;
+                            activeMatchValue = activeSecondaryCellValue;
+                            if (verbose == true) { Console.WriteLine(); printFittedSizeAsterixSurroundedText("MATCH--FOUND"); }
+                        }*/
+                        if (string.Equals(activeSecondaryCellValue, activePrimaryCellValue, StringComparison.OrdinalIgnoreCase))
                         {
                             matchedCells++;
                             matchedCellsIdentical++;
@@ -940,6 +955,7 @@ namespace DB_Matching_main1
                             activeMatchColumn = secondaryFirstCellColumn;
                             activeMatchRow = sCnt;
                             activeMatchPercentage = compareMatchPercentage;
+                            activeMatchLD_value = compareMatchPercentage; // added due to the occurrence of an unexpected error
                             compareMatch = true;
                             //compareMatchPercentage = getSimilarityValue(activePrimaryCellValue, activeSecondaryCellValue);
                             if (verbose == true)
@@ -1152,7 +1168,8 @@ namespace DB_Matching_main1
                         sheet = workbook.GetSheetAt(resultSheet);
                         IRow rrrow = sheet.GetRow(cnt);
                         ICell cccell = rrrow.CreateCell(resultColumn + (secondaryLastCellColumn - secondaryFirstCellColumn) + ++columnHold);
-                        cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
+                        //cellValueTransferHold = $"LD-Value: {activeMatchPercentage}";
+                        cellValueTransferHold = $"LD-Value: {activeMatchLD_value}";
                         cccell.SetCellValue(cellValueTransferHold);
                         if (SettingsAgent.GetSettingIsTrue("colorGradient"))
                         {
