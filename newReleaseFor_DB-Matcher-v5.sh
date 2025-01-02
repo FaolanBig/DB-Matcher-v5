@@ -13,7 +13,10 @@ WINDOWS_FILENAME="DB-Matcher-v5_win_x86"
 RELEASE_NAME="automatically-generated-binaries"
 
 # Clone repository
+echo "cleaning..."
 rm -rf $REPO_NAME
+echo "cleaning successful"
+
 echo "Cloning repository..."
 git clone "$REPO_URL" "$REPO_NAME" || { echo "Error: git clone failed"; exit 1; }
 cd "$REPO_NAME" || { echo "Error: repository not found"; exit 1; }
