@@ -775,19 +775,79 @@ namespace DB_Matching_main1
                 Console.Write("\n\n\n\n");
                 ToLog.Inf("starting thread1");
                 //PrintIn.blue("starting thread1");
-                Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow1, primaryLastCellRow: primaryLastCellRow1, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                Thread thread1 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 1, 
+                    workbook: workbook, 
+                    styles: styles, 
+                    dictionary: dictionary, 
+                    sheetInput1: sheetInput1, 
+                    sheetInput2: sheetInput2, 
+                    resultSheet: resultSheet, 
+                    resultColumn: resultColumn, 
+                    primaryFirstCellRow: primaryFirstCellRow1, 
+                    primaryLastCellRow: primaryLastCellRow1, 
+                    primaryFirstCellColumn: primaryFirstCellColumn, 
+                    primaryLastCellColumn: primaryLastCellColumn, 
+                    secondaryFirstCellRow: secondaryFirstCellRow, 
+                    secondaryLastCellRow: secondaryLastCellRow, 
+                    secondaryFirstCellColumn: secondaryFirstCellColumn, 
+                    secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread2");
                 //PrintIn.blue("starting thread2");
-                Thread thread2 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 2, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow2, primaryLastCellRow: primaryLastCellRow2, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                Thread thread2 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 2, 
+                    workbook: workbook, 
+                    styles: styles, 
+                    dictionary: dictionary, 
+                    sheetInput1: sheetInput1, 
+                    sheetInput2: sheetInput2, 
+                    resultSheet: resultSheet, 
+                    resultColumn: resultColumn, 
+                    primaryFirstCellRow: primaryFirstCellRow2, 
+                    primaryLastCellRow: primaryLastCellRow2, 
+                    primaryFirstCellColumn: primaryFirstCellColumn, 
+                    primaryLastCellColumn: primaryLastCellColumn, 
+                    secondaryFirstCellRow: secondaryFirstCellRow, 
+                    secondaryLastCellRow: secondaryLastCellRow, 
+                    secondaryFirstCellColumn: secondaryFirstCellColumn, 
+                    secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread3");
                 //PrintIn.blue("starting thread3");
-                Thread thread3 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 3, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow3, primaryLastCellRow: primaryLastCellRow3, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                Thread thread3 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 3, 
+                    workbook: workbook, 
+                    styles: styles, 
+                    dictionary: dictionary, 
+                    sheetInput1: sheetInput1, 
+                    sheetInput2: sheetInput2, 
+                    resultSheet: resultSheet, 
+                    resultColumn: resultColumn, 
+                    primaryFirstCellRow: primaryFirstCellRow3, 
+                    primaryLastCellRow: primaryLastCellRow3, 
+                    primaryFirstCellColumn: primaryFirstCellColumn, 
+                    primaryLastCellColumn: primaryLastCellColumn, 
+                    secondaryFirstCellRow: secondaryFirstCellRow, 
+                    secondaryLastCellRow: secondaryLastCellRow, 
+                    secondaryFirstCellColumn: secondaryFirstCellColumn, 
+                    secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting thread4");
                 //PrintIn.blue("starting thread4");
-                Thread thread4 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 4, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow4, primaryLastCellRow: primaryLastCellRow4, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn));
+                Thread thread4 = new Thread(() => ThreadingAgentInternal.Matcher(threadCount: 4, 
+                    workbook: workbook, 
+                    styles: styles, 
+                    dictionary: dictionary, 
+                    sheetInput1: sheetInput1, 
+                    sheetInput2: sheetInput2, 
+                    resultSheet: resultSheet, 
+                    resultColumn: resultColumn, 
+                    primaryFirstCellRow: primaryFirstCellRow4, 
+                    primaryLastCellRow: primaryLastCellRow4, 
+                    primaryFirstCellColumn: primaryFirstCellColumn, 
+                    primaryLastCellColumn: primaryLastCellColumn, 
+                    secondaryFirstCellRow: secondaryFirstCellRow, 
+                    secondaryLastCellRow: secondaryLastCellRow, 
+                    secondaryFirstCellColumn: secondaryFirstCellColumn, 
+                    secondaryLastCellColumn: secondaryLastCellColumn));
 
                 ToLog.Inf("starting threads");
 
