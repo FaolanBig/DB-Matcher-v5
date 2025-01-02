@@ -4,4 +4,4 @@
 (3) - edit setting file manually
 (4) - launch data file agent
 (5) - check for updates
-(6) - report something
+(6) - report something (github-ISSUE)
