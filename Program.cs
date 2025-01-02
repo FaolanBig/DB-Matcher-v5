@@ -647,7 +647,7 @@ namespace DB_Matching_main1
                 styles[7].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Orange.Index;
                 styles[8].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Red.Index;
                 styles[9].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.DarkRed.Index;
-                styles[10].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Black.Index;
+                styles[10].FillForegroundColor = NPOI.HSSF.Util.HSSFColor.Grey80Percent.Index;
             }
             for (int i = 0; i < styles.Length; i++)
             {
