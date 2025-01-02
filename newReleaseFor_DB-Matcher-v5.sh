@@ -32,7 +32,7 @@ generate_hashes() {
 
 # Build for Linux
 echo "Building for Linux..."
-dotnet publish "$PROJECT_FILE" -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true -o "../$BUILD_DIR/linux" || { echo "Error: Linux build failed"; exit 1; }
+dotnet publish "$PROJECT_FILE" -c Release -r linux-x64 --self-contained true --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:PublishSingleFile=true -o "../$BUILD_DIR/linux" || { echo "Error: Linux build failed"; exit 1; }
 cd "../$BUILD_DIR/linux" || exit
 zip "../${LINUX_FILENAME}.zip" * || exit
 tar -czf "../${LINUX_FILENAME}.tar.gz" * || exit
@@ -40,7 +40,7 @@ cd ../../"$REPO_NAME" || exit
 
 # Build for Windows
 echo "Building for Windows..."
-dotnet publish "$PROJECT_FILE" -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true -o "../$BUILD_DIR/windows" || { echo "Error: Windows build failed"; exit 1; }
+dotnet publish "$PROJECT_FILE" -c Release -r win-x64 --self-contained true --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:PublishSingleFile=true -o "../$BUILD_DIR/windows" || { echo "Error: Windows build failed"; exit 1; }
 cd "../$BUILD_DIR/windows" || exit
 zip "../${WINDOWS_FILENAME}.zip" * || exit
 tar -czf "../${WINDOWS_FILENAME}.tar.gz" * || exit
