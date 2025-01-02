@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# before running this script, make shure you are logged in with gh (github cli)
+# you can see your gh status by running 'gh auth status'
+
 # Variables
 REPO_URL="https://github.com/FaolanBig/DB-Matcher-v5.git"
 REPO_NAME="DB-Matcher-v5"
