@@ -10,7 +10,7 @@ BUILD_DIR="build_output"
 PROJECT_FILE="DB-Matcher-v5.csproj"
 LINUX_FILENAME="DB-Matcher-v5_linux_x86"
 WINDOWS_FILENAME="DB-Matcher-v5_win_x86"
-RELEASE_NAME="automatically-generated-binaries"
+RELEASE_NAME="automatically generated binaries with sha256 checksums"
 
 # Clone repository
 echo "cleaning..."
