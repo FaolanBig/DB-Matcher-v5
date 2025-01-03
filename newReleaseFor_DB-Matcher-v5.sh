@@ -68,8 +68,9 @@ echo "success"
 cd ../../"$REPO_NAME" || exit
 
 # generating hashes
-echo "generating hashes"
+echo "initializing hash generation"
 generate_hashes "../$BUILD_DIR/"
+echo "hashing finished successfully"
 
 # Create GitHub Release
 echo "Creating GitHub release..."
@@ -85,11 +86,13 @@ gh release create "$LATEST_TAG" \
   "../$BUILD_DIR/${WINDOWS_FILENAME}.tar.gz.sha256" \
   --title "$LATEST_TAG" \
   --notes "$RELEASE_NAME" || { echo "Error: GitHub release creation failed"; exit 1; }
+echo "generating release finished successfully"
 
 # Cleanup
-echo "Cleanup..."
+echo "cleaning..."
 rm -rf "../$BUILD_DIR"
 rm -rf "../$REPO_NAME"
-
-echo "Done"
+echo "cleaning finished successfully"
+echo " "
+echo "Done, see you soon"
 
