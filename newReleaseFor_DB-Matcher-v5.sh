@@ -47,16 +47,24 @@ generate_hashes() {
 echo "Building for Linux..."
 dotnet publish "$PROJECT_FILE" -c Release -r linux-x64 --self-contained true --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:PublishSingleFile=true -o "../$BUILD_DIR/linux" || { echo "Error: Linux build failed"; exit 1; }
 cd "../$BUILD_DIR/linux" || exit
+echo "compressing for linux as .zip"
 zip "../${LINUX_FILENAME}.zip" * || exit
+echo "success"
+echo "compressing for linux as .tar.gz"
 tar -czf "../${LINUX_FILENAME}.tar.gz" * || exit
+echo "success"
 cd ../../"$REPO_NAME" || exit
 
 # Build for Windows
 echo "Building for Windows..."
 dotnet publish "$PROJECT_FILE" -c Release -r win-x64 --self-contained true --nologo -v q --property WarningLevel=0 /clp:ErrorsOnly /p:PublishSingleFile=true -o "../$BUILD_DIR/windows" || { echo "Error: Windows build failed"; exit 1; }
 cd "../$BUILD_DIR/windows" || exit
+echo "compressing for windows as .zip"
 zip "../${WINDOWS_FILENAME}.zip" * || exit
+echo "success"
+echo "compressing for windows as .tar.gz"
 tar -czf "../${WINDOWS_FILENAME}.tar.gz" * || exit
+echo "success"
 cd ../../"$REPO_NAME" || exit
 
 # generating hashes
