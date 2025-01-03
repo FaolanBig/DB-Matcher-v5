@@ -20,10 +20,15 @@ echo "cleaning successful"
 echo "Cloning repository..."
 git clone "$REPO_URL" "$REPO_NAME" || { echo "Error: git clone failed"; exit 1; }
 cd "$REPO_NAME" || { echo "Error: repository not found"; exit 1; }
+echo "cloning successful"
 
 # Clean build directory
+echo "cleaning build directory"
 rm -rf "../$BUILD_DIR"
+echo "cleaning successful"
+echo "creating build directory"
 mkdir "../$BUILD_DIR"
+echo "creatung successful"
 
 # Function to generate SHA256 hash files
 generate_hashes() {
@@ -31,7 +36,9 @@ generate_hashes() {
   echo "Generating SHA256 hashes in $dir..."
   for file in "$dir"/*; do
     if [ -f "$file" ]; then
+      echo "hashing file $file"
       sha256sum "$file" > "$file.sha256" || { echo "Error: Failed to generate hash for $file"; exit 1; }
+      echo "hashing successful for file $file
     fi
   done
 }
