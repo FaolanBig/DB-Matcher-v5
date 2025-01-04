@@ -896,10 +896,10 @@ namespace DB_Matching_main1
                 }
                 ToLog.Inf("all threads ended execution");
 
-                Helper.DrawProgressBar(0, 100, 100, 4, "finished");
-                Helper.DrawProgressBar(1, 100, 100, 4, "finished");
-                Helper.DrawProgressBar(2, 100, 100, 4, "finished");
-                Helper.DrawProgressBar(3, 100, 100, 4, "finished");
+                Helper.DrawProgressBar(0, 100, 100, 4, "computation finished");
+                Helper.DrawProgressBar(1, 100, 100, 4, "computation finished");
+                Helper.DrawProgressBar(2, 100, 100, 4, "computation finished");
+                Helper.DrawProgressBar(3, 100, 100, 4, "computation finished");
 
                 //ThreadingAgentInternal.Matcher(threadCount: 1, workbook: workbook, styles: styles, dictionary: dictionary, sheetInput1: sheetInput1, sheetInput2: sheetInput2, resultSheet: resultSheet, resultColumn: resultColumn, primaryFirstCellRow: primaryFirstCellRow, primaryLastCellRow: primaryLastCellRow, primaryFirstCellColumn: primaryFirstCellColumn, primaryLastCellColumn: primaryLastCellColumn, secondaryFirstCellRow: secondaryFirstCellRow, secondaryLastCellRow: secondaryLastCellRow, secondaryFirstCellColumn: secondaryFirstCellColumn, secondaryLastCellColumn: secondaryLastCellColumn);
             }
