@@ -1287,16 +1287,19 @@ namespace DB_Matching_main1
             stopwatch.Stop();
             ToLog.Inf("stopwatch stopped");
 
+            PrintIn.blue("restoring file contents...");
             Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             //if (writeResults) { workbook.Write(ffstream); }
             ToLog.Inf("writing workbook back to file");
+            PrintIn.blue("saving content to file...");
             workbook.Write(ffstream);
             ToLog.Inf("closing file stream");
             ffstream.Close();
 
             if (verbose) { printFittedSizeAsterixSurroundedText("COMPUTING CHECKSUM"); }
             ToLog.Inf($"getting hash: {toPath}");
+            PrintIn.blue("computing sha256-checksum...");
             using (FileStream fffstream = File.OpenRead(toPath))
             {
                 SHA256Managed sha = new SHA256Managed();
@@ -1316,7 +1319,8 @@ namespace DB_Matching_main1
             //stopwatch.Stop();
             TimeSpan timeSpan = stopwatch.Elapsed;
             string timeSpanString = String.Format("{0:00}h:{1:00}m:{2:00}s:{3:00}ms", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-
+            PrintIn.green("done");
+            Console.WriteLine();
             setConsoleColorToGreen();
             printFittedSizeAsterixSurroundedText("COMPUTING--FINISHED");
             resetConsoleColor();
