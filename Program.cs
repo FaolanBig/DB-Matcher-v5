@@ -887,10 +887,10 @@ namespace DB_Matching_main1
                     Console.Write(progressOutputHold);
                     Thread.Sleep(50);*/
 
-                    if (!thread1.IsAlive && statusThread0) { Helper.DrawProgressBar(0, 100, 100, 4, "thread0: computation finished"); ToLog.Inf("thread0: computing has finished"); statusThread0 = false; }
-                    if (!thread2.IsAlive && statusThread1) { Helper.DrawProgressBar(1, 100, 100, 4, "thread1: computation finished"); ToLog.Inf("thread1: computing has finished"); statusThread1 = false; }
-                    if (!thread3.IsAlive && statusThread2) { Helper.DrawProgressBar(2, 100, 100, 4, "thread2: computation finished"); ToLog.Inf("thread2: computing has finished"); statusThread2 = false; }
-                    if (!thread4.IsAlive && statusThread3) { Helper.DrawProgressBar(3, 100, 100, 4, "thread3: computation finished"); ToLog.Inf("thread3: computing has finished"); statusThread3 = false; }
+                    if (!thread1.IsAlive && statusThread0) { Helper.DrawProgressBar(0, 100, 100, 4, "computation finished"); ToLog.Inf("thread0: computing has finished"); statusThread0 = false; }
+                    if (!thread2.IsAlive && statusThread1) { Helper.DrawProgressBar(1, 100, 100, 4, "computation finished"); ToLog.Inf("thread1: computing has finished"); statusThread1 = false; }
+                    if (!thread3.IsAlive && statusThread2) { Helper.DrawProgressBar(2, 100, 100, 4, "computation finished"); ToLog.Inf("thread2: computing has finished"); statusThread2 = false; }
+                    if (!thread4.IsAlive && statusThread3) { Helper.DrawProgressBar(3, 100, 100, 4, "computation finished"); ToLog.Inf("thread3: computing has finished"); statusThread3 = false; }
                     Thread.Sleep(100);
                 }
                 ToLog.Inf("all threads ended execution");
