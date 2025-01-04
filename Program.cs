@@ -668,6 +668,7 @@ namespace DB_Matching_main1
 
             Helper.writeContentToFile(workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
+            Console.WriteLine();
             printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
 
             if (verbose) { Console.WriteLine("starting stopwatch"); }
@@ -1287,7 +1288,7 @@ namespace DB_Matching_main1
             stopwatch.Stop();
             ToLog.Inf("stopwatch stopped");
 
-            PrintIn.blue("restoring file contents...");
+            //PrintIn.blue("restoring file contents...");
             Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             //if (writeResults) { workbook.Write(ffstream); }
