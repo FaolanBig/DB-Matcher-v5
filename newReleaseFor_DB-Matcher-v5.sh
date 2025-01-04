@@ -38,7 +38,7 @@ generate_hashes() {
     if [ -f "$file" ]; then
       echo "hashing file $file"
       sha256sum "$file" > "$file.sha256" || { echo "Error: Failed to generate hash for $file"; exit 1; }
-      echo "hashing successful for file $file
+      echo "hashing successful for file $file"
     fi
   done
 }
