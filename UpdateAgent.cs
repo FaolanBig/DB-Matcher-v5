@@ -48,7 +48,7 @@ namespace DB_Matcher_v5
                 }
             }
         }
-        internal static bool CheckForUpdates() //0: aktuell; 1: veraltet
+        internal static bool CheckForUpdates() //0: currently running the latest version of DB-Matcher-v5; 1: update available
         {
             GetVersionLatest();
 
@@ -73,7 +73,7 @@ namespace DB_Matcher_v5
             if (string.IsNullOrEmpty(VarHold.latestVersion)) { return false; }
             else if (VarHold.currentVersion != VarHold.latestVersion)
             {
-                ToLog.Inf($"UpdateAgent: new version awailable on {VarHold.repoURLReleases} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
+                ToLog.Inf($"UpdateAgent: new version available on {VarHold.repoURLReleases} (current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion})");
                 PrintIn.blue($"new version awailable on {VarHold.repoURLReleases}");
                 PrintIn.blue($"current version: {VarHold.currentVersion} --> latest version: {VarHold.latestVersion}");
                 RecoveryHandler.WaitForKeystrokeENTER();
@@ -85,7 +85,7 @@ namespace DB_Matcher_v5
                 PrintIn.green($"currenly running the latest version of DB-Matcher-v5: {VarHold.currentVersion}");
                 return false;
             }
-            ToLog.Err("UpdateAgent: cursed error at version check occurred");
+            ToLog.Err("UpdateAgent: unexpected error at version check occurred");
             return false;
         }
     }
