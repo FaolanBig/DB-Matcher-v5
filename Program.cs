@@ -668,6 +668,7 @@ namespace DB_Matching_main1
 
             Helper.writeContentToFile(workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
+            Console.WriteLine();
             printFittedSizeAsterixSurroundedText("STARTING COMPUTATION");
 
             if (verbose) { Console.WriteLine("starting stopwatch"); }
@@ -860,17 +861,23 @@ namespace DB_Matching_main1
 
                 while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
-                    Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
+                    //Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
                     /*Helper.printProgressBar(0, VarHold.thread1_progress, 100, 4, VarHold.thread1_remainingTime, VarHold.thread1_progressPercentage);
                     Helper.printProgressBar(1, VarHold.thread2_progress, 100, 4, VarHold.thread2_remainingTime, VarHold.thread2_progressPercentage);
                     Helper.printProgressBar(2, VarHold.thread3_progress, 100, 4, VarHold.thread3_remainingTime, VarHold.thread3_progressPercentage);
                     Helper.printProgressBar(3, VarHold.thread4_progress, 100, 4, VarHold.thread4_remainingTime, VarHold.thread4_progressPercentage);
                     Thread.Sleep(50);*/
 
-                    Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
+                    /*Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
                     Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread2_progress), 100, 4, VarHold.thread2_remainingTime);
                     Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread3_progress), 100, 4, VarHold.thread3_remainingTime);
                     Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread4_progress), 100, 4, VarHold.thread4_remainingTime);
+                    Thread.Sleep(50);*/
+
+                    if (statusThread0) { Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progressPercentage), 100, 4, VarHold.thread1_remainingTime); }
+                    if (statusThread1) { Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread2_progressPercentage), 100, 4, VarHold.thread2_remainingTime); }
+                    if (statusThread2) { Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread3_progressPercentage), 100, 4, VarHold.thread3_remainingTime); }
+                    if (statusThread3) { Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread4_progressPercentage), 100, 4, VarHold.thread4_remainingTime); }
                     Thread.Sleep(50);
 
                     /*Console.SetCursorPosition(0, Console.WindowHeight - 6);
@@ -881,10 +888,10 @@ namespace DB_Matching_main1
                     Console.Write(progressOutputHold);
                     Thread.Sleep(50);*/
 
-                    if (!thread1.IsAlive && statusThread0) { Helper.DrawProgressBar(0, 100, 100, 4, "finished"); ToLog.Inf("thread0: computing has finished"); statusThread0 = false; }
-                    if (!thread2.IsAlive && statusThread1) { Helper.DrawProgressBar(1, 100, 100, 4, "finished"); ToLog.Inf("thread1: computing has finished"); statusThread1 = false; }
-                    if (!thread3.IsAlive && statusThread2) { Helper.DrawProgressBar(2, 100, 100, 4, "finished"); ToLog.Inf("thread2: computing has finished"); statusThread2 = false; }
-                    if (!thread4.IsAlive && statusThread3) { Helper.DrawProgressBar(3, 100, 100, 4, "finished"); ToLog.Inf("thread3: computing has finished"); statusThread3 = false; }
+                    if (!thread1.IsAlive && statusThread0) { Helper.DrawProgressBar(0, 100, 100, 4, "computation finished"); ToLog.Inf("thread0: computing has finished"); statusThread0 = false; }
+                    if (!thread2.IsAlive && statusThread1) { Helper.DrawProgressBar(1, 100, 100, 4, "computation finished"); ToLog.Inf("thread1: computing has finished"); statusThread1 = false; }
+                    if (!thread3.IsAlive && statusThread2) { Helper.DrawProgressBar(2, 100, 100, 4, "computation finished"); ToLog.Inf("thread2: computing has finished"); statusThread2 = false; }
+                    if (!thread4.IsAlive && statusThread3) { Helper.DrawProgressBar(3, 100, 100, 4, "computation finished"); ToLog.Inf("thread3: computing has finished"); statusThread3 = false; }
                     Thread.Sleep(100);
                 }
                 ToLog.Inf("all threads ended execution");
@@ -1281,16 +1288,19 @@ namespace DB_Matching_main1
             stopwatch.Stop();
             ToLog.Inf("stopwatch stopped");
 
+            //PrintIn.blue("restoring file contents...");
             Helper.readContentFromFile(ref workbook, sheetInput1, primaryFirstCellColumn, primaryFirstCellRow, primaryLastCellColumn, primaryLastCellRow);
 
             //if (writeResults) { workbook.Write(ffstream); }
             ToLog.Inf("writing workbook back to file");
+            PrintIn.blue("saving content to file...");
             workbook.Write(ffstream);
             ToLog.Inf("closing file stream");
             ffstream.Close();
 
             if (verbose) { printFittedSizeAsterixSurroundedText("COMPUTING CHECKSUM"); }
             ToLog.Inf($"getting hash: {toPath}");
+            PrintIn.blue("computing sha256-checksum...");
             using (FileStream fffstream = File.OpenRead(toPath))
             {
                 SHA256Managed sha = new SHA256Managed();
@@ -1310,7 +1320,8 @@ namespace DB_Matching_main1
             //stopwatch.Stop();
             TimeSpan timeSpan = stopwatch.Elapsed;
             string timeSpanString = String.Format("{0:00}h:{1:00}m:{2:00}s:{3:00}ms", timeSpan.Hours, timeSpan.Minutes, timeSpan.Seconds, timeSpan.Milliseconds);
-
+            PrintIn.green("done");
+            Console.WriteLine();
             setConsoleColorToGreen();
             printFittedSizeAsterixSurroundedText("COMPUTING--FINISHED");
             resetConsoleColor();

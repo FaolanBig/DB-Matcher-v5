@@ -123,13 +123,13 @@ namespace DB_Matcher_v5
         {
             int errorCount = 0;
 
-            PrintIn.blue("cleaning");
+            PrintIn.blue("restoring...");
 
             if (!File.Exists(VarHold.helperFilePath))
             {
                 ToLog.Err("no file found: helper file - abort");
                 PrintIn.red("no helperFile found");
-                PrintIn.red("no cleaning possible");
+                PrintIn.red("cleaning not possible");
                 RecoveryHandler.WaitForKeystrokeENTER("hit ENTER to continue without cleaning");
             }
 
@@ -147,7 +147,7 @@ namespace DB_Matcher_v5
                     ICell newCell = currentRow.CreateCell(primaryFirstCellColumn); // Neue Spalte
                     newCell.SetCellValue(line);
 
-                    try
+                    /*try
                     {
                         TimeSpan timeSpanIntern = stopwatchIntern.Elapsed;
                         string timeSpanStringIntern = String.Format("{0:00}:{1:00}:{2:00}", timeSpanIntern.Hours, timeSpanIntern.Minutes, timeSpanIntern.Seconds);
@@ -179,16 +179,17 @@ namespace DB_Matcher_v5
                         PrintIn.red("an error occurred when calculating or printing progress (progress bar)");
                         PrintIn.red("see log for more information");
                         RecoveryHandler.WaitForKeystrokeENTER();
-                    }
+                    }*/
 
                     row++;
                 }
             }
             ToLog.Inf("deleting file: helper file");
+            PrintIn.blue("cleaning...");
             File.Delete(VarHold.helperFilePath);
             ToLog.Inf("helper file deleted: success");
 
-            if (errorCount == 0) { ToLog.Inf("operation has finished: reading content from file"); PrintIn.green("cleaning finished successful"); }
+            if (errorCount == 0) { ToLog.Inf("operation has finished: reading content from file"); }
             else { ToLog.Err($"operation has finished: reading content from file - {errorCount} minor errors occurred"); PrintIn.yellow($"preparation finished with {errorCount} minor errors"); PrintIn.yellow("see log for more information"); }
         }
         internal static void printProgressBar(int line, double progress, int total, int barCount, string remainingTime, int progressPercentage)
