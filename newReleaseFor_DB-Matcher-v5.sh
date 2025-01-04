@@ -8,8 +8,8 @@ REPO_URL="https://github.com/FaolanBig/DB-Matcher-v5.git"
 REPO_NAME="DB-Matcher-v5"
 BUILD_DIR="build_output"
 PROJECT_FILE="DB-Matcher-v5.csproj"
-LINUX_FILENAME="DB-Matcher-v5_linux_x86"
-WINDOWS_FILENAME="DB-Matcher-v5_win_x86"
+LINUX_FILENAME="DB-Matcher-v5_linux_x86_64"
+WINDOWS_FILENAME="DB-Matcher-v5_win_x86_64"
 RELEASE_NAME="automatically generated binaries with sha256 checksums"
 
 # Clone repository
