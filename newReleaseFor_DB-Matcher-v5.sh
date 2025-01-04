@@ -28,7 +28,7 @@ rm -rf "../$BUILD_DIR"
 echo "cleaning successful"
 echo "creating build directory"
 mkdir "../$BUILD_DIR"
-echo "creatung successful"
+echo "creating successful"
 
 # Function to generate SHA256 hash files
 generate_hashes() {
@@ -94,5 +94,5 @@ rm -rf "../$BUILD_DIR"
 rm -rf "../$REPO_NAME"
 echo "cleaning finished successfully"
 echo " "
-echo "done, see you soon"
+echo "Done, see you soon"
 
