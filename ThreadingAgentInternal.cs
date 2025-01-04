@@ -299,7 +299,7 @@ namespace DB_Matcher_v5
                 else if (threadCount == 3) { VarHold.thread3_remainingTime = timeSpanRemainingTimeStringFormatted; }
                 else if (threadCount == 4) { VarHold.thread4_remainingTime = timeSpanRemainingTimeStringFormatted; }
 
-            if (threadCount == 1) { VarHold.thread1_progressPercentage = progressPercentage; }
+                if (threadCount == 1) { VarHold.thread1_progressPercentage = progressPercentage; }
                 else if (threadCount == 2) { VarHold.thread2_progressPercentage = progressPercentage; }
                 else if (threadCount == 3) { VarHold.thread3_progressPercentage = progressPercentage; }
                 else if (threadCount == 4) { VarHold.thread4_progressPercentage = progressPercentage; }

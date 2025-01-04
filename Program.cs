@@ -860,17 +860,23 @@ namespace DB_Matching_main1
 
                 while (thread1.IsAlive ||thread2.IsAlive || thread3.IsAlive || thread4.IsAlive)
                 {
-                    Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
+                    //Console.WriteLine(VarHold.thread1_progress + " | ", VarHold.thread1_remainingTime);
                     /*Helper.printProgressBar(0, VarHold.thread1_progress, 100, 4, VarHold.thread1_remainingTime, VarHold.thread1_progressPercentage);
                     Helper.printProgressBar(1, VarHold.thread2_progress, 100, 4, VarHold.thread2_remainingTime, VarHold.thread2_progressPercentage);
                     Helper.printProgressBar(2, VarHold.thread3_progress, 100, 4, VarHold.thread3_remainingTime, VarHold.thread3_progressPercentage);
                     Helper.printProgressBar(3, VarHold.thread4_progress, 100, 4, VarHold.thread4_remainingTime, VarHold.thread4_progressPercentage);
                     Thread.Sleep(50);*/
 
-                    Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
+                    /*Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progress), 100, 4, VarHold.thread1_remainingTime);
                     Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread2_progress), 100, 4, VarHold.thread2_remainingTime);
                     Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread3_progress), 100, 4, VarHold.thread3_remainingTime);
                     Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread4_progress), 100, 4, VarHold.thread4_remainingTime);
+                    Thread.Sleep(50);*/
+
+                    Helper.DrawProgressBar(0, Convert.ToInt32(VarHold.thread1_progressPercentage), 100, 4, VarHold.thread1_remainingTime);
+                    Helper.DrawProgressBar(1, Convert.ToInt32(VarHold.thread2_progressPercentage), 100, 4, VarHold.thread2_remainingTime);
+                    Helper.DrawProgressBar(2, Convert.ToInt32(VarHold.thread3_progressPercentage), 100, 4, VarHold.thread3_remainingTime);
+                    Helper.DrawProgressBar(3, Convert.ToInt32(VarHold.thread4_progressPercentage), 100, 4, VarHold.thread4_remainingTime);
                     Thread.Sleep(50);
 
                     /*Console.SetCursorPosition(0, Console.WindowHeight - 6);
