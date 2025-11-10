@@ -12,11 +12,17 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using static NPOI.HSSF.Util.HSSFColor;
+using BigLog;
 
 namespace DB_Matcher_v5
 {
     internal class DataTransferHoldObj : IDisposable
     {
+        Logger logger = new Logger()
+        {
+            LogToFile = true,
+            LogToTerminal = VarHold.logToTerminal,
+        };
         internal int objectID;
         internal int primarySheet;
         internal int fromPrimary;
@@ -80,9 +86,9 @@ namespace DB_Matcher_v5
             this.ld_value = new int[this.toPrimary - this.fromPrimary];
 
 
-            ToLog.Inf($"new dataTransferHoldObj initialized - objectID: {this.objectID} - parameters (sheet: from --> to): primary({this.primarySheet}: {fromPrimary} --> {toPrimary} - secondary({this.secondarySheet}: {fromSecondary} --> {toSecondary}))");
+            logger.Inf($"new dataTransferHoldObj initialized - objectID: {this.objectID} - parameters (sheet: from --> to): primary({this.primarySheet}: {fromPrimary} --> {toPrimary} - secondary({this.secondarySheet}: {fromSecondary} --> {toSecondary}))");
 
-            ToLog.Inf($"loading primary content from sheet: {this.primarySheet}");
+            logger.Inf($"loading primary content from sheet: {this.primarySheet}");
 
             this.primaryContents = new string[this.toPrimary];
             ISheet tsheet = this.workbook.GetSheetAt(this.primarySheet);

@@ -32,6 +32,7 @@ using System.Threading.Tasks;
 using DB_Matching_main1;
 using NPOI.SS.Formula.Functions;
 using Serilog;
+using BigLog;
 
 namespace DB_Matcher_v5
 {
@@ -40,25 +41,32 @@ namespace DB_Matcher_v5
     }
     internal static class ToLog
     {
+        static Logger logger = new Logger()
+        {
+            LogToTerminal = true,
+            LogToFile = true,
+        };
         public static void Inf(string toLog)
         {
-            Serilog.Log.Logger = new LoggerConfiguration()
+            logger.Inf(toLog);
+            /*Serilog.Log.Logger = new LoggerConfiguration()
                 //.WriteTo.Console()
                 .WriteTo.File(VarHold.logFileNameInfo)
                 .CreateLogger();
 
             Serilog.Log.Information(toLog);
-            Serilog.Log.CloseAndFlush();
+            Serilog.Log.CloseAndFlush();*/
         }
         public static void Err(string toLog)
         {
-            Serilog.Log.Logger = new LoggerConfiguration()
+            logger.Err(toLog);
+            /*Serilog.Log.Logger = new LoggerConfiguration()
                 //.WriteTo.Console()
                 .WriteTo.File(VarHold.logFileNameError)
                 .CreateLogger();
 
             Serilog.Log.Error(toLog);
-            Serilog.Log.CloseAndFlush();
+            Serilog.Log.CloseAndFlush();*/
         }
     }
 }

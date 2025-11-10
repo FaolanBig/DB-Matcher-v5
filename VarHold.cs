@@ -8,6 +8,7 @@ namespace DB_Matcher_v5
 {
     internal static class VarHold
     {
+        public static readonly bool logToTerminal = true;
         //public const string repoURL = "https://github.com/FaolanBig/DB-Matcher-v5";
         public const string repoURLReportIssue = "https://github.com/FaolanBig/DB-Matcher-v5/issues/new";
         public const string repoURLReleases = "https://github.com/FaolanBig/DB-Matcher-v5/releases";
